@@ -1,0 +1,175 @@
+/* admin.css */
+
+/* General page layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+.nav-item.dropdown {
+    position: relative;
+}
+
+/* Dropdown menu styling */
+.nav-item .dropdown-menu {
+    display: none; /* Hide by default */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(-10px);
+    z-index: 1000;
+}
+
+/* Show the dropdown when hovered */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hover effect for dropdown items */
+.nav-item .dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for each dropdown item */
+.nav-item .dropdown-menu .dropdown-item:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 3px;
+}
+
+/* Adjust the dropdown toggle appearance */
+.nav-item .dropdown-toggle {
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for the dropdown toggle */
+.nav-item .dropdown-toggle:hover {
+    color: #007bff;
+}
+/* Sidebar */
+#sidebar {
+    background-color: #343a40;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 50px;
+}
+
+#sidebar .nav-link {
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 15px 20px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #495057;
+    border-left: 4px solid #007bff;
+}
+
+#sidebar .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+    border-left: 4px solid #0056b3;
+}
+
+/* Page content */
+main {
+    margin-left: 250px;
+    padding: 30px;
+}
+
+/* Dashboard status section */
+#status {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: calc(33% - 20px);
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.info-box:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.info-box .heading h5 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.info-box .info i {
+    font-size: 2rem;
+    color: #007bff;
+}
+
+.info-box .info-content p {
+    margin: 10px 0;
+    font-size: 1.2rem;
+}
+
+.info-box .num {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.info-box a {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.info-box a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    main {
+        margin-left: 0;
+    }
+
+    .info-box {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}

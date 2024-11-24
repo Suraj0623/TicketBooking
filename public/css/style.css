@@ -1,0 +1,20 @@
+/* Add custom styles for cards or the footer */
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #333;
+}
