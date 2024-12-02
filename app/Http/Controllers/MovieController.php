@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $movies=Movie::with('screenings')->get();
-        return view('movies.index',compact('movies'));
+        $search = $request->input('search');
+        $movies = Movie::when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                         ->orWhere('description', 'like', "%{$search}%");
+        })->get();
+    
+        return view('movies.index', compact('movies'));
     }
 
     public function create()

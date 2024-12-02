@@ -16,4 +16,14 @@ class Screening extends Model
     {
         return $this->morphOne(Seat::class, 'seatable');
     }
+    public function bookings()
+    {
+        return $this->morphMany(Booking::class, 'bookable');
+    }
+
+    // Relation to tickets
+    public function tickets()
+    {
+        return $this->morphMany(Ticket::class, 'ticketable');
+    }
 }

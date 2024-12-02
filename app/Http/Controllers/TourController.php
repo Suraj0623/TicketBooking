@@ -10,10 +10,15 @@ class TourController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-      $tours=Tour::get();
-      return view('tour.index',compact('tours'));
+        $search = $request->input('search');
+        $tours = Tour::when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                         ->orWhere('description', 'like', "%{$search}%");
+        })->get();
+    
+        return view('tour.index', compact('tours'));
     }
 
     /**

@@ -41,45 +41,54 @@ class BookingController extends Controller
     
 
     public function store(Request $request)
-{
-    $request->validate([
-        'bookable_type' => 'required|string',
-        'bookable_id' => 'required|integer',
-        'seats_booked' => 'required|integer|min:1',
-    ]);
+    {
+        $request->validate([
+            'bookable_type' => 'required|string',
+            'bookable_id' => 'required|integer',
+            'seats_booked' => 'required|integer|min:1',
+            'payment_option' => 'required|string',
+        ]);
 
-    $seat = Seat::where('seatable_id', $request->bookable_id)
-        ->where('seatable_type', $request->bookable_type)
-        ->first();
+        // Check if the selected number of seats are available
+        $seat = Seat::where('seatable_id', $request->bookable_id)
+            ->where('seatable_type', $request->bookable_type)
+            ->first();
 
-    if ($request->seats_booked > $seat->available_seats) {
-        return back()->withErrors(['seats_booked' => 'Not enough available seats.']);
+        if ($request->seats_booked > $seat->available_seats) {
+            return back()->withErrors(['seats_booked' => 'Not enough available seats.']);
+        }
+
+        // Fetch the bookable model (e.g., Event, Movie, etc.) to get the price per seat
+        $bookableModel = app($request->bookable_type)::findOrFail($request->bookable_id);
+        $pricePerSeat = $bookableModel->ticket_price;
+
+        // Calculate total price based on the seats booked and the price per seat
+        $totalPrice = $pricePerSeat * $request->seats_booked;
+
+        // If the user chooses 'Pay Later', redirect back to the form
+        if ($request->payment_option === 'pay_later') {
+            return back()
+                ->withInput()
+                ->with('message', 'Booking cannot proceed with Pay Later. Please choose Pay Now.');
+        }
+
+        // Create the booking
+        $booking = Booking::create([
+            'user_id' => auth::id(),
+            'bookable_id' => $request->bookable_id,
+            'bookable_type' => $request->bookable_type,
+            'seats_booked' => $request->seats_booked,
+            'total_price' => $totalPrice,  // Store the calculated total price
+            'payment_status' => 'pending',
+        ]);
+
+        // Update available seats
+        $seat->update([
+            'available_seats' => $seat->available_seats - $request->seats_booked,
+        ]);
+
+        return redirect()->route('payment.index', ['booking_id' => $booking->id]);
     }
-
-    // Fetch the bookable model (e.g., Event, Movie, etc.) to get the price per seat
-    $bookableModel = app($request->bookable_type)::findOrFail($request->bookable_id);
-    $pricePerSeat = $bookableModel->ticket_price;
-
-    // Calculate total price based on the seats booked and the price per seat
-    $totalPrice = $pricePerSeat * $request->seats_booked;
-
-    // Create booking
-    $booking = Booking::create([
-        'user_id' => auth::id(),
-        'bookable_id' => $request->bookable_id,
-        'bookable_type' => $request->bookable_type,
-        'seats_booked' => $request->seats_booked,
-        'total_price' => $totalPrice,  // Store the calculated total price
-        'payment_status' => 'pending',
-    ]);
-
-    // Update available seats
-    $seat->update([
-        'available_seats' => $seat->available_seats - $request->seats_booked,
-    ]);
-
-    return redirect()->route('payment.index', ['booking_id' => $booking->id]);
-}
 
 
    

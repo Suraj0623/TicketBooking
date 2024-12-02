@@ -15,9 +15,22 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::with('ticketable')->where('user_id', auth::id())->get();
+        $bookings = Booking::where('payment_status', 'paid')
+            ->where('user_id', Auth::id())
+            ->get();
+    
+        $tickets = Ticket::whereIn('ticketable_id', $bookings->pluck('bookable_id'))
+            ->whereIn('ticketable_type', $bookings->pluck('bookable_type'))
+            ->where('user_id', Auth::id())
+            ->get();
+    
         return view('tickets.index', compact('tickets'));
     }
+    
+
+
+    
+
 
     /**
      * Show the form for creating a new ticket (triggered after payment).
@@ -36,31 +49,30 @@ class TicketController extends Controller
         $booking = Booking::where('user_id', auth::id())
                           ->where('id', $request->booking_id)
                           ->firstOrFail();
-
+    
         // Check if the payment status is completed
         $payment = Payment::where('booking_id', $booking->id)
                           ->where('status', 'completed')
                           ->first();
-
+    
         if (!$payment) {
             return back()->withErrors(['payment' => 'Payment is not completed yet.']);
         }
-
+    
         // Generate the ticket
         $ticket = Ticket::create([
             'user_id' => Auth::id(),
-            'ticketable_type' => $booking->bookable_type,
+            'ticketable_type' => $booking->bookable_type,  // Use polymorphic relationship
             'ticketable_id' => $booking->bookable_id,
             'price' => $booking->total_price,
             'quantity' => $booking->seats_booked,
         ]);
-
-        // Optionally, mark the payment as 'completed'
-        $payment->update(['status' => 'completed']);
-
+    
         // Redirect with success message
         return redirect()->route('tickets.index')->with('success', 'Ticket generated successfully.');
     }
+    
+
 
     /**
      * Display the specified ticket.

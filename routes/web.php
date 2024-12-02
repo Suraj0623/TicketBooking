@@ -40,6 +40,7 @@ Route::prefix('user')->group(function () {
     Route::resource('movie', MovieController::class);
     Route::resource('transport', TransportController::class);
     Route::resource('screening', ScreeningController::class);
+    Route::resource('ticket', TicketController::class);
 
 });
 Route::prefix('admin')->group(function () {

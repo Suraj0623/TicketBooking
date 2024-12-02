@@ -1,3 +1,7 @@
+@extends('layouts.search')
+@section('content')
+    
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +19,8 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Movie List</h1>
+        <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search events..." />
+
         <div class="row">
             @foreach ($movies as $movie)
                 <div class="col-md-4 mb-4">
@@ -58,3 +64,4 @@
     
 </body>
 </html>
+@endsection

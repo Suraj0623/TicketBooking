@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Models\Ticket;
 use App\Models\Booking;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -23,25 +24,37 @@ class PaymentController extends Controller
     }
 
     public function process(Request $request)
-    {
-        $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
-            'payment_method' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'booking_id' => 'required|exists:bookings,id',
+        'payment_method' => 'required|string',
+    ]);
 
-        $booking = Booking::findOrFail($request->booking_id);
+    $booking = Booking::findOrFail($request->booking_id);
 
-        $payment = Payment::create([
-            'booking_id' => $booking->id,
-            'amount' => $booking->total_price,
-            'payment_method' => $request->payment_method,
-            'status' => 'completed', // Update with payment gateway integration if needed
-        ]);
+    // Process the payment
+    $payment = Payment::create([
+        'booking_id' => $booking->id,
+        'amount' => $booking->total_price,
+        'payment_method' => $request->payment_method,
+        'status' => 'completed',
+    ]);
 
-        $booking->update(['payment_status' => 'paid']);
+    // Update booking payment status to 'paid'
+    $booking->update(['payment_status' => 'paid']);
 
-        return redirect()->route('tickets.index')->with('success', 'Payment successful!');
-    }
+    // Automatically create a ticket after payment is successful
+    Ticket::create([
+        'user_id' => $booking->user_id,
+        'ticketable_type' => $booking->bookable_type,
+        'ticketable_id' => $booking->bookable_id,
+        'price' => $booking->total_price,
+        'quantity' => $booking->seats_booked,
+    ]);
+
+    return redirect()->route('tickets.index')->with('success', 'Payment successful, ticket generated!');
+}
+
 
     // Show details of a specific payment
     public function show($id)
