@@ -8,34 +8,7 @@
 </head>
 <body style="background-image: url('{{ asset('images/new.avif') }}'); background-size: cover; background-attachment: fixed; height: 100vh; background-position: center;" class="bg-body">
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-50 position-fixed top-0 w-100">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{route('welcome')}}">
-                <img src="{{ asset('images/logo.webp') }}" alt="Logo" height="50">
-            </a>
-            <div class="d-flex">
-                <a class="btn btn-outline-light me-2" href="{{ route('tour.index') }}">Tours</a>
-                @auth
-                    <a class="btn btn-outline-light me-2" href="{{ route('ticket.index') }}">My Bookings</a>
-                @endauth
-                <a class="btn btn-outline-light me-2" href="{{ route('home') }}">Start Your Journey</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('faq') }}">FAQ</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('contact') }}">Contact</a>
-            </div>
-            <div class="d-flex text-center">
-                @auth
-                    <a href="{{ route('profile.index') }}" class="btn btn-primary btn-sm me-2">View Profile</a>
-                    @if(auth()->user()->roles->contains('roleName', 'admin'))
-                    <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2" title="Go to the dashboard">Dashboard</a>
-                @endif
-                    <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">Logout</a>
-                @else
-                    <a href="{{ route('register') }}" class="btn btn-warning text-white">Register</a>
-                    <a href="{{ route('login') }}" class="btn btn-success btn-lg">Login</a>
-                @endauth
-            </div>
-        </div>
-    </nav>
+    <x-header/>
     <!-- Main Content -->
     <main class="text-center text-black py-5">
         <h2>Choose A Service</h2>

@@ -11,10 +11,39 @@ class TransportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
+    public function index(Request $request)
+{
+    // Retrieve query parameters
+    $origin = $request->query('origin');
+    $destination = $request->query('destination');
+    $departure_date = $request->query('departure_date');
+
+    // Build base query for transports
+    $query = Transport::query();
+
+    // Filter by route if origin and destination are provided
+    if ($origin && $destination) {
+        $query->whereHas('route', function ($query) use ($origin, $destination) {
+            $query->where('origin', $origin)
+                  ->where('destination', $destination);
+        });
     }
+
+    // Filter by departure date if provided
+    if ($departure_date) {
+        $query->whereDate('departure_date', $departure_date);
+    }
+
+    // Separate queries for each transport type
+    $buses = (clone $query)->where('type', 'bus')->get();
+    $planes = (clone $query)->where('type', 'plane')->get();
+    $trains = (clone $query)->where('type', 'train')->get();
+
+    // Return the view with the results
+    return view('transports.index', compact('buses', 'planes', 'trains'));
+}
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -101,6 +130,6 @@ class TransportController extends Controller
             ->whereDate('departure_date', $validatedData['departure_date'])
             ->get();
 
-        return view('transport.index', compact('buses', 'planes', 'trains'));
+        return view('transports.index', compact('buses', 'planes', 'trains'));
     }
 }

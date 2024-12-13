@@ -24,8 +24,8 @@
             <input type="text" class="form-control" name="packageName" id="packageName" required>
         </div>
         <div class="form-group">
-            <label for="price">Price Per Person</label>
-            <input type="number" class="form-control" name="price" id="price" required>
+            <label for="ticket_price">Price Per Person</label>
+            <input type="number" class="form-control" name="ticket_price" id="ticket_price" required>
         </div>
         <div class="form-group">
             <label for="duration">Duration</label>

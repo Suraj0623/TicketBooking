@@ -41,9 +41,9 @@
             <div class="d-flex text-center">
                 @auth
                     <a href="{{ route('profile.index') }}" class="btn btn-primary btn-sm me-2">View Profile</a>
-                    @if(auth()->check() && auth()->user()->roles->contains('name', 'admin'))
-                        <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2">Dashboard</a>
-                    @endif
+                    @if(auth()->user()->roles->contains('roleName', 'admin'))
+                    <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2" title="Go to the dashboard">Dashboard</a>
+                @endif
                     <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">Logout</a>
                 @else
                     <a href="{{ route('register') }}" class="btn btn-warning text-white">Register</a>

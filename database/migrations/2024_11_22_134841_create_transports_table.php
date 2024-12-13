@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('departure_date');
             $table->time('departure_time');
             $table->integer('capacity')->unsigned(); // Maximum number of seats
-            $table->decimal('price_per_seat', 10, 2); // Price for each seat
+            $table->decimal('ticket_price',8, 2); // Price for each seat
             $table->timestamps();
         });
     }

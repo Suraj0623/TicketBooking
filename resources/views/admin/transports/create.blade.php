@@ -74,9 +74,9 @@
 
             <!-- Price per Seat -->
             <div class="form-group">
-                <label for="price_per_seat">Price per Seat:</label>
-                <input type="number" name="price_per_seat" id="price_per_seat" class="form-control" value="{{ old('price_per_seat') }}" required min="0" step="0.01">
-                @error('price_per_seat')
+                <label for="ticket_price">Price per Seat:</label>
+                <input type="number" name="ticket_price" id="ticket_price" class="form-control" value="{{ old('ticket_price') }}" required min="0" step="0.01">
+                @error('ticket_price')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>

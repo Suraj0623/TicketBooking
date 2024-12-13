@@ -7,7 +7,7 @@
         <tr>
             <th>Origin</th>
             <th>Destination</th>
-            <th>Total Time</th>
+            <th>Total Time (in hours) </th>
             
         </tr>
     </thead>

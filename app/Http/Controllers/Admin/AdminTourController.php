@@ -37,7 +37,7 @@ class AdminTourController extends Controller
         'description' => 'required',
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Added image validation
         'packageName' => 'required',
-        'price' => 'required|numeric',
+        'ticket_price' => 'required|numeric',
         'duration' => 'required',
         'highlights' => 'required',
         'avg_rating' => 'required|numeric',
@@ -53,7 +53,7 @@ class AdminTourController extends Controller
         'description' => $request->description,
         'image' => $path,  // Store the image path in the database
         'packageName' => $request->packageName,
-        'price' => $request->price,
+        'ticket_price' => $request->price,
         'duration' => $request->duration,
         'highlights' => $request->highlights,
         'avg_rating' => $request->avg_rating,
@@ -97,7 +97,7 @@ class AdminTourController extends Controller
             'description' => 'required',
             'image' => 'required',
             'packageName' => 'required',
-            'ticketPrice' => 'required|numeric',
+            'ticket_price' => 'required|numeric',
             'duration' => 'required',
             'highlights' => 'required',
             'avg_rating' => 'required|numeric',

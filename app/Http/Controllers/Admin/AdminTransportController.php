@@ -45,7 +45,7 @@ class AdminTransportController extends Controller
             'departure_date' => 'required|date|after_or_equal:today', //  valid date after today
             'departure_time' => 'required|date_format:H:i', //  time is in HH:mm format
             'capacity' => 'required|integer|min:1', // 
-            'price_per_seat' => 'required|numeric|min:0',
+            'ticket_price' => 'required|numeric|min:0',
         ]);
 
 

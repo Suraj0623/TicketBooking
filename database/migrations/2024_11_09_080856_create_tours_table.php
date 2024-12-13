@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('image');
             $table->string('packageName');
-            $table->decimal('price');
+            $table->decimal('ticket_price',8, 2);
             $table->string('duration');
             $table->string('highlights');
             $table->decimal('avg_rating');
