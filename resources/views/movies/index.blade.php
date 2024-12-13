@@ -1,23 +1,7 @@
-@extends('layouts.search')
-@section('content')
-    
+<x-header/>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Movie List</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery for popover initialization -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-    <div class="container mt-5">
+    <main class="container" style="margin-top: 80px;">
+    <div class="container mt-5 my-4">
         <h1 class="text-center mb-4">Movie List</h1>
         <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search events..." />
 
@@ -57,11 +41,10 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+           @endforeach
         </div>
     </div>
-
+    </main>
+<x-footer/>
     
-</body>
-</html>
-@endsection
+

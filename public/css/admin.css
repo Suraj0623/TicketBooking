@@ -155,6 +155,17 @@ footer {
     bottom: 0;
     width: 100%;
 }
+/* Adding this rule to prevent conflict with footer */
+.admin-footer {
+    background-color: #343a40; /* Admin footer background */
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {

@@ -25,7 +25,6 @@ class UserController extends Controller
       'mobileNumber' => 'required|digits:10',
       'password' => 'required|string|min:8|confirmed',
   ]);
-  // $user=User::create($data);
 
   $user = User::create([
       'FirstName' => $request->FirstName,
@@ -65,9 +64,12 @@ return back()->with('error', 'Failed to register the user.');
     return view('admin.index');
   
  }
- public function logout(){
+ public function logout(Request $request){
   Auth::logout();
-  return view('welcome');
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('welcome');;
  }
 
  public function manageAdmins()
@@ -98,10 +100,34 @@ public function assignRole(Request $request)
 
   }
   public function index(){
-    $user = User::whereDoesntHave('roles', function ($query) {
-      $query->where('roleName', 'admin');
-  })->get();
-    return view('user.index',compact('user'));
+    $services = [
+      [
+          'route' => 'transport.index',
+          'image' => 'images/transport.webp',
+          'title' => 'Transport Booking',
+          'description' => 'Book transport options quickly and easily.',
+      ],
+      [
+          'route' => 'movie.index',
+          'image' => 'images/movie.webp',
+          'title' => 'Movie Booking',
+          'description' => 'Find and book your favorite movies in theaters.',
+      ],
+      [
+          'route' => 'event.index',
+          'image' => 'images/concert.webp',
+          'title' => 'Event Tickets',
+          'description' => 'Reserve tickets for concerts, sports, and other events.',
+      ],
+      [
+          'route' => 'tour.index',
+          'image' => 'images/tours.webp',
+          'title' => 'Tour Packages',
+          'description' => 'Explore and book amazing tour packages.',
+      ],
+  ];
+
+  return view('welcome', compact('services'));
   }
 
 }

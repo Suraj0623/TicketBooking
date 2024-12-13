@@ -1,8 +1,6 @@
-@extends('layouts.app')
-
-@section('title', 'Payment')
-
-@section('content')
+<x-header/>
+<main class="container" style="margin-top: 80px;">
+    <div class="container my-4">
     <h1>Payment Details</h1>
 
     <p><strong>Total Amount:</strong> ${{ number_format($totalAmount, 2) }}</p>
@@ -22,4 +20,6 @@
 
         <button type="submit" class="btn btn-success">Make Payment</button>
     </form>
-@endsection
+    </div>
+</main>
+<x-footer/>

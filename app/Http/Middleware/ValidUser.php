@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class ValidUser
          $user = Auth::user();
 
          // Check if the user is an instance of the User model
-        if ($user instanceof \App\Models\User) {
+        if ($user instanceof User) {
             // Eager load roles
             $user->load('roles'); 
 

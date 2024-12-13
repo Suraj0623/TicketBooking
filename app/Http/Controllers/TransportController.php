@@ -101,6 +101,6 @@ class TransportController extends Controller
             ->whereDate('departure_date', $validatedData['departure_date'])
             ->get();
 
-        return view('transports.view', compact('buses', 'planes', 'trains'));
+        return view('transport.index', compact('buses', 'planes', 'trains'));
     }
 }

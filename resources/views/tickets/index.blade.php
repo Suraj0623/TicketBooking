@@ -6,7 +6,7 @@
     <h1>Your Tickets</h1>
 
     @if ($tickets->isEmpty())
-        <p>No tickets available. Complete your booking payment to generate tickets.</p>
+        <p>No tickets available. Make a  booking  & pay to generate tickets.</p>
     @else
         <table class="table">
             <thead>
@@ -32,3 +32,4 @@
         </table>
     @endif
 </div>
+<x-footer/>

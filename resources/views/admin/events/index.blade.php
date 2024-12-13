@@ -13,7 +13,7 @@
                     <p class="card-text"><strong>Date:</strong> {{ $event->event_date }}</p>
                     <p class="card-text"><strong>Venue:</strong> {{ $event->venue }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ $event->ticket_price }}</p>
-                    <a href="{{ route('booking.create', ['event' => $event->id]) }}" class="btn btn-primary">Book Now</a>
+                    <a href="{{ route('booking.create') }}" class="btn btn-primary">Book Now</a>
                 </div>
             </div>
         </div>

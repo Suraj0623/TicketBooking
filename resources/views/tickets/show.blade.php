@@ -24,3 +24,4 @@
         @endforeach
     @endif
 @endsection
+<x-footer/>

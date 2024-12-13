@@ -1,6 +1,7 @@
 <?php
-
+use Illuminate\Http\Request;
 use App\Http\Middleware\ValidUser;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\TourController;
@@ -20,18 +21,18 @@ use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\AdminMovieController;
 use App\Http\Controllers\Admin\AdminScreeningController;
 use App\Http\Controllers\Admin\AdminTransportController;
+use App\Http\Controllers\ProfileController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/',[UserController::class,'index'])->name('welcome');
 Route::get('/journey', function () {
     return view('home');
 })->name('home');
-
+Route::view('about','about')->name('about');
 Route::prefix('user')->group(function () {
     
     // Resource route for bookings
     Route::resource('booking', BookingController::class);
+
     Route::resource('event', EventController::class);
     Route::resource('route', RouteController::class);
     Route::resource('seat', SeatController::class);
@@ -41,6 +42,8 @@ Route::prefix('user')->group(function () {
     Route::resource('transport', TransportController::class);
     Route::resource('screening', ScreeningController::class);
     Route::resource('ticket', TicketController::class);
+    Route::resource('profile',ProfileController::class);
+
 
 });
 Route::prefix('admin')->group(function () {
@@ -56,8 +59,6 @@ Route::post('journey/search',[TransportController::class,'search'])->name('trans
 
 Route::prefix('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('contact', [AdminController::class, 'contact'])->name('contact');
-    Route::get('about', [AdminController::class, 'about'])->name('about');
 });
 
 Route::get('dashboardPage',[UserController::class,'dashboardPage'])->name('dashboardPage')->middleware(ValidUser::class);
@@ -74,8 +75,31 @@ Route::get('logout', [UserController::class, 'logout'])->name('logout');
 Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
 
 
-Route::view('card','card');
-Route::view('view','view');
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+Route::post('/contact', function (Request $request) {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'subject' => 'required|string|max:255',
+        'message' => 'required|string',
+    ]);
+
+    // Example mail logic (you need to configure email settings in .env)
+    Mail::raw($request->message, function ($mail) use ($request) {
+        $mail->to('support@example.com')
+            ->subject($request->subject)
+            ->from($request->email, $request->name);
+    });
+
+    return back()->with('success', 'Your message has been sent successfully!');
+})->name('contact.submit');
+
+
 Route::get('user',[UserController::class,'index'])->name('user.index');
 
 Route::middleware('auth')->group(function () {

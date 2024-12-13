@@ -1,7 +1,6 @@
-@extends('layouts.search')
-@section('title', 'Events')
-
-@section('content')
+<x-header/>
+<main class="container" style="margin-top: 80px;">
+    
 <div class="container my-4">
     <h1 class="text-center mb-4">Events</h1>
 
@@ -25,4 +24,5 @@
         @endforeach
     </div>
 </div>
-@endsection
+</main>
+<x-footer/>

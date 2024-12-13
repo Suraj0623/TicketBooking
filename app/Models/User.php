@@ -14,16 +14,47 @@ class User extends Authenticatable
     // public $timestamps=false;
     // protected $guarded=[];
     public function bookings()
-{
-    return $this->morphMany(Booking::class, 'bookable');
-}
+    {
+        return $this->morphMany(Booking::class, 'bookable');
+    }
+    protected static function boot()
+    {
+        parent::boot();
 
-    
-   
+        // Event to handle profile creation after a user is created
+        static::created(function ($user) {
+            Profile::create([
+                'user_id' => $user->id,
+                'FirstName' => $user->FirstName,
+                'LastName' => $user->LastName,
+                'email' => $user->email,
+                'mobileNumber' => $user->mobileNumber,
+                'password' => $user->password,
+            ]);
+        });
+
+        // Event to handle profile update after a user is updated
+        static::updated(function ($user) {
+            $profile = Profile::where('user_id', $user->id)->first();
+            if ($profile) {
+                $profile->update([
+                    'FirstName' => $user->FirstName,
+                    'LastName' => $user->LastName,
+                    'email' => $user->email,
+                    'mobileNumber' => $user->mobileNumber,
+                    'password' => $user->password,
+                ]);
+            }
+        });
+    }
+
+    public function profile(){
+        return $this->hasOne(Profile::class);
+    }
     public function roles()
-{
-    return $this->belongsToMany(Role::class, 'role_user');
-}
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
 
 
     /**
@@ -32,12 +63,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'FirstName', 
+        'FirstName',
         'LastName',
-         'email', 
-         'mobileNumber',
-          'password', 
-          
+        'email',
+        'mobileNumber',
+        'password',
+
     ];
 
     /**
@@ -58,7 +89,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            
+
             'password' => 'hashed',
         ];
     }
