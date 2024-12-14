@@ -13,6 +13,11 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     // public $timestamps=false;
     // protected $guarded=[];
+    public function tickets()
+{
+    return $this->hasMany(Ticket::class);
+}
+
     public function bookings()
     {
         return $this->morphMany(Booking::class, 'bookable');

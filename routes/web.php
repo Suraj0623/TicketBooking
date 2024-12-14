@@ -42,6 +42,7 @@ Route::prefix('user')->group(function () {
     Route::resource('transport', TransportController::class);
     Route::resource('screening', ScreeningController::class);
     Route::resource('ticket', TicketController::class);
+    Route::get('/ticket/validate/{ticket}', [TicketController::class, 'validateTicket'])->name('ticket.validate');
     Route::resource('profile',ProfileController::class);
 
 

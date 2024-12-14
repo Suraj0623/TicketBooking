@@ -7,10 +7,10 @@ use App\Models\Tour;
 
 class Booking extends Model
 {
-    // public $timestamps=false;
-    protected $guarded=[];
-   
-  
+    
+    protected $guarded = [];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -22,12 +22,12 @@ class Booking extends Model
 
     public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasOne(Payment::class);
     }
 
-    public function tickets()
-{
-    return $this->hasMany(Ticket::class, 'ticketable_id')->where('ticketable_type', self::class);
-}
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'ticketable_id')->where('ticketable_type', self::class);
+    }
 }
