@@ -23,13 +23,13 @@ use App\Http\Controllers\Admin\AdminScreeningController;
 use App\Http\Controllers\Admin\AdminTransportController;
 use App\Http\Controllers\ProfileController;
 
-Route::get('/',[UserController::class,'index'])->name('welcome');
+Route::get('/', [UserController::class, 'index'])->name('welcome');
 Route::get('/journey', function () {
     return view('home');
 })->name('home');
-Route::view('about','about')->name('about');
+Route::view('about', 'about')->name('about');
 Route::prefix('user')->group(function () {
-    
+
     // Resource route for bookings
     Route::resource('booking', BookingController::class);
 
@@ -43,7 +43,7 @@ Route::prefix('user')->group(function () {
     Route::resource('screening', ScreeningController::class);
     Route::resource('ticket', TicketController::class);
     Route::get('/ticket/validate/{ticket}', [TicketController::class, 'validateTicket'])->name('ticket.validate');
-    Route::resource('profile',ProfileController::class);
+    Route::resource('profile', ProfileController::class);
 
 
 });
@@ -53,16 +53,21 @@ Route::prefix('admin')->group(function () {
     Route::resource('events', AdminEventController::class);
     Route::resource('transports', AdminTransportController::class);
     Route::resource('screenings', AdminScreeningController::class);
+    Route::resource('bookings', BookingController::class);
+    Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
+    Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
+    Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
+
 });
 
 // for  search function
-Route::post('journey/search',[TransportController::class,'search'])->name('transport.search');
+Route::post('journey/search', [TransportController::class, 'search'])->name('transport.search');
 
 Route::prefix('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 });
 
-Route::get('dashboardPage',[UserController::class,'dashboardPage'])->name('dashboardPage')->middleware(ValidUser::class);
+Route::get('dashboardPage', [UserController::class, 'dashboardPage'])->name('dashboardPage')->middleware(ValidUser::class);
 // to manage and add new admin
 Route::get('admin/manage', [UserController::class, 'manageAdmins'])->name('admin.manage')->middleware(ValidUser::class);
 Route::post('admin/assign-role', [UserController::class, 'assignRole'])->name('admin.assignRole')->middleware(ValidUser::class);
@@ -101,17 +106,18 @@ Route::post('/contact', function (Request $request) {
 })->name('contact.submit');
 
 
-Route::get('user',[UserController::class,'index'])->name('user.index');
+Route::get('user', [UserController::class, 'index'])->name('user.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 
     Route::get('/payment/{booking_id}', [PaymentController::class, 'index'])->name('payment.index');
+    Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('user.ticket');
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
 
     Route::get('/seats/manage/{id}/{type}', [SeatController::class, 'manageSeats'])->name('seats.manage');
     Route::post('/seats/update/{id}/{type}', [SeatController::class, 'updateSeats'])->name('seats.update');
 
-    Route::resource('tickets',TicketController::class);
+    Route::resource('tickets', TicketController::class);
 });

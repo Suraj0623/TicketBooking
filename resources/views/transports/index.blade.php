@@ -3,54 +3,51 @@
 
 
 <h2>Buses</h2>
-          @if($buses->isNotEmpty())
-        @foreach ($buses as $bus)
+@if ($buses->isNotEmpty())
+    @foreach ($buses as $bus)
         <div class="card w-50">
             <div class="card-body">
-              <h5 class="card-title"> {{$bus->name}} </h5>
-              <p class="card-text">{{$bus->capacity}} </p>
-              <a href="{{ route('booking.create', ['bookable_id' => $bus->id, 'bookable_type' => get_class($bus)]) }}" class="btn btn-primary">Book Now</a>
+                <h5 class="card-title"> {{ $bus->name }} </h5>
+                <p class="card-text">{{ $bus->capacity }} </p>
+                <a href="{{ route('booking.create', ['bookable_id' => $bus->id, 'bookable_type' => get_class($bus)]) }}"
+                    class="btn btn-primary">Book Now</a>
             </div>
-          </div>
-          @endforeach
-       
-          
-          @endif
+        </div>
+    @endforeach
 
-          <h2>Trains</h2>
-          @if($trains->isNotEmpty())
-              @foreach ($trains as $train)
-              <div class="card w-50">
-                  <div class="card-body">
-                      <h5 class="card-title">{{ $train->name }}</h5>
-                      <p class="card-text">{{ $train->capacity }}</p>
-                      <a href="{{ route('booking.create', ['bookable_id' => $train->id, 'bookable_type' => get_class($train)]) }}" class="btn btn-primary">Book Now</a>
-                  </div>
-              </div>
-              @endforeach
-          @else
-              <p>No trains available for this route at this time.</p>
-          @endif
-          
+
+@endif
+
+<h2>Trains</h2>
+@if ($trains->isNotEmpty())
+    @foreach ($trains as $train)
+        <div class="card w-50">
+            <div class="card-body">
+                <h5 class="card-title">{{ $train->name }}</h5>
+                <p class="card-text">{{ $train->capacity }}</p>
+                <a href="{{ route('booking.create', ['bookable_id' => $train->id, 'bookable_type' => get_class($train)]) }}"
+                    class="btn btn-primary">Book Now</a>
+            </div>
+        </div>
+    @endforeach
+@else
+    <p>No trains available for this route at this time.</p>
+@endif
+
 
 
 <h2>Planes</h2>
-          @if($planes->isNotEmpty())
-        @foreach ($planes as $plane)
+@if ($planes->isNotEmpty())
+    @foreach ($planes as $plane)
         <div class="card w-50">
             <div class="card-body">
-              <h5 class="card-title"> {{$plane->name}} </h5>
-              <p class="card-text">{{$plane->capacity}} </p>
-              <a href="{{ route('booking.create', ['bookable_id' => $plane->id, 'bookable_type' => get_class($plane)]) }}" class="btn btn-primary">Book Now</a>
+                <h5 class="card-title"> {{ $plane->name }} </h5>
+                <p class="card-text">{{ $plane->capacity }} </p>
+                <a href="{{ route('booking.create', ['bookable_id' => $plane->id, 'bookable_type' => get_class($plane)]) }}"
+                    class="btn btn-primary">Book Now</a>
             </div>
-          </div>
-          @endforeach
-          @else
-          <p>No planes available for this route at this time.</p>
-          @endif
-
-         
-        
-          
-          
-          
+        </div>
+    @endforeach
+@else
+    <p>No planes available for this route at this time.</p>
+@endif

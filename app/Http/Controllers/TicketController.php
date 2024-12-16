@@ -25,14 +25,27 @@ class TicketController extends Controller
         //     ->where('user_id', Auth::id())
         //     ->get();
         $tickets = auth::user()->tickets;
+        $bookings = Booking::where('user_id', Auth::id())
+            ->where('payment_status', 'paid')
+            ->get();
 
-        return view('tickets.index', compact('tickets'));
+        // Fetch tickets related to these bookings
+        $ticketBookings = Ticket::whereIn('ticketable_id', $bookings->pluck('bookable_id'))
+            ->whereIn('ticketable_type', $bookings->pluck('bookable_type'))
+            ->get();
+
+        // Merge tickets from user's direct relationship and those from bookings
+        $allTickets = $tickets->merge($ticketBookings);
+
+        return view('tickets.index', compact('allTickets'));
     }
 
     /**
      * Show the form for creating a new ticket (triggered after payment).
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Store a newly created ticket in storage (triggered by completed payment).
@@ -71,20 +84,28 @@ class TicketController extends Controller
     /**
      * Display the specified ticket.
      */
-    public function show( $ticketId)
+    public function show($ticketId)
     {
         $ticket = Ticket::with('ticketable')->find($ticketId);
 
-        // Generate QR code data (e.g., ticket ID or user ID)
-        $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]); // This is a URL to validate the ticket
+        if (!$ticket) {
+            // If the ticket is not found, redirect to an error page or handle accordingly
+            return redirect()->route('tickets.index')->with('error', 'Ticket not found');
+        }
 
-        return view('tickets.show', compact('ticket', 'qrCodeData'));;
+        // Generate QR code data (e.g., ticket ID or user ID)
+        $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]);
+
+        return view('tickets.show', compact('ticket', 'qrCodeData'));
     }
+
 
     /**
      * Show the form for editing the specified ticket.
      */
-    public function edit(Ticket $ticket) {}
+    public function edit(Ticket $ticket)
+    {
+    }
 
     /**
      * Update the specified ticket in storage.
@@ -113,7 +134,12 @@ class TicketController extends Controller
     // }
     public function validateTicket(Ticket $ticket)
     {
-        // Check if the ticket has already been used or is invalid
+        // Ensure the ticket belongs to the authenticated user
+        if ($ticket->user_id !== auth()->id()) {
+            return response()->json(['status' => 'unauthorized'], 403);
+        }
+
+        // Check if the ticket has already been used
         if ($ticket->status === 'used') {
             return response()->json(['status' => 'invalid']);
         }
@@ -124,4 +150,5 @@ class TicketController extends Controller
 
         return response()->json(['status' => 'valid']);
     }
+
 }

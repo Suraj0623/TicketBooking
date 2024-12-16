@@ -21,7 +21,7 @@
                             <p class="text-muted">{{ \Str::limit($tour->description, 150) }}</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Price:</strong> NPR {{ $tour->ticketPrice }}</li>
+                            <li class="list-group-item"><strong>Price:</strong> NPR {{ $tour->ticket_price }}</li>
                             <li class="list-group-item"><strong>Duration:</strong> {{ $tour->duration }} Days</li>
                         </ul>
                         <div class="card-body">

@@ -6,54 +6,74 @@ use App\Models\Ticket;
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
     // List all payments
     public function index($bookingId)
     {
-         $booking = Booking::findOrFail($bookingId);
+        $booking = Booking::findOrFail($bookingId);
 
-    // Get the bookable model (Event, Movie, etc.)
-    $bookableModel = app($booking->bookable_type)::findOrFail($booking->bookable_id);
+        // Get the bookable model (Event, Movie, etc.)
+        $bookableModel = app($booking->bookable_type)::findOrFail($booking->bookable_id);
 
-    // Fetch the price from the bookable model
-    $totalAmount = $booking->seats_booked * $bookableModel->ticket_price;
+        // Fetch the price from the bookable model
+        $totalAmount = $booking->seats_booked * $bookableModel->ticket_price;
 
-    return view('payments.index', compact('booking', 'totalAmount', 'bookingId'));
+        return view('payments.index', compact('booking', 'totalAmount', 'bookingId'));
+    }
+    // Accept payment method
+    public function accept($payment_id)
+    {
+        $payment = Payment::findOrFail($payment_id);
+        $payment->status = 'completed'; // Update status to 'completed'
+        $payment->save();
+
+        return redirect()->route('bookings.index')->with('success', 'Payment has been accepted.');
     }
 
+
+
+    public function reject($payment_id)
+    {
+        $payment = Payment::findOrFail($payment_id);
+        $payment->status = 'failed'; // Update status to 'failed'
+        $payment->save();
+
+        return redirect()->route('bookings.index')->with('success', 'Payment has been rejected.');
+    }
+
+
+
+
+
     public function process(Request $request)
-{
-    $request->validate([
-        'booking_id' => 'required|exists:bookings,id',
-        'payment_method' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
+            'payment_method' => 'required|string',
+        ]);
 
-    $booking = Booking::findOrFail($request->booking_id);
+        $booking = Booking::findOrFail($request->booking_id);
 
-    // Process the payment
-    $payment = Payment::create([
-        'booking_id' => $booking->id,
-        'amount' => $booking->total_price,
-        'payment_method' => $request->payment_method,
-        'status' => 'completed',
-    ]);
+        // Process the payment with status 'pending'
+        $payment = Payment::create([
+            'booking_id' => $booking->id,
+            'amount' => $booking->total_price,
+            'payment_method' => $request->payment_method,
+            'status' => 'pending',  // Set status to pending initially
+        ]);
 
-    // Update booking payment status to 'paid'
-    $booking->update(['payment_status' => 'paid']);
 
-    // Automatically create a ticket after payment is successful
-    Ticket::create([
-        'user_id' => $booking->user_id,
-        'ticketable_type' => $booking->bookable_type,
-        'ticketable_id' => $booking->bookable_id,
-        'price' => $booking->total_price,
-        'quantity' => $booking->seats_booked,
-    ]);
 
-    return redirect()->route('tickets.index')->with('success', 'Payment successful, ticket generated!');
-}
+        // Update booking payment status to 'pending'
+        $booking->update(['payment_status' => 'pending']);
+
+        return redirect()->route('user.ticket', ['bookingId' => $booking->id])
+            ->with('success', 'Payment initiated, awaiting admin approval!');
+    }
+
 
 
     // Show details of a specific payment
