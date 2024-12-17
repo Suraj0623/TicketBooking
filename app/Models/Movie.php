@@ -12,10 +12,11 @@ class Movie extends Model
     return $this->morphMany(Booking::class, 'bookable');
 }
 
-    public function seats()
-    {
-        return $this->morphOne(Seat::class,'seatable');
-    }
+public function seats()
+{
+    return $this->morphMany(Seat::class, 'seatable');
+}
+
     public function screenings()
     {
         return $this->hasMany(Screening::class);

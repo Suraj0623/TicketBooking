@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>User</th>
+                    <th colspan="2">User</th>
                     <th>Mobile Number</th> <!-- Added for mobile number -->
                     <th>Bookable Type</th>
                     <th>Bookable Item</th>
@@ -31,11 +31,14 @@
                 @forelse($bookings as $index => $booking)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $booking->user->name ?? 'N/A' }}</td>
-                        <td>{{ $booking->user->mobile_number ?? 'N/A' }}</td>
+                        <td>{{ $booking->user->FirstName ?? 'N/A' }}</td>
+                        <td>{{ $booking->user->LastName ?? 'N/A' }}</td>
+                        <td>{{ $booking->user->mobileNumber ?? 'N/A' }}</td>
                         <td>{{ class_basename($booking->bookable_type) }}</td>
-                        <td>{{ $booking->bookable->name ?? 'N/A' }}</td>
-                        <td>{{ $booking->seats_booked }}</td>
+                        <td>{{ $booking->bookable->title ?? $booking->bookable->name ?? 'N/A' }}</td>
+                        <td>{{ $booking->seats_booked }}
+                            <a href="{{ route('seats.view', $booking->id) }}" class="btn btn-sm btn-info">View Seats</a>                              
+                        </td>
                         <td>${{ number_format($booking->total_price, 2) }}</td>
                         <td>
                             <span
@@ -93,4 +96,6 @@
             {{-- {{ $bookings->links() }} Laravel pagination links --}}
         </div>
     </div>
+    <x-footer/>
 @endsection
+

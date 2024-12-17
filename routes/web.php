@@ -121,3 +121,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tickets', TicketController::class);
 });
+Route::get('/seats/{booking}', [SeatController::class, 'view'])->name('seats.view');
+Route::post('/seats/assign', [SeatController::class, 'assignSeats'])->name('seats.assign');
+

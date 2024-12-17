@@ -30,6 +30,18 @@ class PaymentController extends Controller
         $payment->status = 'completed'; // Update status to 'completed'
         $payment->save();
 
+        $booking = $payment->booking; // Assuming there's a relationship defined between Payment and Booking
+        $booking->payment_status = 'paid';
+        $booking->save();
+        
+        Ticket::create([
+            'user_id' => $booking->user_id,
+            'ticketable_type' => $booking->bookable_type, // Polymorphic relationship
+            'ticketable_id' => $booking->bookable_id,
+            'price' => $booking->total_price,
+            'quantity' => $booking->seats_booked,
+        ]);
+
         return redirect()->route('bookings.index')->with('success', 'Payment has been accepted.');
     }
 

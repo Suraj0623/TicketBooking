@@ -14,8 +14,9 @@ class Tour extends Model
 }
 public function seats()
 {
-    return $this->morphOne(Seat::class, 'seatable');
+    return $this->morphMany(Seat::class, 'seatable');
 }
+
 
 
 }

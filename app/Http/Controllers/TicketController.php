@@ -16,14 +16,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        // $bookings = Booking::where('payment_status', 'paid')
-        //     ->where('user_id', Auth::id())
-        //     ->get();
-
-        // $tickets = Ticket::whereIn('ticketable_id', $bookings->pluck('bookable_id'))
-        //     ->whereIn('ticketable_type', $bookings->pluck('bookable_type'))
-        //     ->where('user_id', Auth::id())
-        //     ->get();
+        
         $tickets = auth::user()->tickets;
         $bookings = Booking::where('user_id', Auth::id())
             ->where('payment_status', 'paid')
@@ -52,31 +45,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        // Get the booking based on the provided booking ID
-        $booking = Booking::where('user_id', auth::id())
-            ->where('id', $request->booking_id)
-            ->firstOrFail();
-
-        // Check if the payment status is completed
-        $payment = Payment::where('booking_id', $booking->id)
-            ->where('status', 'completed')
-            ->first();
-
-        if (!$payment) {
-            return back()->withErrors(['payment' => 'Payment is not completed yet.']);
-        }
-
-        // Generate the ticket
-        $ticket = Ticket::create([
-            'user_id' => Auth::id(),
-            'ticketable_type' => $booking->bookable_type,  // Use polymorphic relationship
-            'ticketable_id' => $booking->bookable_id,
-            'price' => $booking->total_price,
-            'quantity' => $booking->seats_booked,
-        ]);
-
-        // Redirect with success message
-        return redirect()->route('tickets.index')->with('success', 'Ticket generated successfully.');
+        
     }
 
 
@@ -123,19 +92,11 @@ class TicketController extends Controller
         $ticket->delete();
         return back()->with('success', 'Ticket deleted successfully.');
     }
-    // public function showTicketDetails($ticketId)
-    // {
-    //     $ticket = Ticket::with('ticketable')->find($ticketId);
-
-    //     // Generate QR code data (e.g., ticket ID or user ID)
-    //     $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]); // This is a URL to validate the ticket
-
-    //     return view('tickets.show', compact('ticket', 'qrCodeData'));
-    // }
+    
     public function validateTicket(Ticket $ticket)
     {
         // Ensure the ticket belongs to the authenticated user
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth::id()) {
             return response()->json(['status' => 'unauthorized'], 403);
         }
 

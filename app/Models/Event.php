@@ -13,9 +13,10 @@ class Event extends Model
     }
 
     public function seats()
-    {
-        return $this->morphOne(Seat::class,'seatable');
-    }
+{
+    return $this->morphMany(Seat::class, 'seatable');
+}
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
