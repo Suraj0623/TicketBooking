@@ -1,25 +1,29 @@
-<x-header/>
+<x-header />
 <main class="container" style="margin-top: 80px;">
     <div class="container my-4">
-    <h1>Payment Details</h1>
+        <h1>Payment Details</h1>
 
-    <p><strong>Total Amount:</strong> ${{ number_format($totalAmount, 2) }}</p>
-    <form action="{{ route('payment.process') }}" method="POST">
-        @csrf
+        <p><strong>Total Amount:</strong> ${{ number_format($totalAmount, 2) }}</p>
+        <form action="{{ route('payment.process') }}" method="POST">
+            @csrf
 
-        <input type="hidden" name="booking_id" value="{{ $bookingId }}">
+            <input type="hidden" name="booking_id" value="{{ $bookingId }}">
 
-        <div class="mb-3">
-            <label for="payment_method" class="form-label">Payment Method:</label>
-            <select class="form-control" id="payment_method" name="payment_method" required>
-                <option value="credit_card">Credit Card</option>
-                <option value="paypal">PayPal</option>
-                <option value="bank_transfer">Bank Transfer</option>
-            </select>
-        </div>
+            <div class="mb-3">
+                <label for="payment_method" class="form-label">Payment Method:</label>
+                <select class="form-control" id="payment_method" name="payment_method" required>
+                    <option value="Esewa">Esewa</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-success">Make Payment</button>
-    </form>
+            <button type="submit" class="btn btn-success">Make Payment</button>
+        </form>
+
+        <!-- Display QR Code Image -->
+        <h3>QR Code for Payment</h3>
+        <img src="{{ asset('qr_codes/your_qr_code.png') }}" alt="Payment QR Code" width="200" height="200">
     </div>
 </main>
-<x-footer/>
+<x-footer />

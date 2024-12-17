@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Mail;
+
 
 class UserController extends Controller
 {
@@ -39,6 +42,8 @@ class UserController extends Controller
     if ($defaultRole) {
         $user->roles()->attach($defaultRole->id);
     }
+    // Send the welcome email
+    Mail::to($user->email)->send(new WelcomeEmail($user));
 
     return redirect()->route('login')->with('success', 'User registered successfully.');
 }

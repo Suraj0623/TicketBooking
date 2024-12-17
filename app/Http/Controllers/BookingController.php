@@ -11,34 +11,43 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('user', 'bookable')->get();
+        $bookings = Booking::with('user', 'bookable', 'payment')->get();
         return view('bookings.index', compact('bookings'));
     }
 
     public function create(Request $request)
     {
-       
+
         $bookableId = $request->input('bookable_id');
         $bookableType = $request->input('bookable_type');
         $bookableModel = app($bookableType)::find($bookableId);
         if (!$bookableId || !$bookableType) {
             return back()->withErrors(['error' => 'Invalid booking details.']);
         }
-    
+
         $seat = Seat::where('seatable_id', $bookableId)
             ->where('seatable_type', $bookableType)
             ->first();
-    
+
         if (!$seat) {
             return back()->withErrors(['error' => 'Seat information not found.']);
         }
-    
+
         $availableSeats = $seat->available_seats;
         $pricePerSeat = $bookableModel->ticket_price;
-    
+
         return view('bookings.create', compact('bookableId', 'bookableType', 'availableSeats', 'pricePerSeat'));
     }
-    
+
+    public function updatePaymentStatus(Request $request, Booking $booking)
+    {
+        $request->validate(['payment_status' => 'required|string']);
+
+        $booking->update(['payment_status' => $request->payment_status]);
+
+        return redirect()->route('booking.index')->with('success', 'Payment status updated successfully');
+    }
+
 
     public function store(Request $request)
     {
@@ -90,19 +99,13 @@ class BookingController extends Controller
         return redirect()->route('payment.index', ['booking_id' => $booking->id]);
     }
 
-
-   
-
-
-    
-
     /**
      * Display the specified resource.
      */
     public function show(Booking $booking)
     {
         if ($booking->user_id !== Auth::id()) {
-            abort(403,'Unauthorized');
+            abort(403, 'Unauthorized');
         }
         return view('bookings.show', compact('booking'));
     }
@@ -118,18 +121,18 @@ class BookingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update( string $id, Request $request)
+    public function update(string $id, Request $request)
     {
-        $booking=Booking::findOrFail($id);
-        $seat=Seat::where('seatable_id',$request->bookable_id)
-        ->where('seatable_type',$request->bookable_type)->first();
-        $seat->update(['available_seats'=>$seat->available_seats+ $booking->seats_booked]);
+        $booking = Booking::findOrFail($id);
+        $seat = Seat::where('seatable_id', $request->bookable_id)
+            ->where('seatable_type', $request->bookable_type)->first();
+        $seat->update(['available_seats' => $seat->available_seats + $booking->seats_booked]);
         $booking->delete();
 
-        return response()->json(['message'=>'booking cancelled and seats restored']); 
+        return response()->json(['message' => 'booking cancelled and seats restored']);
 
-        
-     }
+
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -140,12 +143,12 @@ class BookingController extends Controller
         return redirect()->route('booking.index')->with('success', 'Booking canceled successfully');
     }
 
-// Dynamic Status Update
+    // Dynamic Status Update
     public function updateStatus(Request $request, Booking $booking)
-{
-    $request->validate(['status' => 'required|string']);
-    $booking->update(['status' => $request->status]);
-    return response()->json(['success' => true, 'message' => 'Status updated successfully']);
-}
+    {
+        $request->validate(['status' => 'required|string']);
+        $booking->update(['status' => $request->status]);
+        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+    }
 
 }

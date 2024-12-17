@@ -1,9 +1,9 @@
-<x-header/>
+<x-header />
 <main>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Your Tickets</h1>
-    
-        @if ($tickets->isEmpty())
+
+        @if ($allTickets->isEmpty())
             <div class="alert alert-warning text-center" role="alert">
                 No tickets available. Make a booking & pay to generate tickets.
             </div>
@@ -22,11 +22,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tickets as $ticket)
+                    @foreach ($allTickets as $ticket)
                         <tr>
                             <td>{{ $ticket->user->FirstName }}</td>
                             <td>{{ $ticket->user->LastName }}</td>
-                            {{-- <td>{{ $ticket->user }}</td> --}}
                             <td>{{ $ticket->ticketable_type ?? 'N/A' }}</td>
                             <td>${{ number_format($ticket->price, 2) }}</td>
                             <td>{{ $ticket->quantity }}</td>
@@ -53,7 +52,8 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('ticket.show', ['ticket' => $ticket->id]) }}" class="btn btn-info btn-sm">View</a>
+                                <a href="{{ route('ticket.show', ['ticket' => $ticket->id]) }}"
+                                    class="btn btn-info btn-sm">View</a>
                             </td>
                         </tr>
                     @endforeach
@@ -62,4 +62,4 @@
         @endif
     </div>
 </main>
-<x-footer/>
+<x-footer />
