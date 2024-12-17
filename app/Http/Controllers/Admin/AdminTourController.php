@@ -53,7 +53,7 @@ class AdminTourController extends Controller
         'description' => $request->description,
         'image' => $path,  // Store the image path in the database
         'packageName' => $request->packageName,
-        'ticket_price' => $request->price,
+        'ticket_price' => $request->ticket_price,
         'duration' => $request->duration,
         'highlights' => $request->highlights,
         'avg_rating' => $request->avg_rating,
