@@ -75,7 +75,8 @@ class AdminTourController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tour=Tour::find($id);
+       return view('tour.show',compact('tour'));
     }
 
     /**
