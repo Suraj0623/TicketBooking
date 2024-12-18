@@ -1,14 +1,23 @@
 
-
 <main>
     <h1>Ticket Details</h1>
 
-    @if(!$ticket) <!-- Check if the model is null -->
-    <p>No tickets found.</p>
+    @if(!$ticket)
+        <p>No tickets found.</p>
     @else
     <div class="ticket-details">
-        <p><strong>Title/Name:</strong> {{ $ticket->ticketable->title ?? $ticket->ticketable->name }}</p>
+        <p><strong>Title/Name:</strong> {{ $ticket->ticketable->title ?? $ticket->ticketable->name ?? $ticket->ticketable->movie->title }}</p>
         <p><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
+
+        <!-- Display Assigned Booked Seats -->
+        <p><strong>Assigned Seats:</strong></p>
+<ul>
+    @foreach($ticket->seats as $seat)
+        <li>Seat #{{ $seat->seat_number }} - Status: {{ ucfirst($seat->status) }}</li>
+    @endforeach
+</ul>
+
+
         <p><strong>Status:</strong>
             @if(optional($ticket->booking)->payment && optional($ticket->booking->payment)->status === 'completed')
                 <span class="text-success">Paid</span>
@@ -16,11 +25,12 @@
                 <span class="text-warning">Pending</span>
             @endif
         </p>
-         <!-- Display the QR Code -->
-         <div class="ticket-qr">
-            {!! QrCode::size(150)->generate($qrCodeData) !!}
+
+        <!-- Display the QR Code -->
+        <div class="ticket-qr">
+            {!! QrCode::size(250)->generate($qrCodeData) !!}
         </div>
-        
+
         <p>
             <a href="javascript:window.print()" class="btn btn-secondary">
                 Print
@@ -28,17 +38,15 @@
         </p>
     </div>
     @endif
-<div>
-    <p>
-        <a href="{{route('welcome')}}" class="btn btn-secondary">
-            Home
-        </a>
-    </p>
-</div>
+
+    <div>
+        <p>
+            <a href="{{ route('welcome') }}" class="btn btn-secondary">
+                Home
+            </a>
+        </p>
+    </div>
 </main>
-
-
-
 <!-- Print-specific Styles -->
 <style>
     /* Basic Styles for the PDF-like look */
@@ -125,4 +133,4 @@
             line-height: 1.8;
         }
     }
-</style>
+</style> 

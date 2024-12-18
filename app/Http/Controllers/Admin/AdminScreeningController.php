@@ -39,16 +39,18 @@ class AdminScreeningController extends Controller
             'ticket_price' => 'required|numeric|min:0',
             'total_seats' => 'required|integer|min:1',
         ]);
-
         $screening = Screening::create($request->all());
-       
-        // Create seats for this screening
-        $screening->seats()->create([
-            'total_seats' => $request->total_seats,
-            'available_seats' => $request->total_seats,
-            'seatable_id' => $screening->id,
-                'seatable_type' => Screening::class,
-        ]);
+
+        // Generate seat entries for the movie
+        for ($i = 1; $i <= $request->total_seats; $i++) {
+            $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
+            $screening->seats()->create([
+                'seat_number' => $seatNumber,
+                'status' => 'available',
+            ]);
+        }
+
+        
                 return redirect()->route('screenings.index')->with('success', 'Screening created successfully.');
 
     }

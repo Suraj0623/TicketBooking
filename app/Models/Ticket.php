@@ -19,4 +19,10 @@ class Ticket extends Model
 {
     return $this->belongsTo(Booking::class, 'ticketable_id', 'id');
 }
+public function seats()
+{
+    return $this->morphMany(Seat::class, 'seatable');
+}
+
+
 }

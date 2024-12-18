@@ -45,12 +45,7 @@ class AdminMovieController extends Controller
         }
 
        $movie= Movie::create($validated);
-    //     $movie->seats()->create([
-    //     'total_seats'=>$request->total_seats,
-    //     'available_seats'=>$request->total_seats,
-    //     'seatable_id' => $movie->id,
-    //     'seatable_type' => Movie::class,
-    //    ]);
+    
         return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
 
     }

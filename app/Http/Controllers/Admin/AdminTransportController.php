@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Seat;
-use App\Models\Movie;
 use App\Models\Route;
 use App\Models\Transport;
 use Illuminate\Http\Request;
@@ -48,16 +47,16 @@ class AdminTransportController extends Controller
             'ticket_price' => 'required|numeric|min:0',
         ]);
 
-
+       
         // Create a new transport record
         $transport=Transport::create($validated);
 
         Seat::create([
-    'seatable_id' => $transport->id,
-    'seatable_type' => Transport::class,
-    'total_seats' => 100,
-    'available_seats' => 100,
-]);
+            'seatable_id' => $transport->id,
+            'seatable_type' => Transport::class,
+            'seat_number' => 100,
+            'status' => 'available',
+        ]);
         
 
         return redirect()->route('transports.index')->with('success', 'Transport created successfully!');

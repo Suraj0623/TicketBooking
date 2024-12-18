@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
-            $table->morphs('seatable'); // This automatically creates the polymorphic relationship and the index
-            $table->integer('total_seats')->unsigned();
-            $table->integer('available_seats')->unsigned();
-            $table->boolean('is_booked')->default(false);
+            $table->morphs('seatable'); 
+            $table->string('seat_number')->nullable(); // e.g., A1, B2, etc.
+            $table->enum('status', ['available', 'reserved', 'booked'])->default('available'); 
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
+        
         
     }
 

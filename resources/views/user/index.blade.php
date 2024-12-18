@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($user as $user)
+                @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->FirstName }}</td>
                     <td>{{ $user->LastName }}</td>

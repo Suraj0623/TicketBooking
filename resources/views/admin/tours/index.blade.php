@@ -30,7 +30,7 @@
                         <img src="{{ asset('/storage/'.$tour->image) }}" class="img-thumbnail" style="width: 100px; height: 70px;" alt="{{ $tour->name }}">
                     </td>
                     <td>{{ Str::limit($tour->description, 50) }}</td>
-                    <td>{{ $tour->price }}</td>
+                    <td>{{ $tour->ticket_price }}</td>
                     <td>{{ $tour->duration }}</td>
                     <td>
                         <a href="{{ route('tour.show', $tour->id) }}" class="btn btn-info btn-sm">View</a>

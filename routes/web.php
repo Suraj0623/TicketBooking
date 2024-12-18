@@ -57,7 +57,7 @@ Route::prefix('admin')->group(function () {
     Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
     Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
     Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
-
+    Route::get('user',[UserController::class,'user'])->name('user');
 });
 
 // for  search function

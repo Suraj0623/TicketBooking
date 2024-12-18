@@ -55,8 +55,8 @@ class TicketController extends Controller
      */
     public function show($ticketId)
     {
-        $ticket = Ticket::with('ticketable')->find($ticketId);
-
+        $ticket = Ticket::with(['ticketable','seats'])->find($ticketId);
+        
         if (!$ticket) {
             // If the ticket is not found, redirect to an error page or handle accordingly
             return redirect()->route('tickets.index')->with('error', 'Ticket not found');

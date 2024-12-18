@@ -15,7 +15,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>S.N</th>
                     <th colspan="2">User</th>
                     <th>Mobile Number</th> <!-- Added for mobile number -->
                     <th>Bookable Type</th>
@@ -35,7 +35,7 @@
                         <td>{{ $booking->user->LastName ?? 'N/A' }}</td>
                         <td>{{ $booking->user->mobileNumber ?? 'N/A' }}</td>
                         <td>{{ class_basename($booking->bookable_type) }}</td>
-                        <td>{{ $booking->bookable->title ?? $booking->bookable->name ?? 'N/A' }}</td>
+                        <td>{{ $booking->bookable->title ?? $booking->bookable->name ?? $booking->bookable->movie->title ?? 'N/A' }}</td>
                         <td>{{ $booking->seats_booked }}
                             <a href="{{ route('seats.view', $booking->id) }}" class="btn btn-sm btn-info">View Seats</a>                              
                         </td>

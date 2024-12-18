@@ -59,11 +59,12 @@ class AdminTourController extends Controller
         'avg_rating' => $request->avg_rating,
         'total_rating' => $request->total_rating
     ]);
+    
     Seat::create([
         'seatable_id' => $tour->id,
         'seatable_type' => Tour::class,
-        'total_seats' => 100,
-        'available_seats' => 100,
+        'seat_number' => 100,
+        'status' => 'available',
     ]);
 
     // Redirect back to the tour index page

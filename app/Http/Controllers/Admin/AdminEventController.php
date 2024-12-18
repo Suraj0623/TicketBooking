@@ -28,9 +28,32 @@ class AdminEventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //             $request->validate([
+    //         'title' => 'required',
+    //         'description' => 'required',
+    //         'event_date' => 'required|date',
+    //         'venue' => 'required|string|max:255',
+    //         'ticket_price' => 'required|numeric|min:0',
+    //         'total_seats' => 'required|integer|min:1',
+    //     ]);
+
+    //    $event= Event::create($request->all());
+    //    $event->seats()->create([
+    //     'total_seats'=>$request->total_seats,
+    //     'available_seats'=>$request->total_seats,
+    //     'seatable_id' => $event->id,
+    //     'seatable_type' => Event::class,
+    //    ]);
+
+    //     return redirect()->route('events.index')->with('success', 'Event created successfully.');
+
+    // }
+
     public function store(Request $request)
     {
-                $request->validate([
+        $request->validate([
             'title' => 'required',
             'description' => 'required',
             'event_date' => 'required|date',
@@ -39,16 +62,18 @@ class AdminEventController extends Controller
             'total_seats' => 'required|integer|min:1',
         ]);
 
-       $event= Event::create($request->all());
-       $event->seats()->create([
-        'total_seats'=>$request->total_seats,
-        'available_seats'=>$request->total_seats,
-        'seatable_id' => $event->id,
-        'seatable_type' => Event::class,
-       ]);
+        $event = Event::create($request->all());
+
+        // Generate seat entries for the event
+        for ($i = 1; $i <= $request->total_seats; $i++) {
+            $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
+            $event->seats()->create([
+                'seat_number' => $seatNumber,
+                'status' => 'available',
+            ]);
+        }
 
         return redirect()->route('events.index')->with('success', 'Event created successfully.');
-
     }
 
     /**

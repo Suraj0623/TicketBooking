@@ -134,5 +134,9 @@ public function assignRole(Request $request)
 
   return view('welcome', compact('services'));
   }
+  public function user(){
+    $users = User::all();
+    return view('user.index', compact('users'));
+  }
 
 }

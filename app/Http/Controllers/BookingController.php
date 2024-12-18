@@ -11,43 +11,34 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('user', 'bookable', 'payment')->get();
+        $bookings = Booking::with(['user', 'bookable', 'payment'])->get();
         return view('bookings.index', compact('bookings'));
     }
 
     public function create(Request $request)
     {
+        $request->validate([
+            'bookable_id' => 'required|integer',
+            'bookable_type' => 'required|string',
+        ]);
 
-        $bookableId = $request->input('bookable_id');
-        $bookableType = $request->input('bookable_type');
+        $bookableId = $request->bookable_id;
+        $bookableType = $request->bookable_type;
+
         $bookableModel = app($bookableType)::find($bookableId);
-        if (!$bookableId || !$bookableType) {
+        if (!$bookableModel) {
             return back()->withErrors(['error' => 'Invalid booking details.']);
         }
 
-        $seat = Seat::where('seatable_id', $bookableId)
+        $availableSeats = Seat::where('seatable_id', $bookableId)
             ->where('seatable_type', $bookableType)
-            ->first();
+            ->where('status', 'available')
+            ->count();
 
-        if (!$seat) {
-            return back()->withErrors(['error' => 'Seat information not found.']);
-        }
-
-        $availableSeats = $seat->available_seats;
         $pricePerSeat = $bookableModel->ticket_price;
 
         return view('bookings.create', compact('bookableId', 'bookableType', 'availableSeats', 'pricePerSeat'));
     }
-
-    public function updatePaymentStatus(Request $request, Booking $booking)
-    {
-        $request->validate(['payment_status' => 'required|string']);
-
-        $booking->update(['payment_status' => $request->payment_status]);
-
-        return redirect()->route('booking.index')->with('success', 'Payment status updated successfully');
-    }
-
 
     public function store(Request $request)
     {
@@ -55,100 +46,72 @@ class BookingController extends Controller
             'bookable_type' => 'required|string',
             'bookable_id' => 'required|integer',
             'seats_booked' => 'required|integer|min:1',
-            'payment_option' => 'required|string',
+            'payment_option' => 'required|string|in:pay_now',
         ]);
 
-        // Check if the selected number of seats are available
-        $seat = Seat::where('seatable_id', $request->bookable_id)
-            ->where('seatable_type', $request->bookable_type)
-            ->first();
+        $bookableId = $request->bookable_id;
+        $bookableType = $request->bookable_type;
 
-        if ($request->seats_booked > $seat->available_seats) {
+        $seats = Seat::where('seatable_id', $bookableId)
+            ->where('seatable_type', $bookableType)
+            ->where('status', 'available')
+            ->take($request->seats_booked)
+            ->get();
+
+        if ($seats->count() < $request->seats_booked) {
             return back()->withErrors(['seats_booked' => 'Not enough available seats.']);
         }
 
-        // Fetch the bookable model (e.g., Event, Movie, etc.) to get the price per seat
-        $bookableModel = app($request->bookable_type)::findOrFail($request->bookable_id);
+        $bookableModel = app($bookableType)::findOrFail($bookableId);
         $pricePerSeat = $bookableModel->ticket_price;
-
-        // Calculate total price based on the seats booked and the price per seat
         $totalPrice = $pricePerSeat * $request->seats_booked;
 
-        // If the user chooses 'Pay Later', redirect back to the form
-        if ($request->payment_option === 'pay_later') {
-            return back()
-                ->withInput()
-                ->with('message', 'Booking cannot proceed with Pay Later. Please choose Pay Now.');
-        }
-
-        // Create the booking
         $booking = Booking::create([
-            'user_id' => auth::id(),
-            'bookable_id' => $request->bookable_id,
-            'bookable_type' => $request->bookable_type,
+            'user_id' => Auth::id(),
+            'bookable_id' => $bookableId,
+            'bookable_type' => $bookableType,
             'seats_booked' => $request->seats_booked,
-            'total_price' => $totalPrice,  // Store the calculated total price
+            'total_price' => $totalPrice,
             'payment_status' => 'pending',
         ]);
 
-        // Update available seats
-        $seat->update([
-            'available_seats' => $seat->available_seats - $request->seats_booked,
-        ]);
+        foreach ($seats as $seat) {
+            $seat->update(['status' => 'booked', 'user_id' => Auth::id()]);
+        }
 
         return redirect()->route('payment.index', ['booking_id' => $booking->id]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Booking $booking)
-    {
-        if ($booking->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized');
-        }
-        return view('bookings.show', compact('booking'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Booking $booking)
-    {
-        return view('bookings.edit', compact('booking'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(string $id, Request $request)
     {
         $booking = Booking::findOrFail($id);
-        $seat = Seat::where('seatable_id', $request->bookable_id)
-            ->where('seatable_type', $request->bookable_type)->first();
-        $seat->update(['available_seats' => $seat->available_seats + $booking->seats_booked]);
+
+        // Restore seat availability
+        $seats = Seat::where('seatable_id', $booking->bookable_id)
+            ->where('seatable_type', $booking->bookable_type)
+            ->where('user_id', $booking->user_id)
+            ->get();
+
+        foreach ($seats as $seat) {
+            $seat->update(['status' => 'available', 'user_id' => null]);
+        }
+
         $booking->delete();
 
-        return response()->json(['message' => 'booking cancelled and seats restored']);
-
-
+        return response()->json(['message' => 'Booking cancelled and seats restored']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Booking $booking)
     {
-        $booking->delete();
+        $this->update($booking->id, new Request());
         return redirect()->route('booking.index')->with('success', 'Booking canceled successfully');
     }
 
-    // Dynamic Status Update
     public function updateStatus(Request $request, Booking $booking)
     {
         $request->validate(['status' => 'required|string']);
         $booking->update(['status' => $request->status]);
+
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
-
 }
