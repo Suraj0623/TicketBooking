@@ -1,6 +1,10 @@
 <!-- Bootstrap CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<x-search-box search-route="{{ route('transport.index') }}" placeholder="Search transports..."/>
+@if (request('search'))
+    <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+@endif
 
 <h2>Buses</h2>
 @if ($buses->isNotEmpty())

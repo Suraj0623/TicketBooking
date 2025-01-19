@@ -37,7 +37,7 @@
                 @endauth
                 <a class="btn btn-outline-light me-2" href="{{ route('home') }}">Start Your Journey</a>
                 <a class="btn btn-outline-light me-2" href="{{ route('faq') }}">FAQ</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('contact') }}">Contact</a>
+                <a class="btn btn-outline-light me-2" href="{{ route('contact') }}">Assistance</a>
             </div>
             <div class="d-flex text-center">
                 @auth

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Contact Us</h1>
+        <h1 class="text-center mb-4">Enquiry</h1>
         <p class="text-center mb-5">Have questions or need assistance? Feel free to reach out to us using the form below or via the provided contact information.</p>
 
         @if (session('success'))

@@ -6,6 +6,9 @@
 
     <!-- Search Box -->
     <x-search-box search-route="{{ route('event.index') }}" placeholder="Search events..." />
+    @if (request('search'))
+    <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+@endif
 
     <div class="row mt-4">
         @foreach($events as $event)

@@ -1,7 +1,10 @@
 <x-header/>
 <main class="container" style="margin-top: 80px;">
     <div class="container my-4">
-        <x-search-box search-route="{{ route('tour.index') }}" placeholder="Search events..." />
+        <x-search-box search-route="{{ route('tour.index') }}" placeholder="Search Tour..." />
+        @if (request('search'))
+        <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+    @endif
     
         <div class="row row-cols-1 row-cols-md-2 g-4">
             @foreach($tours as $tour)
