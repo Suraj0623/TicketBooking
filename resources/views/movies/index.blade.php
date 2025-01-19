@@ -3,8 +3,11 @@
     <main class="container" style="margin-top: 80px;">
     <div class="container mt-5 my-4">
         <h1 class="text-center mb-4">Movie List</h1>
-        <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search events..." />
-
+        <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search movies..." />
+        @if (request('search'))
+        <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+    @endif
+    
         <div class="row">
             @foreach ($movies as $movie)
                 <div class="col-md-4 mb-4">
