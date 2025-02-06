@@ -82,36 +82,63 @@ class BookingController extends Controller
         return redirect()->route('payment.index', ['booking_id' => $booking->id]);
     }
 
-    public function update(string $id, Request $request)
-    {
-        $booking = Booking::findOrFail($id);
+   // Updated method for updating the booking details (no conflict anymore)
+   public function update(string $id, Request $request)
+   {
+       $booking = Booking::findOrFail($id);
 
-        // Restore seat availability
-        $seats = Seat::where('seatable_id', $booking->bookable_id)
-            ->where('seatable_type', $booking->bookable_type)
-            ->where('user_id', $booking->user_id)
-            ->get();
+       // You can handle updates to booking details here, such as seats booked
+       $booking->update([
+           'seats_booked' => $request->seats_booked,
+           // Any other fields you want to update, for example:
+           'total_price' => $request->total_price
+       ]);
 
-        foreach ($seats as $seat) {
-            $seat->update(['status' => 'available', 'user_id' => null]);
-        }
+       return redirect()->route('booking.index')->with('success', 'Booking updated successfully');
+   }
 
-        $booking->delete();
+   // Renamed method to cancel the booking (previously `update`)
+   public function cancel(string $id, Request $request)
+   {
+       $booking = Booking::findOrFail($id);
 
-        return response()->json(['message' => 'Booking cancelled and seats restored']);
-    }
+       // Restore seat availability
+       $seats = Seat::where('seatable_id', $booking->bookable_id)
+           ->where('seatable_type', $booking->bookable_type)
+           ->where('user_id', $booking->user_id)
+           ->get();
 
-    public function destroy(Booking $booking)
-    {
-        $this->update($booking->id, new Request());
-        return redirect()->route('booking.index')->with('success', 'Booking canceled successfully');
-    }
+       foreach ($seats as $seat) {
+           $seat->update(['status' => 'available', 'user_id' => null]);
+       }
 
-    public function updateStatus(Request $request, Booking $booking)
-    {
-        $request->validate(['status' => 'required|string']);
-        $booking->update(['status' => $request->status]);
+       $booking->delete();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
-    }
+       return response()->json(['message' => 'Booking cancelled and seats restored']);
+   }
+
+   // The destroy method now uses the renamed cancel method
+   public function destroy(Booking $booking)
+   {
+       $this->cancel($booking->id, new Request());
+       return redirect()->route('booking.index')->with('success', 'Booking canceled successfully');
+   }
+
+   public function updateStatus(Request $request, Booking $booking)
+   {
+       $request->validate(['status' => 'required|string']);
+       $booking->update(['status' => $request->status]);
+
+       return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+   }
+
+   // Edit method to render the form for editing a booking
+   public function edit($id)
+   {
+       // Retrieve the booking details by ID
+       $booking = Booking::with(['user', 'bookable', 'payment'])->findOrFail($id);
+
+       // Return the view with the booking data to populate the form
+       return view('bookings.edit', compact('booking'));
+   }
 }
