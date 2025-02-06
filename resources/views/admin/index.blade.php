@@ -81,7 +81,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('user') }}">
+                        <a class="nav-link" href="{{ route('user.index') }}">
                             <i class="fas fa-users"></i> Users
                         </a>
                     </li>
