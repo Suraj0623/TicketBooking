@@ -6,9 +6,20 @@
     <div class="container">
         <h1>Edit Booking</h1>
 
+        <!-- Display errors -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('booking.update', $booking->id) }}" method="POST">
             @csrf
-            @method('PUT') <!-- Use PUT method for updates -->
+            @method('PUT')
 
             <div class="form-group">
                 <label for="seats_booked">Seats Booked</label>
@@ -20,7 +31,15 @@
                 <input type="number" name="total_price" id="total_price" value="{{ old('total_price', $booking->total_price) }}" class="form-control" required>
             </div>
 
-            <!-- Add other fields as needed -->
+            <!-- Payment Status Dropdown -->
+            <div class="form-group">
+                <label for="payment_status">Payment Status</label>
+                <select name="payment_status" id="payment_status" class="form-control" required>
+                    <option value="pending" {{ $booking->payment_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="paid" {{ $booking->payment_status == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="failed" {{ $booking->payment_status == 'failed' ? 'selected' : '' }}>Failed</option>
+                </select>
+            </div>
 
             <button type="submit" class="btn btn-primary">Update Booking</button>
         </form>

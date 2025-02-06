@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\OfferController;
@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
 
 // Admin Resource Routes
 Route::prefix('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('movies', AdminMovieController::class);
     Route::resource('tours', AdminTourController::class);
     Route::resource('events', AdminEventController::class);
@@ -80,9 +80,11 @@ Route::prefix('admin')->group(function () {
     Route::resource('screenings', AdminScreeningController::class);
     Route::resource('bookings', BookingController::class);
     Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
-    Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
-    Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
-});
+
+    Route::get('bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
+
+
+}); 
 
 // User Resource Routes
 Route::prefix('user')->group(function () {
@@ -113,6 +115,9 @@ Route::post('journey/search', [TransportController::class, 'search'])->name('tra
 Route::middleware('auth')->group(function () {
     Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+    Route::post('/booking/{id}/accept', [BookingController::class, 'accept'])->name('booking.accept');
+    Route::post('/booking/{id}/reject', [BookingController::class, 'reject'])->name('booking.reject');
+
     Route::get('/payment/{booking_id}', [PaymentController::class, 'index'])->name('payment.index');
     Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('user.ticket');
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');

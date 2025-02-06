@@ -6,11 +6,12 @@ use App\Models\Ticket;
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-    // List all payments
+    // List all payments for a specific booking
     public function index($bookingId)
     {
         $booking = Booking::findOrFail($bookingId);
@@ -23,43 +24,13 @@ class PaymentController extends Controller
 
         return view('payments.index', compact('booking', 'totalAmount', 'bookingId'));
     }
+
     // Accept payment method
-    public function accept($payment_id)
-    {
-        $payment = Payment::findOrFail($payment_id);
-        $payment->status = 'completed'; // Update status to 'completed'
-        $payment->save();
-
-        $booking = $payment->booking; // Assuming there's a relationship defined between Payment and Booking
-        $booking->payment_status = 'paid';
-        $booking->save();
-        
-        Ticket::create([
-            'user_id' => $booking->user_id,
-            'ticketable_type' => $booking->bookable_type, // Polymorphic relationship
-            'ticketable_id' => $booking->bookable_id,
-            'price' => $booking->total_price,
-            'quantity' => $booking->seats_booked,
-        ]);
-
-        return redirect()->route('bookings.index')->with('success', 'Payment has been accepted.');
-    }
+    // Accept payment method (POST)
+    
 
 
-
-    public function reject($payment_id)
-    {
-        $payment = Payment::findOrFail($payment_id);
-        $payment->status = 'failed'; // Update status to 'failed'
-        $payment->save();
-
-        return redirect()->route('bookings.index')->with('success', 'Payment has been rejected.');
-    }
-
-
-
-
-
+    // Process the payment (e.g., initiate payment)
     public function process(Request $request)
     {
         $request->validate([
@@ -67,6 +38,7 @@ class PaymentController extends Controller
             'payment_method' => 'required|string',
         ]);
 
+        // Find the booking and create a pending payment
         $booking = Booking::findOrFail($request->booking_id);
 
         // Process the payment with status 'pending'
@@ -77,16 +49,12 @@ class PaymentController extends Controller
             'status' => 'pending',  // Set status to pending initially
         ]);
 
-
-
         // Update booking payment status to 'pending'
         $booking->update(['payment_status' => 'pending']);
 
         return redirect()->route('user.ticket', ['bookingId' => $booking->id])
-            ->with('success', 'Payment initiated, awaiting admin approval!');
+                         ->with('success', 'Payment initiated, awaiting admin approval!');
     }
-
-
 
     // Show details of a specific payment
     public function show($id)
@@ -96,7 +64,7 @@ class PaymentController extends Controller
         return response()->json($payment);
     }
 
-    // Create a new payment
+    // Create a new payment (for administrative purposes)
     public function store(Request $request)
     {
         $request->validate([
@@ -106,6 +74,7 @@ class PaymentController extends Controller
             'status' => 'required|in:pending,completed,failed',
         ]);
 
+        // Create the payment record
         $payment = Payment::create([
             'booking_id' => $request->booking_id,
             'amount' => $request->amount,
@@ -119,7 +88,7 @@ class PaymentController extends Controller
         ], 201);
     }
 
-    // Update an existing payment
+    // Update an existing payment (e.g., modify payment status or details)
     public function update(Request $request, $id)
     {
         $payment = Payment::findOrFail($id);
@@ -130,6 +99,7 @@ class PaymentController extends Controller
             'status' => 'sometimes|in:pending,completed,failed',
         ]);
 
+        // Update the payment details
         $payment->update($request->only(['amount', 'method', 'status']));
 
         return response()->json([
@@ -138,7 +108,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    // Delete a payment
+    // Delete a payment (e.g., cancel or remove a payment)
     public function destroy($id)
     {
         $payment = Payment::findOrFail($id);

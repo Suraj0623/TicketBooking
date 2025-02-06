@@ -17,7 +17,7 @@
                 <tr>
                     <th>S.N</th>
                     <th colspan="2">User</th>
-                    <th>Mobile Number</th> <!-- Added for mobile number -->
+                    <th>Mobile Number</th>
                     <th>Bookable Type</th>
                     <th>Bookable Item</th>
                     <th>Seats Booked</th>
@@ -37,12 +37,12 @@
                         <td>{{ class_basename($booking->bookable_type) }}</td>
                         <td>{{ $booking->bookable->title ?? $booking->bookable->name ?? $booking->bookable->movie->title ?? 'N/A' }}</td>
                         <td>{{ $booking->seats_booked }}
-                            <a href="{{ route('seats.view', $booking->id) }}" class="btn btn-sm btn-info">View Seats</a>                              
+                            <a href="{{ route('seats.view', $booking->id) }}" class="btn btn-sm btn-info">View Seats</a>
                         </td>
                         <td>${{ number_format($booking->total_price, 2) }}</td>
                         <td>
                             <!-- Payment Status Badge -->
-                            <span class="badge bg-{{ $booking->payment_status === 'paid' ? 'success' : 'warning' }}">
+                            <span class="badge bg-{{ $booking->payment_status === 'paid' ? 'success' : ($booking->payment_status === 'failed' ? 'danger' : 'warning') }}">
                                 {{ ucfirst($booking->payment_status) }}
                             </span>
                         </td>
@@ -60,19 +60,19 @@
 
                             <!-- Only show Accept and Reject buttons for pending payments -->
                             @if ($booking->payment_status === 'pending')
-                                <form action="{{ route('payments.accept', $booking->id) }}" method="POST" style="display:inline;">
+                                <!-- Accept button form -->
+                                <form action="{{ route('booking.accept', $booking->id) }}" method="POST" style="display:inline;">
                                     @csrf
-                                    @method('PATCH')
                                     <button type="submit" class="btn btn-sm btn-success">Accept</button>
                                 </form>
 
-                                <form action="{{ route('payments.reject', $booking->id) }}" method="POST" style="display:inline;">
+                                <!-- Reject button form -->
+                                <form action="{{ route('booking.reject', $booking->id) }}" method="POST" style="display:inline;">
                                     @csrf
-                                    @method('PATCH')
                                     <button type="submit" class="btn btn-sm btn-danger">Reject</button>
                                 </form>
                             @else
-                                <span class="badge bg-{{ $booking->payment_status === 'paid' ? 'success' : 'danger' }}">
+                                <span class="badge bg-{{ $booking->payment_status === 'paid' ? 'success' : ($booking->payment_status === 'failed' ? 'danger' : 'warning') }}">
                                     {{ ucfirst($booking->payment_status) }}
                                 </span>
                             @endif
