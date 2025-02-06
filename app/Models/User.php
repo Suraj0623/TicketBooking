@@ -20,10 +20,10 @@ class User extends Authenticatable
     return $this->hasMany(Ticket::class);
 }
 
-    public function bookings()
-    {
-        return $this->morphMany(Booking::class, 'bookable');
-    }
+public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
     protected static function boot()
     {
         parent::boot();

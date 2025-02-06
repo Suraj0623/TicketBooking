@@ -31,9 +31,9 @@ class Booking extends Model
      * Get the user associated with the booking.
      */
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class);
+}
 
     /**
      * Get the bookable item (Movie, Tour, or Event) associated with the booking.
