@@ -27,12 +27,13 @@ Route::get('/', [UserController::class, 'index'])->name('welcome');
 Route::get('/journey', function () {
     return view('home');
 })->name('home');
+Route::get('/search',[UserController::class,'search'])->name('search');
 Route::view('about', 'about')->name('about');
 Route::prefix('user')->group(function () {
 
     // Resource route for bookings
     Route::resource('booking', BookingController::class);
-
+    Route::get('/seat/{seat}',[SeatController::class,'update'])->name('update');
     Route::resource('event', EventController::class);
     Route::resource('route', RouteController::class);
     Route::resource('seat', SeatController::class);

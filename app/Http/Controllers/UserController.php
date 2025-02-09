@@ -104,36 +104,47 @@ public function assignRole(Request $request)
     return redirect()->route('admin.manage')->with('success', 'Role assigned successfully.');
 
   }
-  public function index(){
-    $services = [
-      [
-          'route' => 'transport.index',
-          'image' => 'images/transport.webp',
-          'title' => 'Transport Booking',
-          'description' => 'Book transport options quickly and easily.',
-      ],
-      [
-          'route' => 'movie.index',
-          'image' => 'images/movie.webp',
-          'title' => 'Movie Booking',
-          'description' => 'Find and book your favorite movies in theaters.',
-      ],
-      [
-          'route' => 'event.index',
-          'image' => 'images/concert.webp',
-          'title' => 'Event Tickets',
-          'description' => 'Reserve tickets for concerts, sports, and other events.',
-      ],
-      [
-          'route' => 'tour.index',
-          'image' => 'images/tours.webp',
-          'title' => 'Tour Packages',
-          'description' => 'Explore and book amazing tour packages.',
-      ],
-  ];
-
-  return view('welcome', compact('services'));
+  public function index()
+  {
+      $services = [
+          [
+              'route' => 'transport.index',
+              'image' => 'images/transport.webp',
+              'title' => 'Transport Booking',
+              'description' => 'Book transport options quickly and easily.',
+          ],
+          [
+              'route' => 'movie.index',
+              'image' => 'images/movie.webp',
+              'title' => 'Movie Booking',
+              'description' => 'Find and book your favorite movies in theaters.',
+          ],
+          [
+              'route' => 'event.index',
+              'image' => 'images/concert.webp',
+              'title' => 'Event Tickets',
+              'description' => 'Reserve tickets for concerts, sports, and other events.',
+          ],
+          [
+              'route' => 'tour.index',
+              'image' => 'images/tours.webp',
+              'title' => 'Tour Packages',
+              'description' => 'Explore and book amazing tour packages.',
+          ],
+      ];
+  
+      return view('welcome', compact('services'));
   }
+  
+  public function search(Request $request)
+  {
+      $query = $request->input('query');
+      $category = $request->input('category');
+  
+  
+      return view('search-results', compact('query', 'category')); // Pass search results here
+  }
+  
   public function user(){
     $users = User::all();
     return view('user.index', compact('users'));
