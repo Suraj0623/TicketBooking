@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AdminController
 {
     public function dashboard(){
         return view('admin.index');
