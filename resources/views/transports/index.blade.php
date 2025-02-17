@@ -18,7 +18,8 @@
             </div>
         </div>
     @endforeach
-
+@else
+<p>No buses available for this route at this time</p>
 
 @endif
 

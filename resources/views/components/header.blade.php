@@ -1,64 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'My Application' }}</title>
-    <!-- Include a CSS framework (e.g., Bootstrap, Tailwind) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <style>
-       body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-50 position-fixed top-0 w-100">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{route('welcome')}}">
-                <img src="{{ asset('images/logo.webp') }}" alt="Logo" height="50">
-            </a>
-            <div class="d-flex">
-                <a class="btn btn-outline-light me-2" href="{{ route('tour.index') }}">Tours</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand me-auto" href="{{route('welcome')}}">
+            <img src="{{ asset('images/logo.webp') }}" alt="Logo" height="50" class="me-2"> 
+            <span class="fs-5 fw-bold">BookMyTicket</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('tour.index') }}">Tours</a></li>
                 @auth
-                    <a class="btn btn-outline-light me-2" href="{{ route('ticket.index') }}">My Bookings</a>
+                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('ticket.index') }}">My Bookings</a></li>
                 @endauth
-                <a class="btn btn-outline-light me-2" href="{{ route('home') }}">Start Your Journey</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('faq') }}">FAQ</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('contact') }}">Assistance</a>
-            </div>
-            <div class="d-flex text-center">
+                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('home') }}">Start Journey</a></li>
+                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('faq') }}">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('contact') }}">Assistance</a></li>
+            </ul>
+
+            <!-- Separated Register/Login Buttons -->
+            <div class="ms-3">
                 @auth
-                    <a href="{{ route('profile.index') }}" class="btn btn-primary btn-sm me-2">View Profile</a>
-                    @if(auth()->user()->roles->contains('roleName', 'admin'))
-                    <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2" title="Go to the dashboard">Dashboard</a>
-                @endif
-                    <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">Logout</a>
+                    <a class="btn btn-primary btn-sm fs-6" href="{{ route('profile.index') }}">Profile</a>
+                    <a class="btn btn-danger btn-sm fs-6" href="{{ route('logout') }}">Logout</a>
                 @else
-                    <a href="{{ route('register') }}" class="btn btn-warning text-white">Register</a>
-                    <a href="{{ route('login') }}" class="btn btn-success btn-lg">Login</a>
+                    <a class="btn btn-warning text-white fs-5" href="{{ route('register') }}">Register</a>
+                    <a class="btn btn-success fs-5" href="{{ route('login') }}">Login</a>
                 @endauth
             </div>
         </div>
-    </nav>
-
-    <main class="container">
-        {{ $slot }}
-    </main>
-
-    <!-- Include JavaScript framework (optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    </div>
+</nav>

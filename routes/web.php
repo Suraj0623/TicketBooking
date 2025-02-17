@@ -29,13 +29,70 @@ Route::get('/', [UserController::class, 'index'])->name('welcome');
 Route::get('/journey', function () {
     return view('home');
 })->name('home');
-<<<<<<< HEAD
-Route::get('/search',[UserController::class,'search'])->name('search');
-=======
 
-// Static Pages
->>>>>>> 6d9942814386363355bfe6db8dc977f8aa78d4b0
+Route::get('/search',[UserController::class,'search'])->name('search');
+
+Route::get('/search',[UserController::class,'search'])->name('search');
+
+
 Route::view('about', 'about')->name('about');
+Route::prefix('user')->group(function () {
+
+    // Resource route for bookings
+    Route::resource('booking', BookingController::class);
+    Route::get('/seat/{seat}',[SeatController::class,'update'])->name('update');
+    Route::resource('event', EventController::class);
+    Route::resource('route', RouteController::class);
+    Route::resource('seat', SeatController::class);
+    Route::resource('tour', TourController::class);
+    Route::resource('offer', OfferController::class);
+    Route::resource('movie', MovieController::class);
+    Route::resource('transport', TransportController::class);
+    Route::resource('screening', ScreeningController::class);
+    Route::resource('ticket', TicketController::class);
+    Route::get('/ticket/validate/{ticket}', [TicketController::class, 'validateTicket'])->name('ticket.validate');
+    Route::resource('profile', ProfileController::class);
+
+
+});
+Route::view('/view','view');
+Route::prefix('profile')->group(function () {
+    Route::get('/partner', [UserController::class, 'partner'])->name('partner');
+});
+Route::prefix('admin')->group(function () {
+    Route::resource('movies', AdminMovieController::class);
+    Route::resource('tours', AdminTourController::class);
+    Route::resource('events', AdminEventController::class);
+    Route::resource('transports', AdminTransportController::class);
+    Route::resource('screenings', AdminScreeningController::class);
+    Route::resource('bookings', BookingController::class);
+    Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
+    Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
+    Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
+    Route::get('user',[UserController::class,'user'])->name('user');
+});
+
+// for  search function
+Route::post('journey/search', [TransportController::class, 'search'])->name('transport.search');
+
+Route::prefix('admin')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+});
+
+Route::get('dashboardPage', [UserController::class, 'dashboardPage'])->name('dashboardPage')->middleware(ValidUser::class);
+// to manage and add new admin
+Route::get('admin/manage', [UserController::class, 'manageAdmins'])->name('admin.manage')->middleware(ValidUser::class);
+Route::post('admin/assign-role', [UserController::class, 'assignRole'])->name('admin.assignRole')->middleware(ValidUser::class);
+
+// register and save
+Route::post('/registerSave', [UserController::class, 'register'])->name('registerSave');
+Route::get('/register', [UserController::class, 'viewregister'])->name('register');
+Route::post('loginMatch', [UserController::class, 'login'])->name('LoginMatch');
+Route::get('login', [UserController::class, 'viewlog'])->name('login');
+Route::get('logout', [UserController::class, 'logout'])->name('logout');
+Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+
+
 Route::get('/faq', function () {
     return view('faq');
 })->name('faq');
@@ -93,10 +150,6 @@ Route::prefix('admin')->group(function () {
 // User Resource Routes
 Route::prefix('user')->group(function () {
     Route::resource('booking', BookingController::class);
-<<<<<<< HEAD
-    Route::get('/seat/{seat}',[SeatController::class,'update'])->name('update');
-=======
->>>>>>> 6d9942814386363355bfe6db8dc977f8aa78d4b0
     Route::resource('event', EventController::class);
     Route::resource('route', RouteController::class);
     Route::resource('seat', SeatController::class);
