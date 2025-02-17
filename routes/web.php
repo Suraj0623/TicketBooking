@@ -29,7 +29,12 @@ Route::get('/', [UserController::class, 'index'])->name('welcome');
 Route::get('/journey', function () {
     return view('home');
 })->name('home');
+
 Route::get('/search',[UserController::class,'search'])->name('search');
+
+Route::get('/search',[UserController::class,'search'])->name('search');
+
+
 Route::view('about', 'about')->name('about');
 Route::prefix('user')->group(function () {
 
