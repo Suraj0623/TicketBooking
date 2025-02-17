@@ -66,4 +66,7 @@ class RecommendationService
 
         return $recommendations;
     }
+    public function recommendViaRatings(){
+        
+    }
 }

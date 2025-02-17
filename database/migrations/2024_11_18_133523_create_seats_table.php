@@ -16,6 +16,7 @@ return new class extends Migration
             $table->morphs('seatable'); 
             $table->string('seat_number')->nullable(); // e.g., A1, B2, etc.
             $table->enum('status', ['available', 'reserved', 'booked'])->default('available'); 
+            $table->boolean('is_booked')->default(false);
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
