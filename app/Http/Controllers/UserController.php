@@ -143,11 +143,11 @@ class UserController extends Controller
         return redirect()->route('admin.manage')->with('error', 'Failed to assign role.');
     }
 
-    public function user()
-    {
-        $users = User::select(['id', 'FirstName', 'LastName', 'email'])->get();
-        return view('user.index', compact('users'));
-    }
+    // public function user()
+    // {
+    //     $users = User::select(['id', 'FirstName', 'LastName', 'email'])->get();
+    //     return view('user.index', compact('users'));
+    // }
 
     public function recommendations(User $user)
     {

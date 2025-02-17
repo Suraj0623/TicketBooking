@@ -24,8 +24,10 @@
                     <a class="btn btn-primary btn-sm fs-6" href="{{ route('profile.index') }}">Profile</a>
                     <a class="btn btn-danger btn-sm fs-6" href="{{ route('logout') }}">Logout</a>
                 @else
-                    <a class="btn btn-warning text-white fs-5" href="{{ route('register') }}">Register</a>
-                    <a class="btn btn-success fs-5" href="{{ route('login') }}">Login</a>
+                <a class="btn btn-success fs-5" href="{{ route('login') }}">
+                    <img src="{{ asset('images/user.jpg') }}" alt="User" height="20"> Login
+                </a>
+                
                 @endauth
             </div>
         </div>
