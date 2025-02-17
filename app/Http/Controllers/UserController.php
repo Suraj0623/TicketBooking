@@ -25,6 +25,7 @@ class UserController extends Controller
         return view('auth.login');
     }
 
+
     public function index()
     {
         $services = [
@@ -34,6 +35,26 @@ class UserController extends Controller
             ['route' => 'tour.index', 'image' => 'images/tours.webp', 'title' => 'Tour Packages', 'description' => 'Explore and book amazing tour packages.'],
         ];
         return view('welcome', compact('services'));
+
+  }
+ 
+  
+  public function search(Request $request)
+  {
+      $query = $request->input('query');
+      $category = $request->input('category');
+  
+  
+      return view('search-results', compact('query', 'category')); // Pass search results here
+  }
+  
+  public function user(){
+    $users = User::all();
+    return view('user.index', compact('users'));
+  }
+    public function viewregister(){
+        return view('auth.register');
+
     }
 
     public function register(Request $request)
@@ -45,6 +66,7 @@ class UserController extends Controller
             'mobileNumber' => 'required|digits:10',
             'password' => 'required|string|min:8|confirmed',
         ]);
+
 
         $user = User::create([
             'FirstName' => $request->FirstName,
@@ -133,13 +155,7 @@ class UserController extends Controller
         return view('user.recommendations', compact('recommendations'));
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
-        $category = $request->input('category');
-
-        return view('search-results', compact('query', 'category'));
-    }
+   
 
     public function partner()
     {
