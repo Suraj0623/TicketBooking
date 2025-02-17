@@ -116,9 +116,9 @@
                                     <div class="card p-3 shadow-sm">
                                         <img src="{{ asset($service['image']) }}" class="card-img-top" alt="{{ $service['title'] }}" style="height: 150px; object-fit: cover;">
                                         <i class="fas fa-calendar-check text-primary fs-2"></i>
-                                        <h6 class="mt-2 text-center fs-3">{{ $service['title'] }}</h6>
+                                        <h6 class="mt-2 text-center fs-4">{{ $service['title'] }}</h6>
                                         <p class="small text-center fs-4">{{ Str::limit($service['description'], 60) }}</p>
-                                        <a href="{{ route($service['route']) }}" class="btn btn-sm btn-primary">Explore</a>
+                                        <a href="{{ route($service['route']) }}" class="btn btn-lg btn-primary">Explore</a>
                                     </div>
                                 </div>
                             @endforeach

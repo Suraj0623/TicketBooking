@@ -30,7 +30,7 @@
 </div>
 
 <!-- Login Button -->
-<button type="submit" class="btn btn-primary w-100">Login</button>
+<button type="submit" class="btn btn-success w-100">Login</button>
 <div class="text-center mt-4">
     <p>New User <a href="{{ route('register') }}">Registration</a></p>
 </div>

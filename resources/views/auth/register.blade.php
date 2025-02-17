@@ -1,5 +1,5 @@
 <title>Register</title>
-<x-form action="{{route('registerSave')}}" method="POSt">
+<x-form action="{{route('registerSave')}}" method="POST">
     <div class="form-group mb-3">
         <label for="FirstName">First Name</label>
         <input type="text" name="FirstName" id="FirstName" class="form-control @error('FirstName') is-invalid @enderror" value="{{ old('FirstName') }}" required>
@@ -52,7 +52,7 @@
 
     <!-- Submit Button -->
     <div class="form-group text-center mt-4">
-        <button type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="submit" class="btn btn-success w-100">Register</button>
     </div>
 
     <!-- Sign In Link -->
