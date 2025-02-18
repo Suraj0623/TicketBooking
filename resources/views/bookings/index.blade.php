@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Bookings Management</h1>
+        <h1 class="mb-4 text-center text-primary">Bookings Management</h1>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -12,9 +12,10 @@
             </div>
         @endif
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
+        <div class="table-responsive bg-white p-3 rounded border border-black">
+            <table class="table table-bordered">
+                <thead class="bg-primary text-white">
+                <tr  class="text-center">
                     <th>S.N</th>
                     <th colspan="2">User</th>
                     <th>Mobile Number</th>
@@ -29,7 +30,7 @@
             </thead>
             <tbody>
                 @forelse($bookings as $index => $booking)
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $booking->user->FirstName ?? 'N/A' }}</td>
                         <td>{{ $booking->user->LastName ?? 'N/A' }}</td>
@@ -85,6 +86,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
 
         <div class="mt-3">
             {{-- {{ $bookings->links() }} Laravel pagination links --}}

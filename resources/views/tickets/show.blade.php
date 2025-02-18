@@ -1,136 +1,67 @@
-
-<main>
-    <h1>Ticket Details</h1>
-
-    @if(!$ticket)
-        <p>No tickets found.</p>
-    @else
-    <div class="ticket-details">
-        <p><strong>Title/Name:</strong> {{ $ticket->ticketable->title ?? $ticket->ticketable->name ?? $ticket->ticketable->movie->title }}</p>
-        <p><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
-
-        <!-- Display Assigned Booked Seats -->
-        <p><strong>Assigned Seats:</strong></p>
-<ul>
-    @foreach($ticket->seats as $seat)
-        <li>Seat #{{ $seat->seat_number }} - Status: {{ ucfirst($seat->status) }}</li>
-    @endforeach
-</ul>
-
-
-        <p><strong>Status:</strong>
-            @if(optional($ticket->booking)->payment && optional($ticket->booking->payment)->status === 'completed')
-                <span class="text-success">Paid</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ticket Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            body {
+                background-color: white;
+            }
+            header, footer, .btn {
+                display: none;
+            }
+            .ticket-details {
+                border: none;
+                padding: 10px;
+                background-color: white;
+                box-shadow: none;
+            }
+            h1 {
+                font-size: 28px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="bg-primary text-white">
+    <div class="container mt-5">
+        <h1 class="text-center">Ticket Details</h1>
+        <div class="card bg-light text-dark p-4 mt-4">
+            @if(!$ticket)
+                <p>No tickets found.</p>
             @else
-                <span class="text-warning">Pending</span>
+                <div class="ticket-details">
+                    <p><strong>Title/Name:</strong> {{ $ticket->ticketable->title ?? $ticket->ticketable->name ?? $ticket->ticketable->movie->title }}</p>
+                    <p><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
+                    <p><strong>Assigned Seats:</strong></p>
+                    <ul>
+                        @foreach($ticket->seats as $seat)
+                            <li>Seat #{{ $seat->seat_number }} - Status: {{ ucfirst($seat->status) }}</li>
+                        @endforeach
+                    </ul>
+                    <p><strong>Status:</strong>
+                        @if(optional($ticket->booking)->payment && optional($ticket->booking->payment)->status === 'completed')
+                            <span class="text-success">Paid</span>
+                        @else
+                            <span class="text-warning">Pending</span>
+                        @endif
+                    </p>
+                    <div class="text-center">
+                        {!! QrCode::size(250)->generate($qrCodeData) !!}
+                    </div>
+                    <p class="text-center mt-3">
+                        <a href="javascript:window.print()" class="btn btn-primary">Print</a>
+                    </p>
+                </div>
             @endif
-        </p>
-
-        <!-- Display the QR Code -->
-        <div class="ticket-qr">
-            {!! QrCode::size(250)->generate($qrCodeData) !!}
         </div>
-
-        <p>
-            <a href="javascript:window.print()" class="btn btn-secondary">
-                Print
-            </a>
-        </p>
+        <div class="text-center mt-3">
+            <a href="{{ route('welcome') }}" class="btn btn-secondary">Home</a>
+        </div>
     </div>
-    @endif
-
-    <div>
-        <p>
-            <a href="{{ route('welcome') }}" class="btn btn-secondary">
-                Home
-            </a>
-        </p>
-    </div>
-</main>
-<!-- Print-specific Styles -->
-<style>
-    /* Basic Styles for the PDF-like look */
-    body {
-        font-family: 'Arial', sans-serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-    }
-
-    main {
-        width: 100%;
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    .ticket-details {
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-    }
-
-    .ticket-details p {
-        margin: 8px 0;
-    }
-
-    .text-success {
-        color: green;
-    }
-
-    .text-warning {
-        color: orange;
-    }
-
-    /* Button Style for print */
-    .btn {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .btn:hover {
-        background-color: #0056b3;
-    }
-
-    /* Media query for printing */
-    @media print {
-        body {
-            background-color: white;
-        }
-
-        header, footer {
-            display: none; /* Hide header and footer on print */
-        }
-
-        .ticket-details {
-            border: none;
-            padding: 10px;
-            background-color: white;
-            box-shadow: none;
-        }
-
-        .btn {
-            display: none; /* Hide the 'pay' button in the print version */
-        }
-
-        h1 {
-            font-size: 28px;
-            text-align: center;
-        }
-
-        .ticket-details p {
-            font-size: 16px;
-            line-height: 1.8;
-        }
-    }
-</style> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

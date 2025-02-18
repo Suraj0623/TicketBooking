@@ -8,7 +8,7 @@
         height: 80vh; /* Height for the background */
         overflow: hidden;
         background-color: #f0f0f0;
-        background-image: url('{{ asset('images/road.jpeg') }}');
+        background-image: url('{{ asset('images/journey.webp') }}');
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -29,14 +29,14 @@
     }
 
     /* Keyframes for moving the bus */
-    @keyframes moveBus {
+    /* @keyframes moveBus {
         0% {
             left: -300px;
         }
         100% {
             left: 100%;
         }
-    }
+    } */
 
     /* Form styling */
     .search-form {
@@ -93,7 +93,7 @@
 
 <div class="background-container">
     <!-- Bus image animation -->
-    <img class="moving-bus" src="{{ asset('images/bus.jpeg')}}" alt="Moving Bus">
+    {{-- <img class="moving-bus" src="{{ asset('images/bus.jpeg')}}" alt="Moving Bus"> --}}
 
     <!-- Search Form -->
     <form action="{{route('transport.search')}}" method="Post" class="search-form">

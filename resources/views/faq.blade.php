@@ -7,8 +7,8 @@
     <title>Ticket Booking FAQ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container mt-5">
+<body class="bg-primary">
+    <div class="container mt-5  fs-7">
         <h1 class="mb-4 text-center">Ticket Booking - Frequently Asked Questions</h1>
         <div class="accordion" id="faqAccordion">
             <!-- FAQ 1 -->
@@ -76,6 +76,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="container card text-center bg-secondary">
+        <div class="row">
+            <a href="{{route('welcome')}}" class="btn btn-sm">Home</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

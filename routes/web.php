@@ -180,10 +180,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking/{id}/reject', [BookingController::class, 'reject'])->name('booking.reject');
 
     Route::get('/payment/{booking_id}', [PaymentController::class, 'index'])->name('payment.index');
-    Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('user.ticket');
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/seats/manage/{id}/{type}', [SeatController::class, 'manageSeats'])->name('seats.manage');
     Route::post('/seats/update/{id}/{type}', [SeatController::class, 'updateSeats'])->name('seats.update');
+
+    Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('tickets.index');
+
 });
 
 // Seat Management Routes
