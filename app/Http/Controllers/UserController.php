@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\WelcomeEmail;
 use Illuminate\Support\Facades\Mail;
-use App\Services\RecommendationService; 
+use App\Services\RecommendationService;
 
 class UserController extends Controller
 {
@@ -28,31 +28,42 @@ class UserController extends Controller
 
     public function index()
     {
+        // Define the services array
         $services = [
             ['route' => 'transport.index', 'image' => 'images/transport.webp', 'title' => 'Transport Booking', 'description' => 'Book transport options quickly and easily.'],
             ['route' => 'movie.index', 'image' => 'images/movie.webp', 'title' => 'Movie Booking', 'description' => 'Find and book your favorite movies in theaters.'],
             ['route' => 'event.index', 'image' => 'images/concert.webp', 'title' => 'Event Tickets', 'description' => 'Reserve tickets for concerts, sports, and other events.'],
             ['route' => 'tour.index', 'image' => 'images/tours.webp', 'title' => 'Tour Packages', 'description' => 'Explore and book amazing tour packages.'],
         ];
-        return view('welcome', compact('services'));
 
-  }
- 
-  
-  public function search(Request $request)
-  {
-      $query = $request->input('query');
-      $category = $request->input('category');
-  
-  
-      return view('search-results', compact('query', 'category')); // Pass search results here
-  }
-  
-  public function user(){
-    $users = User::all();
-    return view('user.index', compact('users'));
-  }
-    public function viewregister(){
+        // Fetch recommendations for the logged-in user
+        $recommendations = collect();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $recommendations = $this->recommendationService->recommendForUser($user);
+        }
+
+        // Pass both services and recommendations to the view
+        return view('welcome', compact('services', 'recommendations'));
+    }
+
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $category = $request->input('category');
+
+
+        return view('search-results', compact('query', 'category')); // Pass search results here
+    }
+
+    public function user()
+    {
+        $users = User::all();
+        return view('user.index', compact('users'));
+    }
+    public function viewregister()
+    {
         return view('auth.register');
 
     }
@@ -155,7 +166,7 @@ class UserController extends Controller
         return view('user.recommendations', compact('recommendations'));
     }
 
-   
+
 
     public function partner()
     {
