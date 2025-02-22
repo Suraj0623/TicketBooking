@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transport extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
     public function route()
     {
         return $this->belongsTo(Route::class, 'route_id');
     }
-    
+
 
     public function seats()
-{
-    return $this->morphMany(Seat::class, 'seatable');
-}
+    {
+        return $this->morphMany(Seat::class, 'seatable');
+    }
 
 
     public function bookings()

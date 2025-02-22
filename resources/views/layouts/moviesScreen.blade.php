@@ -21,9 +21,12 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('welcome') }}">Welcome</a>
+                            <a class="nav-link" href="{{ route('movies.index') }}">Movies</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('screenings.index') }}">Screenings</a>
+                        </li>
+                           
                             <li class="nav-item"><a class="nav-link" href="{{ route('logout') }}">Logout</a></li>
                         </li>
                     </ul>

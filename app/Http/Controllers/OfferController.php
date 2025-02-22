@@ -12,11 +12,11 @@ class OfferController extends Controller
      */
     public function index()
     {
-     // Fetch offers from the database
-     $offers = Offer::all();  // You can customize this query as needed (e.g., get active offers)
+        // Fetch offers from the database
+        $offers = Offer::all();  // You can customize this query as needed (e.g., get active offers)
 
-     // Pass the offers data to the view
-     return view('home', compact('offers'));  // Ensure 'offers' is passed to the view
+        // Pass the offers data to the view
+        return view('home', compact('offers'));  // Ensure 'offers' is passed to the view
     }
 
     /**
@@ -24,7 +24,7 @@ class OfferController extends Controller
      */
     public function create()
     {
-       return view('offerform');
+        return view('offerform');
     }
 
     /**

@@ -1,60 +1,112 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Tour')
 
 @section('content')
-    <h1>Edit Tour</h1>
+    <div class="container">
+        <h1>Edit Tour</h1>
+        <!-- Form to update the tour -->
+        <form action="{{ route('tours.update', $tour->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT') <!-- This tells Laravel to use the PUT method for updating -->
 
-    <!-- Form to update the tour -->
-    <form action="{{ route('tour.update', $tour->id) }}" method="POST">
-        @csrf
-        @method('PUT') <!-- This tells Laravel to use the PUT method for updating -->
+            <!-- Tour Name -->
+            <div class="form-group">
+                <label for="name">Tour Name</label>
+                <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $tour->name) }}" required>
+                @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="name">Tour Name</label>
-            <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $tour->name) }}" required>
-        </div>
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="description" rows="3" required>{{ old('description', $tour->description) }}</textarea>
+                @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" name="description" id="description" rows="3" required>{{ old('description', $tour->description) }}</textarea>
-        </div>
+            <!-- Image -->
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" class="form-control" name="image" id="image">
+                @if ($tour->image)
+                    <div class="mt-2">
+                        <img src="{{ asset('storage/' . $tour->image) }}" alt="{{ $tour->name }}" style="max-width: 100px;">
+                    </div>
+                @endif
+                @error('image')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="image">Image</label>
-            <input type="text" class="form-control" name="image" id="image" value="{{ old('image', $tour->image) }}" required>
-        </div>
+            <!-- Package Name -->
+            <div class="form-group">
+                <label for="packageName">Package Name</label>
+                <input type="text" class="form-control" name="packageName" id="packageName" value="{{ old('packageName', $tour->packageName) }}" required>
+                @error('packageName')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="packageName">Package Name</label>
-            <input type="text" class="form-control" name="packageName" id="packageName" value="{{ old('packageName', $tour->packageName) }}" required>
-        </div>
+            <!-- Ticket Price -->
+            <div class="form-group">
+                <label for="ticket_price">Ticket Price</label>
+                <input type="number" class="form-control" name="ticket_price" id="ticket_price" value="{{ old('ticket_price', $tour->ticket_price) }}" step="0.01" required>
+                @error('ticket_price')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="ticketPrice">Ticket Price</label>
-            <input type="number" class="form-control" name="ticketPrice" id="ticketPrice" value="{{ old('ticketPrice', $tour->ticketPrice) }}" required>
-        </div>
+            <!-- Duration -->
+            <div class="form-group">
+                <label for="duration">Duration</label>
+                <input type="text" class="form-control" name="duration" id="duration" value="{{ old('duration', $tour->duration) }}" required>
+                @error('duration')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="duration">Duration</label>
-            <input type="text" class="form-control" name="duration" id="duration" value="{{ old('duration', $tour->duration) }}" required>
-        </div>
+            <!-- Highlights -->
+            <div class="form-group">
+                <label for="highlights">Highlights</label>
+                <textarea class="form-control" name="highlights" id="highlights" rows="3" required>{{ old('highlights', $tour->highlights) }}</textarea>
+                @error('highlights')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="highlights">Highlights</label>
-            <textarea class="form-control" name="highlights" id="highlights" rows="3" required>{{ old('highlights', $tour->highlights) }}</textarea>
-        </div>
+            <!-- Average Rating -->
+            <div class="form-group">
+                <label for="avg_rating">Average Rating</label>
+                <input type="number" class="form-control" name="avg_rating" id="avg_rating" value="{{ old('avg_rating', $tour->avg_rating) }}" step="0.1">
+                @error('avg_rating')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="avg_rating">Average Rating</label>
-            <input type="number" class="form-control" name="avg_rating" id="avg_rating" value="{{ old('avg_rating', $tour->avg_rating) }}" step="0.1" required>
-        </div>
+            <!-- Total Rating -->
+            <div class="form-group">
+                <label for="total_rating">Total Rating</label>
+                <input type="number" class="form-control" name="total_rating" id="total_rating" value="{{ old('total_rating', $tour->total_rating) }}">
+                @error('total_rating')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="form-group">
-            <label for="total_rating">Total Rating</label>
-            <input type="number" class="form-control" name="total_rating" id="total_rating" value="{{ old('total_rating', $tour->total_rating) }}" required>
-        </div>
+            <!-- Category -->
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" class="form-control" name="category" id="category" value="{{ old('category', $tour->category) }}" required>
+                @error('category')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Update Tour</button>
-    </form>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary mt-3">Update Tour</button>
+        </form>
+    </div>
 @endsection

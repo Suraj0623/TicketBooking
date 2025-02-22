@@ -18,37 +18,37 @@ class TransportController extends Controller
         $origin = $request->query('origin');
         $destination = $request->query('destination');
         $departure_date = $request->query('departure_date');
-    
+
         // Build base query for transports
         $query = Transport::query();
-    
+
         // Apply search filter to 'name'
         if ($search) {
             $query->where('name', 'like', "%{$search}%");
         }
-    
+
         // Filter by route if origin and destination are provided
         if ($origin && $destination) {
             $query->whereHas('route', function ($query) use ($origin, $destination) {
                 $query->where('origin', $origin)
-                      ->where('destination', $destination);
+                    ->where('destination', $destination);
             });
         }
-    
+
         // Filter by departure date if provided
         if ($departure_date) {
             $query->whereDate('departure_date', $departure_date);
         }
-    
+
         // Separate queries for each transport type
         $buses = (clone $query)->where('type', 'bus')->get();
         $planes = (clone $query)->where('type', 'plane')->get();
         $trains = (clone $query)->where('type', 'train')->get();
-    
+
         // Return the view with the results
         return view('transports.index', compact('buses', 'planes', 'trains'));
     }
-    
+
 
 
     /**
@@ -56,7 +56,7 @@ class TransportController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -64,7 +64,7 @@ class TransportController extends Controller
      */
     public function store(Request $request)
     {
-       
+
     }
 
     /**
@@ -107,8 +107,8 @@ class TransportController extends Controller
             'destination' => 'required|string',
             'departure_date' => 'required|date',
         ]);
-    
-        
+
+
 
         // Query for buses, planes, and trains
         $buses = Transport::whereHas('route', function ($query) use ($validatedData) {
@@ -119,7 +119,7 @@ class TransportController extends Controller
             ->whereDate('departure_date', $validatedData['departure_date'])
             // ->whereDate('departure_date', '2024-11-20') // Replace with your test date
             ->get();
-          
+
         $planes = Transport::whereHas('route', function ($query) use ($validatedData) {
             $query->where('origin', $validatedData['origin'])
                 ->where('destination', $validatedData['destination']);

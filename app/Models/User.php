@@ -16,14 +16,14 @@ class User extends Authenticatable
     // public $timestamps=false;
     // protected $guarded=[];
     public function tickets()
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Ticket::class);
+    }
 
-public function bookings()
-{
-    return $this->hasMany(Booking::class);
-}
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
     protected static function boot()
     {
         parent::boot();
@@ -55,7 +55,8 @@ public function bookings()
         });
     }
 
-    public function profile(){
+    public function profile()
+    {
         return $this->hasOne(Profile::class);
     }
     public function roles()
@@ -103,8 +104,8 @@ public function bookings()
     protected function preferences(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => json_decode($value, true),
-            set: fn ($value) => json_encode($value),
+            get: fn($value) => json_decode($value, true),
+            set: fn($value) => json_encode($value),
         );
     }
 }

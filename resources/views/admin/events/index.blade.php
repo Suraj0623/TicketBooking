@@ -1,34 +1,49 @@
-<button class="btn btn-primary mb-3">
-    <a href="{{ route('events.create') }}" style="color: white; text-decoration: none;">Add New Event</a>
-</button>
-<button class="btn btn-primary mb-3">
-    <a href="{{ route('dashboardPage') }}" style="color: white; text-decoration: none;">Admin Dashboard</a>
-</button>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<h1>Events</h1>
-<div class="row">
-    @foreach ($events as $event)
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $event->title }}</h5>
-                    <p class="card-text">{{ Str::limit($event->description, 50) }}</p>
-                    <p class="card-text"><strong>Date:</strong> {{ $event->event_date }}</p>
-                    <p class="card-text"><strong>Venue:</strong> {{ $event->venue }}</p>
-                    <p class="card-text"><strong>Price:</strong> ${{ $event->ticket_price }}</p>
-                    <p class="card-text"><strong>Category:</strong> {{ $event->category }}</p> <!-- Add category -->
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
+@extends('layouts.admin')
+
+@section('title', 'All Events')
+
+@section('content')
+
+
+    <div class="container">
+
+       <h1 class="mt-4">Events</h1>
+       <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">Add New Event</a>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Price (NPR)</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($events as $key => $event)
+                <tr>
+                    <td>{{ $key + 1 }}</td>
+                    <td>{{ $event->title }}</td>
+                    <td>{{ Str::limit($event->description, 50) }}</td>
+                    <td>{{ $event->event_date }}</td>
+                    <td>{{ $event->venue }}</td>
+                    <td>${{ $event->ticket_price }}</td>
+                    <td>{{ $event->category }}</td>
+                    <td>
+                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    </div>
+@endsection

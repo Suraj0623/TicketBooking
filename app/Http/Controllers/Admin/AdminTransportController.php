@@ -47,9 +47,9 @@ class AdminTransportController extends Controller
             'ticket_price' => 'required|numeric|min:0',
         ]);
 
-       
+
         // Create a new transport record
-        $transport=Transport::create($validated);
+        $transport = Transport::create($validated);
 
         Seat::create([
             'seatable_id' => $transport->id,
@@ -57,7 +57,7 @@ class AdminTransportController extends Controller
             'seat_number' => 100,
             'status' => 'available',
         ]);
-        
+
 
         return redirect()->route('transports.index')->with('success', 'Transport created successfully!');
     }
@@ -91,7 +91,7 @@ class AdminTransportController extends Controller
      */
     public function destroy(string $id)
     {
-        $transport=Transport::findorFail($id);
+        $transport = Transport::findorFail($id);
         $transport->delete();
         return redirect()->route('transports.index')->with('success', 'Transport deleted successfully');
 

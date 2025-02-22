@@ -72,7 +72,7 @@
             <div class="card">
                 <figure>
                     @if ($tour->image)
-                        <img src="{{ asset('/storage/'.$tour->image) }}" alt="Tour Image" class="card-img-top" style="width: 100%; height: 400px; object-fit: cover;">
+                        <img src="{{ asset('/storage/' . $tour->image) }}" alt="Tour Image" class="card-img-top" style="width: 100%; height: 400px; object-fit: cover;">
                     @else
                         <img src="{{ asset('path/to/default-image.png') }}" alt="Default Image" class="card-img-top" style="width: 100%; height: 400px; object-fit: cover;">
                     @endif

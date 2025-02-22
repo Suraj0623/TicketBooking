@@ -13,15 +13,15 @@ class EventController extends Controller
         $search = $request->input('search');
         $events = Event::when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
-                         ->orWhere('description', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%");
         })->get();
-    
+
         return view('events.index', compact('events'));
     }
 
     public function show($id)
     {
-       
+
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-       
+
     }
 
     public function update(Request $request, Event $event)

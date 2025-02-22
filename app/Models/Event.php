@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
     public function route()
     {
         return $this->belongsTo(Route::class);
     }
 
     public function seats()
-{
-    return $this->morphMany(Seat::class, 'seatable');
-}
+    {
+        return $this->morphMany(Seat::class, 'seatable');
+    }
 
     public function bookings()
     {

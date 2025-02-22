@@ -1,20 +1,44 @@
-<x-layout title="Movies">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.moviesScreen')
 
-    <h1>Movies</h1>
-    <a href="{{ route('movies.create') }}">Add Movie</a>
-    <ul>
-        @foreach ($movies as $movie)
-            <li>
-                <strong>{{ $movie->title }}</strong> - {{ $movie->genre }}
-                <a href="{{ route('movie.edit', $movie) }}">Edit</a>
-                <form action="{{ route('movie.destroy', $movie) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        @endforeach
-    </ul>
+@section('title', 'All Movies')
 
-</x-layout>
+@section('content')
+    <div class="container">
+        <h1 class="mt-4">Movies</h1>
+        <a href="{{ route('movies.create') }}" class="btn btn-primary mb-3">Add New Movie</a>
+
+        <!-- Movies Table -->
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Director</th>
+                    <th>Release Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($movies as $movie)
+                    <tr>
+                        <td>{{ $movie->id }}</td>
+                        <td>{{ $movie->title }}</td>
+                        <td>{{ $movie->genre }}</td>
+                        <td>{{ $movie->director }}</td>
+                        <td>{{ $movie->release_date }}</td>
+                        <td>
+                            <a href="{{ route('movies.edit', $movie->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <form action="{{ route('movies.destroy', $movie->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</button>
+                            </form>
+                            <a href="{{ route('screenings.create', ['movie_id' => $movie->id]) }}" class="btn btn-sm btn-success">Add Screening</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endsection

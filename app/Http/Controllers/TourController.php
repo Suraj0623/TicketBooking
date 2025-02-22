@@ -15,9 +15,9 @@ class TourController extends Controller
         $search = $request->input('search');
         $tours = Tour::when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
-                         ->orWhere('description', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%");
         })->get();
-    
+
         return view('tour.index', compact('tours'));
     }
 
@@ -26,22 +26,22 @@ class TourController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-   
-}
+    {
+
+    }
 
 
     /**
      * Display the specified resource.
      */
-    public function show( $id)
+    public function show($id)
     {
         $tour = Tour::findOrFail($id);
         return view('tour.show', compact('tour'));
@@ -52,15 +52,15 @@ class TourController extends Controller
      */
     public function edit($id)
     {
-       
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
-       
+
     }
 
     /**
@@ -68,6 +68,6 @@ class TourController extends Controller
      */
     public function destroy($id)
     {
-       
+
     }
 }

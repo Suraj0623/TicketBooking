@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
     public function ticketable()
     {
         return $this->morphTo();
@@ -16,13 +16,13 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
     public function booking()
-{
-    return $this->belongsTo(Booking::class, 'ticketable_id', 'id');
-}
-public function seats()
-{
-    return $this->morphMany(Seat::class, 'seatable');
-}
+    {
+        return $this->belongsTo(Booking::class, 'ticketable_id', 'id');
+    }
+    public function seats()
+    {
+        return $this->morphMany(Seat::class, 'seatable');
+    }
 
 
 }

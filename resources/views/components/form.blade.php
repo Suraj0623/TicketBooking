@@ -31,7 +31,7 @@
     @csrf
     @unless(in_array($method, ['GET', 'POST']))
         @method($method)
-       
+
     @endunless
     {{ $slot }}
     <div class="text-center mt-3">

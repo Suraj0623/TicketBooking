@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,7 +15,7 @@ return new class extends Migration
             $table->foreignId('movie_id')->constrained()->onDelete('cascade');
             $table->string('cinema');
             $table->timestamp('show_time');
-            $table->decimal('ticket_price',8, 2);
+            $table->decimal('ticket_price', 8, 2);
             $table->integer('total_seats');
             $table->timestamps();
         });

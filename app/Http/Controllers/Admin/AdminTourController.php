@@ -6,6 +6,7 @@ use App\Models\Seat;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class AdminTourController extends Controller
 {
@@ -31,44 +32,46 @@ class AdminTourController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate the request
-    $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Added image validation
-        'packageName' => 'required',
-        'ticket_price' => 'required|numeric',
-        'duration' => 'required',
-        'highlights' => 'required',
-        'avg_rating' => 'required|numeric',
-        'total_rating' => 'required|numeric'
-    ]);
+        // Validate the request
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
+            'packageName' => 'required',
+            'ticket_price' => 'required|numeric',
+            'duration' => 'required',
+            'highlights' => 'required',
+            'avg_rating' => 'required|numeric',
+            'total_rating' => 'required|numeric',
+            'category' => 'required|string|max:255', // Add validation for category
+        ]);
 
-    // Store the image and get the file path
-    $path = $request->file('image')->store('storage/tours', 'public');
+        // Store the image and get the file path
+        $path = $request->file('image')->store('storage/tours', 'public');
 
-    // Create the new tour and save the image path
-    $tour=Tour::create([
-        'name' => $request->name,
-        'description' => $request->description,
-        'image' => $path,  // Store the image path in the database
-        'packageName' => $request->packageName,
-        'ticket_price' => $request->ticket_price,
-        'duration' => $request->duration,
-        'highlights' => $request->highlights,
-        'avg_rating' => $request->avg_rating,
-        'total_rating' => $request->total_rating
-    ]);
-    
-    Seat::create([
-        'seatable_id' => $tour->id,
-        'seatable_type' => Tour::class,
-        'seat_number' => 100,
-        'status' => 'available',
-    ]);
+        // Create the new tour and save the image path
+        $tour = Tour::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $path, // Store the image path in the database
+            'packageName' => $request->packageName,
+            'ticket_price' => $request->ticket_price,
+            'duration' => $request->duration,
+            'highlights' => $request->highlights,
+            'avg_rating' => $request->avg_rating,
+            'total_rating' => $request->total_rating,
+            'category' => $request->category, // Add category
+        ]);
 
-    // Redirect back to the tour index page
-    return redirect()->route('tours.index');
+        Seat::create([
+            'seatable_id' => $tour->id,
+            'seatable_type' => Tour::class,
+            'seat_number' => 100,
+            'status' => 'available',
+        ]);
+
+        // Redirect back to the tour index page
+        return redirect()->route('tours.index');
     }
 
     /**
@@ -76,8 +79,8 @@ class AdminTourController extends Controller
      */
     public function show(string $id)
     {
-        $tour=Tour::find($id);
-       return view('tour.show',compact('tour'));
+        $tour = Tour::find($id);
+        return view('tour.show', compact('tour'));
     }
 
     /**
@@ -92,26 +95,49 @@ class AdminTourController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'image' => 'required',
-            'packageName' => 'required',
-            'ticket_price' => 'required|numeric',
-            'duration' => 'required',
-            'highlights' => 'required',
-            'avg_rating' => 'required|numeric',
-            'total_rating' => 'required|numeric'
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Allow nullable image
+            'packageName' => 'required|string|max:255',
+            'ticket_price' => 'required|numeric|min:0',
+            'duration' => 'required|string|max:255',
+            'highlights' => 'required|string',
+            'avg_rating' => 'nullable|numeric|min:0|max:5',
+            'total_rating' => 'nullable|numeric|min:0',
+            'category' => 'required|string|max:255',
         ]);
 
         $tour = Tour::findOrFail($id);
-        $tour->update($request->all());
 
-        return redirect()->route('tours.index');
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('tours', 'public'); // Store the new image
+            if ($tour->image) {
+                Storage::disk('public')->delete($tour->image); // Delete the old image
+            }
+            $tour->image = $path; // Update the image path
+        }
+
+        // Update other fields
+        $tour->update($request->only([
+            'name',
+            'description',
+            'packageName',
+            'ticket_price',
+            'duration',
+            'highlights',
+            'avg_rating',
+            'total_rating',
+            'category',
+        ]));
+
+        return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
     }
-
     /**
      * Remove the specified resource from storage.
      */

@@ -9,12 +9,12 @@ class ScreeningController extends Controller
 {
     public function index()
     {
-        
+
     }
 
     public function create()
     {
-        
+
     }
 
     public function store(Request $request)
@@ -24,7 +24,7 @@ class ScreeningController extends Controller
 
     public function edit(Screening $screening)
     {
-      
+
     }
 
     public function update(Request $request, Screening $screening)
@@ -34,6 +34,6 @@ class ScreeningController extends Controller
 
     public function destroy(Screening $screening)
     {
-        
+
     }
 }

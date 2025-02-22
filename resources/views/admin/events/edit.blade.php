@@ -1,48 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <h1>Edit Event</h1>
-    @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
-    <form action="{{ route('events.update', $event->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{{ old('title', $event->title) }}">
-        @error('title') <p style="color: red;">{{ $message }}</p> @enderror
+@extends('layouts.admin')
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description">{{ old('description', $event->description) }}</textarea>
-        @error('description') <p style="color: red;">{{ $message }}</p> @enderror
+@section('title', 'Edit Event')
 
-        <label for="event_date">Event Date:</label>
-        <input type="datetime-local" id="event_date" name="event_date" value="{{ old('event_date', $event->event_date) }}">
-        @error('event_date') <p style="color: red;">{{ $message }}</p> @enderror
+@section('content')
+    <div class="container">
+        <h1 class="mt-4">Edit Event</h1>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        <form action="{{ route('events.update', $event->id) }}" method="POST" class="row g-3">
+            @csrf
+            @method('PUT')
 
-        <label for="venue">Venue:</label>
-        <input type="text" id="venue" name="venue" value="{{ old('venue', $event->venue) }}">
-        @error('venue') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Title -->
+            <div class="col-md-6">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ old('title', $event->title) }}">
+                @error('title')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="ticket_price">Ticket Price:</label>
-        <input type="number" id="ticket_price" name="ticket_price" step="0.01" value="{{ old('ticket_price', $event->ticket_price) }}">
-        @error('ticket_price') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Description -->
+            <div class="col-md-6">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control">{{ old('description', $event->description) }}</textarea>
+                @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="total_seats">Total Seats:</label>
-        <input type="number" id="total_seats" name="total_seats" value="{{ old('total_seats', $event->total_seats) }}">
-        @error('total_seats') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Event Date -->
+            <div class="col-md-6">
+                <label for="event_date" class="form-label">Event Date</label>
+                <input type="datetime-local" id="event_date" name="event_date" class="form-control" value="{{ old('event_date', \Carbon\Carbon::parse($event->event_date)->format('Y-m-d\TH:i')) }}">
+                @error('event_date')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category" value="{{ old('category', $event->category) }}">
-        @error('category') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Venue -->
+            <div class="col-md-6">
+                <label for="venue" class="form-label">Venue</label>
+                <input type="text" id="venue" name="venue" class="form-control" value="{{ old('venue', $event->venue) }}">
+                @error('venue')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <button type="submit">Update Event</button>
-    </form>
-</body>
-</html>
+            <!-- Ticket Price -->
+            <div class="col-md-6">
+                <label for="ticket_price" class="form-label">Ticket Price</label>
+                <input type="number" id="ticket_price" name="ticket_price" step="0.01" class="form-control" value="{{ old('ticket_price', $event->ticket_price) }}">
+                @error('ticket_price')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Total Seats -->
+            <div class="col-md-6">
+                <label for="total_seats" class="form-label">Total Seats</label>
+                <input type="number" id="total_seats" name="total_seats" class="form-control" value="{{ old('total_seats', $event->total_seats) }}">
+                @error('total_seats')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" id="category" name="category" class="form-control" value="{{ old('category', $event->category) }}">
+                @error('category')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Update Event</button>
+                <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+@endsection

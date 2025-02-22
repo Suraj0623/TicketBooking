@@ -1,4 +1,8 @@
 <!-- resources/views/offers/create.blade.php -->
+@extends('layouts.admin') <!-- Extend your admin layout -->
+@section('title', 'Create Offer') <!-- Dynamic page title -->
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,3 +49,4 @@
     </div>
 </body>
 </html>
+@endsection

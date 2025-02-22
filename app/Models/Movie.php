@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
     public function bookings()
-{
-    return $this->morphMany(Booking::class, 'bookable');
-}
+    {
+        return $this->morphMany(Booking::class, 'bookable');
+    }
 
-public function seats()
-{
-    return $this->morphMany(Seat::class, 'seatable');
-}
+    public function seats()
+    {
+        return $this->morphMany(Seat::class, 'seatable');
+    }
 
     public function screenings()
     {

@@ -85,7 +85,7 @@
                             <figure>
                                 <a href="{{ route('tour.show', $tour->id) }}">
                                     @if ($tour->image)
-                                        <img src="{{ asset('/storage/'.$tour->image) }}" alt="Tour Image" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;">
+                                        <img src="{{ asset('storage/' . $tour->image) }}" alt="Tour Image" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;">
                                     @else
                                         <img src="{{ asset('path/to/default-image.png') }}" alt="Default Image" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;">
                                     @endif

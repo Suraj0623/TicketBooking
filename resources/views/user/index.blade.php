@@ -25,23 +25,23 @@
             </thead>
             <tbody>
                 @foreach ($users as $user)
-                <tr>
-                    <td>{{ $user->FirstName }}</td>
-                    <td>{{ $user->LastName }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->mobileNumber }}</td>
-                    <td>
-                        @foreach ($user->roles as $role)
-                            {{ $role->roleName }}<br>
-                        @endforeach
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm">Update Role</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger btn-sm">Block</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ $user->FirstName }}</td>
+                        <td>{{ $user->LastName }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->mobileNumber }}</td>
+                        <td>
+                            @foreach ($user->roles as $role)
+                                {{ $role->roleName }}<br>
+                            @endforeach
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Update Role</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm">Block</button>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

@@ -27,7 +27,7 @@ class PaymentController extends Controller
 
     // Accept payment method
     // Accept payment method (POST)
-    
+
 
 
     // Process the payment (e.g., initiate payment)
@@ -53,7 +53,7 @@ class PaymentController extends Controller
         $booking->update(['payment_status' => 'pending']);
 
         return redirect()->route('user.ticket', ['bookingId' => $booking->id])
-                         ->with('success', 'Payment initiated, awaiting admin approval!');
+            ->with('success', 'Payment initiated, awaiting admin approval!');
     }
 
     // Show details of a specific payment
