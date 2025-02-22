@@ -52,29 +52,30 @@ class AdminEventController extends Controller
     // }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'event_date' => 'required|date',
-            'venue' => 'required|string|max:255',
-            'ticket_price' => 'required|numeric|min:0',
-            'total_seats' => 'required|integer|min:1',
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'event_date' => 'required|date',
+        'venue' => 'required|string|max:255',
+        'ticket_price' => 'required|numeric|min:0',
+        'total_seats' => 'required|integer|min:1',
+        'category' => 'required|string|max:255', // Add validation for category
+    ]);
+
+    $event = Event::create($request->all());
+
+    // Generate seat entries for the event
+    for ($i = 1; $i <= $request->total_seats; $i++) {
+        $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
+        $event->seats()->create([
+            'seat_number' => $seatNumber,
+            'status' => 'available',
         ]);
-
-        $event = Event::create($request->all());
-
-        // Generate seat entries for the event
-        for ($i = 1; $i <= $request->total_seats; $i++) {
-            $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
-            $event->seats()->create([
-                'seat_number' => $seatNumber,
-                'status' => 'available',
-            ]);
-        }
-
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
     }
+
+    return redirect()->route('events.index')->with('success', 'Event created successfully.');
+}
 
     /**
      * Display the specified resource.
@@ -87,29 +88,32 @@ class AdminEventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('admin.events.edit', compact('id'));
+        $event = Event::findOrFail($id);
+        return view('admin.events.edit', compact('event'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-               $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'event_date' => 'required|date',
-            'venue' => 'required',
-            'ticket_price' => 'required|numeric',
-            'total_seats' => 'required|integer|min:1',
-        ]);
-        $event=Event::find($id);
-        $event->update($request->all());
-        return redirect()->route('events.index')->with('success', 'Event updated successfully.');
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'event_date' => 'required|date',
+        'venue' => 'required',
+        'ticket_price' => 'required|numeric',
+        'total_seats' => 'required|integer|min:1',
+        'category' => 'required|string|max:255', // Add validation for category
+    ]);
 
-    }
+    $event = Event::find($id);
+    $event->update($request->all());
+
+    return redirect()->route('events.index')->with('success', 'Event updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.

@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Event</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 <body>
     <h1>Create Event</h1>
-
     @if (session('success'))
         <p style="color: green;">{{ session('success') }}</p>
     @endif
-
     <form action="{{ route('events.store') }}" method="POST">
         @csrf
         <label for="title">Title:</label>
@@ -40,6 +37,10 @@
         <input type="number" id="total_seats" name="total_seats" value="{{ old('total_seats') }}">
         @error('total_seats') <p style="color: red;">{{ $message }}</p> @enderror
 
+        <!-- Add Category Field -->
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" value="{{ old('category') }}">
+        @error('category') <p style="color: red;">{{ $message }}</p> @enderror
 
         <button type="submit">Create Event</button>
     </form>
