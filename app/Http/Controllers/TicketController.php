@@ -16,7 +16,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        
+
         $tickets = auth::user()->tickets;
         $bookings = Booking::where('user_id', Auth::id())
             ->where('payment_status', 'paid')
@@ -45,7 +45,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
 
@@ -55,8 +55,8 @@ class TicketController extends Controller
      */
     public function show($ticketId)
     {
-        $ticket = Ticket::with(['ticketable','seats'])->find($ticketId);
-        
+        $ticket = Ticket::with(['ticketable', 'seats'])->find($ticketId);
+
         if (!$ticket) {
             // If the ticket is not found, redirect to an error page or handle accordingly
             return redirect()->route('tickets.index')->with('error', 'Ticket not found');
@@ -92,7 +92,7 @@ class TicketController extends Controller
         $ticket->delete();
         return back()->with('success', 'Ticket deleted successfully.');
     }
-    
+
     public function validateTicket(Ticket $ticket)
     {
         // Ensure the ticket belongs to the authenticated user

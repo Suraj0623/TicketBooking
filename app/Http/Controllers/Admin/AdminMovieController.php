@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Seat;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class AdminMovieController extends Controller
 {
@@ -14,8 +14,8 @@ class AdminMovieController extends Controller
      */
     public function index()
     {
-        $movies=Movie::all();
-        return view('admin.movies.index',compact('movies'));
+        $movies = Movie::all();
+        return view('admin.movies.index', compact('movies'));
     }
 
     /**
@@ -24,7 +24,6 @@ class AdminMovieController extends Controller
     public function create()
     {
         return view('admin.movies.create');
-
     }
 
     /**
@@ -32,22 +31,25 @@ class AdminMovieController extends Controller
      */
     public function store(Request $request)
     {
-        $validated=$request->validate([
+        // Validate the incoming request data (excluding 'poster')
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'release_date' => 'nullable|date',
-            'poster'=>'nullable|image',
             'genre' => 'nullable|string',
             'director' => 'nullable|string',
         ]);
-        if($request->hasFile('poster')){
-            $validated['poster_url']=$request->file('psoter')->store('storage','public');
+
+        // Handle file upload (if a file is provided)
+        if ($request->hasFile('poster')) {
+            $path = $request->file('poster')->store('posters', 'public'); // Store the file in the 'storage/app/public/posters' directory
+            $validated['poster_url'] = $path; // Add the file path to the validated data
         }
 
-       $movie= Movie::create($validated);
-    
-        return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
+        // Create the movie record
+        Movie::create($validated);
 
+        return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
     }
 
     /**
@@ -55,7 +57,7 @@ class AdminMovieController extends Controller
      */
     public function show(string $id)
     {
-        $movie=Movie::with('screenings')->findOrFail($id);
+        $movie = Movie::with('screenings')->findOrFail($id);
         return view('admin.movies.show', compact('movie'));
     }
 
@@ -64,35 +66,60 @@ class AdminMovieController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.movies.edit', compact('id'));
+        $movie = Movie::findOrFail($id);
+        return view('admin.movies.edit', compact('movie'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        // Validate the incoming request data (excluding 'poster')
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'release_date' => 'nullable|date',
             'genre' => 'nullable|string',
             'director' => 'nullable|string',
         ]);
-        $movie=Movie::find($id);
-        $movie->update($request->all());
-        return redirect()->route('movie.index')->with('success', 'Movie updated successfully.');
 
+        // Find the movie to update
+        $movie = Movie::findOrFail($id);
+
+        // Handle file upload (if a file is provided)
+        if ($request->hasFile('poster')) {
+            $path = $request->file('poster')->store('posters', 'public'); // Store the file in the 'storage/app/public/posters' directory
+
+            // Delete the old poster file if it exists
+            if ($movie->poster_url) {
+                Storage::disk('public')->delete($movie->poster_url);
+            }
+
+            $validated['poster_url'] = $path; // Add the file path to the validated data
+        }
+
+        // Update the movie record
+        $movie->update($validated);
+
+        return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
-    { 
-        $movie=Movie::find($id);
-        $movie->delete();
-        return redirect()->route('movie.index')->with('success', 'Movie deleted successfully.');
+    public function destroy($id)
+    {
+        $movie = Movie::findOrFail($id);
 
+        // Delete the poster file if it exists
+        if ($movie->poster_url) {
+            Storage::disk('public')->delete($movie->poster_url);
+        }
+
+        // Delete the movie record
+        $movie->delete();
+
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');
     }
 }

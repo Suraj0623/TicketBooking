@@ -26,15 +26,15 @@
             </div>
             <div class="d-flex text-center">
                 @auth
-                <a href="" class="btn btn-primary btn-sm me-2" title="View and manage all bookings">Manage Bookings</a>
-                @if(auth()->user()->roles->contains('roleName', 'admin'))
-                <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2" title="Go to the dashboard">Dashboard</a>
-            @endif
-                <a href="{{ route('logout') }}" class="btn btn-danger btn-sm" title="Logout from your account">Logout</a>
-            @else
-                <a class="btn btn-warning text-white" href="{{ route('register') }}">Register</a>
-                <a href="{{ route('login') }}" class="btn btn-success btn-lg">Login</a>
-            @endauth
+                        <a href="" class="btn btn-primary btn-sm me-2" title="View and manage all bookings">Manage Bookings</a>
+                        @if(auth()->user()->roles->contains('roleName', 'admin'))
+                            <a href="{{ route('dashboardPage') }}" class="btn btn-secondary btn-sm me-2" title="Go to the dashboard">Dashboard</a>
+                        @endif
+                        <a href="{{ route('logout') }}" class="btn btn-danger btn-sm" title="Logout from your account">Logout</a>
+                @else
+                    <a class="btn btn-warning text-white" href="{{ route('register') }}">Register</a>
+                    <a href="{{ route('login') }}" class="btn btn-success btn-lg">Login</a>
+                @endauth
             </div>
         </div>
     </nav>

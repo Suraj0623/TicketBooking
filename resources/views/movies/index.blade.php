@@ -5,8 +5,8 @@
         <h1 class="text-center mb-4">Movie List</h1>
         <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search movies..." />
         @if (request('search'))
-        <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
-    @endif
+            <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+        @endif
     
         <div class="row">
             @foreach ($movies as $movie)
@@ -28,14 +28,14 @@
                                         <strong>Price:</strong> ${{ $screening->ticket_price }}<br>
                                         <strong>Total Seats:</strong> {{ $screening->total_seats }}
                                         <div class="mt-2">
-                                       
+
                                             <button class="btn btn-primary btn-lg" data-bs-toggle="popover" title="Book Seats">
-                                                
+
                                                 <a href="{{ route('booking.create', ['bookable_id' => $screening->id, 'bookable_type' => get_class($screening)]) }}">
                                                     Book Now
                                                 </a>
-                                                
-                                                
+
+
                                               </button>
                                         </div>
                                     </li>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-           @endforeach
+               @endforeach
         </div>
     </div>
     </main>

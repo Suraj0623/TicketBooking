@@ -43,30 +43,39 @@ class RecommendationService
         $recommendations = collect();
         if ($preferredCategory) {
             // Recommend movies (exclude already-booked movies)
-            $recommendations = $recommendations->merge(
-                Movie::where('genre', $preferredCategory)
-                    ->whereNotIn('id', $bookedItemIds)
-                    ->get()
-            );
+            $movieRecommendations = Movie::where('genre', $preferredCategory)
+                ->whereNotIn('id', $bookedItemIds)
+                ->get();
 
             // Recommend tours (exclude already-booked tours)
-            $recommendations = $recommendations->merge(
-                Tour::where('category', $preferredCategory)
-                    ->whereNotIn('id', $bookedItemIds)
-                    ->get()
-            );
+            $tourRecommendations = Tour::where('category', $preferredCategory)
+                ->whereNotIn('id', $bookedItemIds)
+                ->get();
 
             // Recommend events (exclude already-booked events)
-            $recommendations = $recommendations->merge(
-                Event::where('category', $preferredCategory)
-                    ->whereNotIn('id', $bookedItemIds)
-                    ->get()
-            );
+            $eventRecommendations = Event::where('category', $preferredCategory)
+                ->whereNotIn('id', $bookedItemIds)
+                ->get();
+
+            // Combine recommendations
+            $recommendations = $recommendations->merge($movieRecommendations)
+                ->merge($tourRecommendations)
+                ->merge($eventRecommendations);
+        }
+
+        // Step 6: Fallback logic if no recommendations are found
+        if ($recommendations->isEmpty()) {
+            // Recommend any available movies, tours, or events (excluding already-booked items)
+            $recommendations = Movie::whereNotIn('id', $bookedItemIds)->get();
+            $recommendations = $recommendations->merge(Tour::whereNotIn('id', $bookedItemIds)->get());
+            $recommendations = $recommendations->merge(Event::whereNotIn('id', $bookedItemIds)->get());
         }
 
         return $recommendations;
     }
-    public function recommendViaRatings(){
-        
+
+    public function recommendViaRatings()
+    {
+        // Placeholder for future implementation
     }
 }

@@ -1,47 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.admin')
 
-</head>
-<body>
-    <h1>Create Event</h1>
+@section('title', 'Add New Event')
 
-    @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
+@section('content')
+    <div class="container">
+        <h1 class="mt-4">Add New Event</h1>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        <form action="{{ route('events.store') }}" method="POST" class="row g-3">
+            @csrf
 
-    <form action="{{ route('events.store') }}" method="POST">
-        @csrf
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{{ old('title') }}">
-        @error('title') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Title -->
+            <div class="col-md-6">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ old('title') }}">
+                @error('title')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description">{{ old('description') }}</textarea>
-        @error('description') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Description -->
+            <div class="col-md-6">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control">{{ old('description') }}</textarea>
+                @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="event_date">Event Date:</label>
-        <input type="datetime-local" id="event_date" name="event_date" value="{{ old('event_date') }}">
-        @error('event_date') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Event Date -->
+            <div class="col-md-6">
+                <label for="event_date" class="form-label">Event Date</label>
+                <input type="datetime-local" id="event_date" name="event_date" class="form-control" value="{{ old('event_date') }}">
+                @error('event_date')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="venue">Venue:</label>
-        <input type="text" id="venue" name="venue" value="{{ old('venue') }}">
-        @error('venue') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Venue -->
+            <div class="col-md-6">
+                <label for="venue" class="form-label">Venue</label>
+                <input type="text" id="venue" name="venue" class="form-control" value="{{ old('venue') }}">
+                @error('venue')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="ticket_price">Ticket Price:</label>
-        <input type="number" id="ticket_price" name="ticket_price" step="0.01" value="{{ old('ticket_price') }}">
-        @error('ticket_price') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Ticket Price -->
+            <div class="col-md-6">
+                <label for="ticket_price" class="form-label">Ticket Price</label>
+                <input type="number" id="ticket_price" name="ticket_price" step="0.01" class="form-control" value="{{ old('ticket_price') }}">
+                @error('ticket_price')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <label for="total_seats">Total Seats:</label>
-        <input type="number" id="total_seats" name="total_seats" value="{{ old('total_seats') }}">
-        @error('total_seats') <p style="color: red;">{{ $message }}</p> @enderror
+            <!-- Total Seats -->
+            <div class="col-md-6">
+                <label for="total_seats" class="form-label">Total Seats</label>
+                <input type="number" id="total_seats" name="total_seats" class="form-control" value="{{ old('total_seats') }}">
+                @error('total_seats')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
+            <!-- Category -->
+            <div class="col-md-6">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" id="category" name="category" class="form-control" value="{{ old('category') }}">
+                @error('category')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <button type="submit">Create Event</button>
-    </form>
-</body>
-</html>
+            <!-- Submit Button -->
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create Event</button>
+                <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+@endsection

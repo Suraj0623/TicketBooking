@@ -11,18 +11,19 @@ class MovieController extends Controller
         $search = $request->input('search');
         $movies = Movie::when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
-                         ->orWhere('description', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%");
         })->get();
-    
+
         return view('movies.index', compact('movies'));
     }
 
     public function create()
     {
-        
+
     }
-    public function show($id){
-        $movie=Movie::with('screenings')->findOrFail($id);
+    public function show($id)
+    {
+        $movie = Movie::with('screenings')->findOrFail($id);
         return view('movies.show');
     }
 
@@ -33,7 +34,7 @@ class MovieController extends Controller
 
     public function edit(Movie $movie)
     {
-        
+
     }
 
     public function update(Request $request, Movie $movie)
@@ -43,5 +44,5 @@ class MovieController extends Controller
     public function destroy(Movie $movie)
     {
     }
-    
+
 }

@@ -13,7 +13,7 @@ class RouteController extends Controller
     public function index()
     {
         $routes = Route::all(); // Get all routes
-    return view('route.index',compact('routes'));
+        return view('route.index', compact('routes'));
     }
 
     /**
@@ -35,10 +35,10 @@ class RouteController extends Controller
             'destination' => 'required|string',
             'duration' => 'required|numeric|min:0',
         ]);
-    
+
         // Store the data
         Route::create($validated);
-    
+
         return redirect()->route('route.index')->with('success', 'Route created successfully!');
     }
 

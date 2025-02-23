@@ -38,16 +38,16 @@ return [
     'mailers' => [
 
         'smtp' => [
-    'transport' => 'smtp',
-    'url' => env('MAIL_URL'),
-    'host' => env('MAIL_HOST', 'smtp.sendgrid.net'),
-    'port' => env('MAIL_PORT', 587),
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-    'username' => env('MAIL_USERNAME'),  // This should be "apikey"
-    'password' => env('MAIL_PASSWORD'),  // This should be your SendGrid API key
-    'timeout' => null,
-    'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
-],
+            'transport' => 'smtp',
+            'url' => env('MAIL_URL'),
+            'host' => env('MAIL_HOST', 'smtp.sendgrid.net'),
+            'port' => env('MAIL_PORT', 587),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username' => env('MAIL_USERNAME'),  // This should be "apikey"
+            'password' => env('MAIL_PASSWORD'),  // This should be your SendGrid API key
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
 
 
         'ses' => [

@@ -29,7 +29,7 @@
             </div>
         </div>
         <div id="reccomended" class="owl-carousel owl-theme owl-loaded owl-drag">
-            @foreach ($offers as $index=>$offer)
+            @foreach ($offers as $index => $offer)
                 <div class="item">
                     <div class="card" style="background-color: {{ $colors[$index % count($colors)] }};">
                         <a target="_blank" href="{{ url('promo-code/' . $offer->id) }}">

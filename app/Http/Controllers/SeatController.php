@@ -118,8 +118,9 @@ class SeatController extends Controller
         return redirect()->route('seats.view', $booking->id)
             ->with('success', 'Seats have been successfully assigned.');
     }
-    public function update(Request $request,Seat $seat){
-        $seat->update(['is_booked'=>$request->is_booked]);
-        return response()->json(['success'=>true]);
+    public function update(Request $request, Seat $seat)
+    {
+        $seat->update(['is_booked' => $request->is_booked]);
+        return response()->json(['success' => true]);
     }
 }

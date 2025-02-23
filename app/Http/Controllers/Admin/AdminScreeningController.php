@@ -39,6 +39,7 @@ class AdminScreeningController extends Controller
             'ticket_price' => 'required|numeric|min:0',
             'total_seats' => 'required|integer|min:1',
         ]);
+
         $screening = Screening::create($request->all());
 
         // Generate seat entries for the movie
@@ -50,9 +51,7 @@ class AdminScreeningController extends Controller
             ]);
         }
 
-        
-                return redirect()->route('screenings.index')->with('success', 'Screening created successfully.');
-
+        return redirect()->route('screenings.index')->with('success', 'Screening created successfully.');
     }
 
     /**
@@ -68,14 +67,15 @@ class AdminScreeningController extends Controller
      */
     public function edit(string $id)
     {
+        $screening = Screening::findOrFail($id);
         $movies = Movie::all();
-        return view('admin.movies.screenings.edit', compact('id', 'movies'));
+        return view('admin.movies.screenings.edit', compact('screening', 'movies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'movie_id' => 'required|exists:movies,id',
@@ -84,20 +84,34 @@ class AdminScreeningController extends Controller
             'ticket_price' => 'required|numeric|min:0',
             'total_seats' => 'required|integer|min:1',
         ]);
-        $screening=Movie::find($id);
-        $screening->update($request->all());
-        return redirect()->route('screenings.index')->with('success', 'Screening updated successfully.');
 
+        $screening = Screening::findOrFail($id);
+
+        // Update the screening details
+        $screening->update($request->only([
+            'movie_id',
+            'cinema',
+            'show_time',
+            'ticket_price',
+            'total_seats',
+        ]));
+
+        return redirect()->route('screenings.index')->with('success', 'Screening updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(  $id)
-    {       
-         $screening=Movie::find($id);
+    public function destroy($id)
+    {
+        $screening = Screening::findOrFail($id);
 
+        // Delete all associated seats
+        $screening->seats()->delete();
+
+        // Delete the screening
         $screening->delete();
+
         return redirect()->route('screenings.index')->with('success', 'Screening deleted successfully.');
     }
 }

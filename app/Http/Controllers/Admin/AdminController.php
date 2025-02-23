@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 
 class AdminController
 {
-    public function dashboard(){
+    public function dashboard()
+    {
         return view('admin.index');
     }
-    public function contact(){
+    public function contact()
+    {
         return view('admin.contact');
     }
-    
-    
+
+
 }

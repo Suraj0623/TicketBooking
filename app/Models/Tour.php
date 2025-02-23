@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
-    protected $table = 'tours'; 
-    protected $guarded=[];
+    protected $table = 'tours';
+    protected $guarded = [];
     public function bookings()
-{
-    return $this->hasMany(Booking::class);
-}
-public function seats()
-{
-    return $this->morphMany(Seat::class, 'seatable');
-}
+    {
+        return $this->hasMany(Booking::class);
+    }
+    public function seats()
+    {
+        return $this->morphMany(Seat::class, 'seatable');
+    }
 
 
 

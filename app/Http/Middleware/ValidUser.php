@@ -17,20 +17,20 @@ class ValidUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-         // Get the currently authenticated user
-         $user = Auth::user();
+        // Get the currently authenticated user
+        $user = Auth::user();
 
-         // Check if the user is an instance of the User model
+        // Check if the user is an instance of the User model
         if ($user instanceof User) {
             // Eager load roles
-            $user->load('roles'); 
+            $user->load('roles');
 
             // Check if the user has the 'admin' role
             if ($user->roles->contains('roleName', 'admin')) {
                 return $next($request);  // Proceed to the next middleware or route
             }
         }
-         // Redirect to the welcome page if not an admin
-         return redirect()->route('welcome');
+        // Redirect to the welcome page if not an admin
+        return redirect()->route('welcome');
     }
 }

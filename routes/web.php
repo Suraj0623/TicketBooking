@@ -30,9 +30,9 @@ Route::get('/journey', function () {
     return view('home');
 })->name('home');
 
-Route::get('/search',[UserController::class,'search'])->name('search');
+Route::get('/search', [UserController::class, 'search'])->name('search');
 
-Route::get('/search',[UserController::class,'search'])->name('search');
+Route::get('/search', [UserController::class, 'search'])->name('search');
 
 
 Route::view('about', 'about')->name('about');
@@ -40,7 +40,7 @@ Route::prefix('user')->group(function () {
 
     // Resource route for bookings
     Route::resource('booking', BookingController::class);
-    Route::get('/seat/{seat}',[SeatController::class,'update'])->name('update');
+    Route::get('/seat/{seat}', [SeatController::class, 'update'])->name('update');
     Route::resource('event', EventController::class);
     Route::resource('route', RouteController::class);
     Route::resource('seat', SeatController::class);
@@ -55,7 +55,7 @@ Route::prefix('user')->group(function () {
 
 
 });
-Route::view('/view','view');
+Route::view('/view', 'view');
 Route::prefix('profile')->group(function () {
     Route::get('/partner', [UserController::class, 'partner'])->name('partner');
 });
@@ -69,7 +69,7 @@ Route::prefix('admin')->group(function () {
     Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
     Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
     Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
-    Route::get('user',[UserController::class,'user'])->name('user');
+    Route::get('user', [UserController::class, 'user'])->name('user');
 });
 
 // for  search function
@@ -145,7 +145,7 @@ Route::prefix('admin')->group(function () {
     Route::get('bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
 
 
-}); 
+});
 
 // User Resource Routes
 Route::prefix('user')->group(function () {
@@ -165,7 +165,7 @@ Route::prefix('user')->group(function () {
     // New Route for Recommendations
     Route::get('/{user}/recommendations', [UserController::class, 'recommendations'])
         ->name('user.recommendations');
-        // Route for listing users
+    // Route for listing users
     Route::get('/', [UserController::class, 'index'])->name('user.index');
 });
 
@@ -196,3 +196,7 @@ Route::post('/seats/assign', [SeatController::class, 'assignSeats'])->name('seat
 
 // Update Booking Status
 Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+
+Route::prefix('admin')->group(function () {
+    Route::resource('tours', AdminTourController::class)->except(['show']);
+});

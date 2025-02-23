@@ -158,42 +158,42 @@ class BookingController extends Controller
     }
 
     public function accept(string $id)
-{
-    // Find the booking or fail if not found
-    $booking = Booking::findOrFail($id);
+    {
+        // Find the booking or fail if not found
+        $booking = Booking::findOrFail($id);
 
-    // Ensure the payment status is 'pending' before accepting
-    if ($booking->payment_status !== 'pending') {
+        // Ensure the payment status is 'pending' before accepting
+        if ($booking->payment_status !== 'pending') {
+            return redirect()->route('booking.index')
+                ->with('error', 'This payment has already been processed.');
+        }
+
+        // Update the payment status to 'paid'
+        $booking->update(['payment_status' => 'paid']);
+
+        // Redirect with success message
         return redirect()->route('booking.index')
-            ->with('error', 'This payment has already been processed.');
+            ->with('success', 'Booking payment accepted successfully.');
     }
 
-    // Update the payment status to 'paid'
-    $booking->update(['payment_status' => 'paid']);
 
-    // Redirect with success message
-    return redirect()->route('booking.index')
-        ->with('success', 'Booking payment accepted successfully.');
-}
+    public function reject(string $id)
+    {
+        // Find the booking or fail if not found
+        $booking = Booking::findOrFail($id);
 
+        // Ensure the payment status is 'pending' before rejecting
+        if ($booking->payment_status !== 'pending') {
+            return redirect()->route('booking.index')
+                ->with('error', 'This payment has already been processed.');
+        }
 
-public function reject(string $id)
-{
-    // Find the booking or fail if not found
-    $booking = Booking::findOrFail($id);
+        // Update the payment status to 'failed'
+        $booking->update(['payment_status' => 'failed']);
 
-    // Ensure the payment status is 'pending' before rejecting
-    if ($booking->payment_status !== 'pending') {
+        // Redirect with success message
         return redirect()->route('booking.index')
-            ->with('error', 'This payment has already been processed.');
+            ->with('success', 'Booking payment rejected successfully.');
     }
-
-    // Update the payment status to 'failed'
-    $booking->update(['payment_status' => 'failed']);
-
-    // Redirect with success message
-    return redirect()->route('booking.index')
-        ->with('success', 'Booking payment rejected successfully.');
-}
 
 }

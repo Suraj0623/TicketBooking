@@ -11,7 +11,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('tour.index') }}">Tours</a></li>
                 @auth
-                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('ticket.index') }}">My Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5" href="{{ route('ticket.index') }}">My Bookings</a></li>
                 @endauth
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('home') }}">Start Journey</a></li>
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('faq') }}">FAQ</a></li>
@@ -24,13 +24,13 @@
                     <a class="btn btn-primary btn-sm fs-6" href="{{ route('profile.index') }}">Profile</a>
                     <a class="btn btn-danger btn-sm fs-6" href="{{ route('logout') }}">Logout</a>
                 @else
-               
-                <a class="btn  bg-light d-flex align-items-center fs-5" href="{{ route('login') }}">
-                    <i class="fas fa-user-circle me-2"></i>
-                    <span>Sign in</span>
-                </a>
-                
-                
+
+                    <a class="btn  bg-light d-flex align-items-center fs-5" href="{{ route('login') }}">
+                        <i class="fas fa-user-circle me-2"></i>
+                        <span>Sign in</span>
+                    </a>
+
+
                 @endauth
             </div>
         </div>

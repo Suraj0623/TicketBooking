@@ -14,11 +14,11 @@ class ProfileController extends Controller
      */
     public function index()
     {
-         // Retrieve the profile of the authenticated user
-         $profile = Profile::where('user_id', Auth::id())->firstOrFail();
+        // Retrieve the profile of the authenticated user
+        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
 
-         // Pass the profile data to the view
-         return view('profiles.index', compact('profile'));
+        // Pass the profile data to the view
+        return view('profiles.index', compact('profile'));
     }
 
     /**
@@ -42,7 +42,7 @@ class ProfileController extends Controller
      */
     public function show(Profile $profile)
     {
-        
+
     }
 
     /**
@@ -59,39 +59,39 @@ class ProfileController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Profile $profile)
-{
-    // Validate input data
-    $request->validate([
-        'FirstName' => 'required|string|max:255',
-        'LastName' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'mobileNumber' => 'required|digits:10',
-        'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-    ]);
+    {
+        // Validate input data
+        $request->validate([
+            'FirstName' => 'required|string|max:255',
+            'LastName' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'mobileNumber' => 'required|digits:10',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
 
-    // Update profile details
-    $profile->FirstName = $request->input('FirstName');
-    $profile->LastName = $request->input('LastName');
-    $profile->email = $request->input('email');
-    $profile->mobileNumber = $request->input('mobileNumber');
+        // Update profile details
+        $profile->FirstName = $request->input('FirstName');
+        $profile->LastName = $request->input('LastName');
+        $profile->email = $request->input('email');
+        $profile->mobileNumber = $request->input('mobileNumber');
 
-    // Handle image upload
-    if ($request->hasFile('image')) {
-        // Delete the old image if exists
-        if ($profile->image && Storage::exists('public/' . $profile->image)) {
-            Storage::delete('public/' . $profile->image);
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete the old image if exists
+            if ($profile->image && Storage::exists('public/' . $profile->image)) {
+                Storage::delete('public/' . $profile->image);
+            }
+
+            // Store the new image
+            $imagePath = $request->file('image')->store('profiles', 'public');
+            $profile->image = $imagePath;
         }
 
-        // Store the new image
-        $imagePath = $request->file('image')->store('profiles', 'public');
-        $profile->image = $imagePath;
+        // Save updated profile
+        $profile->save();
+
+        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
     }
-
-    // Save updated profile
-    $profile->save();
-
-    return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
-}
 
     /**
      * Remove the specified resource from storage.
