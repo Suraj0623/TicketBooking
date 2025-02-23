@@ -1,6 +1,7 @@
 <x-header/>
 
     <main class="container" style="margin-top: 80px;">
+        <x-filter/>
     <div class="container mt-5 my-4">
         <h1 class="text-center mb-4">Movie List</h1>
         <x-search-box search-route="{{ route('movie.index') }}" placeholder="Search movies..." />

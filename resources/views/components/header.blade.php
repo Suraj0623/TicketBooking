@@ -12,7 +12,16 @@
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('tour.index') }}">Tours</a></li>
                 @auth
                     <li class="nav-item"><a class="nav-link fs-5" href="{{ route('ticket.index') }}">My Bookings</a></li>
+                    @php
+                    $role=Auth::user()->roles->whereIn('roleName',['SuperAdmin','admin'])->first();
+                @endphp
+                @if ($role)
+                    <li class="nav-item">
+                        <a href="{{route('dashboard')}}" class="nav-link fs-5 ">Dashboard</a>
+                    </li>
+                @endif
                 @endauth
+               
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('home') }}">Start Journey</a></li>
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('faq') }}">FAQ</a></li>
                 <li class="nav-item"><a class="nav-link fs-5" href="{{ route('contact') }}">Assistance</a></li>

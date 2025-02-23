@@ -80,6 +80,11 @@
                             <i class="fas fa-film"></i> Movies
                         </a>
                     </li>
+                  
+                    @php
+                        $role=Auth::user()->roles->where('roleName','SuperAdmin')->first();
+                    @endphp
+                    @if ($role)
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('user.index') }}">
                             <i class="fas fa-users"></i> Users
@@ -90,6 +95,7 @@
                             <i class="fas fa-user-shield"></i> Admins
                         </a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </nav>

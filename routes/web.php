@@ -171,6 +171,7 @@ Route::prefix('user')->group(function () {
 
 // Search Functionality
 Route::post('journey/search', [TransportController::class, 'search'])->name('transport.search');
+Route::get('tours/filter', [TourController::class, 'filterTours']);
 
 // Auth Middleware Group
 Route::middleware('auth')->group(function () {

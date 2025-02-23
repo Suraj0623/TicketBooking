@@ -13,7 +13,7 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['admin', 'customer'];
+        $roles = ['SuperAdmin','admin', 'customer'];
 
         // Insert each role into the roles table
         foreach ($roles as $roleName) {

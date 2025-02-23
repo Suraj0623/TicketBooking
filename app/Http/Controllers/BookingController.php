@@ -50,7 +50,7 @@ class BookingController extends Controller
             'bookable_type' => 'required|string',
             'bookable_id' => 'required|integer',
             'seats_booked' => 'required|integer|min:1',
-            'payment_option' => 'required|string|in:pay_now',
+            'payment_option' => 'required|string|in:pay_now,pay_later',
         ]);
 
         $bookableId = $request->bookable_id;
@@ -62,13 +62,16 @@ class BookingController extends Controller
             ->take($request->seats_booked)
             ->get();
 
-        if ($seats->count() < $request->seats_booked) {
-            return back()->withErrors(['seats_booked' => 'Not enough available seats.']);
-        }
+            if ($seats->count() < $request->seats_booked) {
+                return redirect()->back()->with('message', 'Not enough available seats.');
+            }
+            
 
         $bookableModel = app($bookableType)::findOrFail($bookableId);
         $pricePerSeat = $bookableModel->ticket_price;
-        $totalPrice = $pricePerSeat * $request->seats_booked;
+        $totalPrice = round($pricePerSeat * $request->seats_booked, 2);
+
+        $paymentStatus = $request->payment_option === 'pay_now' ? 'pay_later' : 'unpaid';
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
@@ -76,8 +79,9 @@ class BookingController extends Controller
             'bookable_type' => $bookableType,
             'seats_booked' => $request->seats_booked,
             'total_price' => $totalPrice,
-            'payment_status' => 'pending', // Default payment status
+            'payment_status' => $paymentStatus,
         ]);
+        
 
         foreach ($seats as $seat) {
             $seat->update(['status' => 'booked', 'user_id' => Auth::id()]);
@@ -195,5 +199,4 @@ class BookingController extends Controller
         return redirect()->route('booking.index')
             ->with('success', 'Booking payment rejected successfully.');
     }
-
 }

@@ -53,31 +53,31 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create tours with categories
-        $tour1 = Tour::create([
-            'name' => 'Adventure Tour',
-            'description' => 'Explore the wild.',
-            'image' => 'https://example.com/adventure-tour.jpg',
-            'packageName' => 'Basic Adventure',
-            'ticket_price' => 500,
-            'duration' => '5 days',
-            'highlights' => 'Nature, Wildlife',
-            'avg_rating' => 4.5,
-            'total_rating' => 100,
-            'category' => 'adventure',
-        ]);
+        // $tour1 = Tour::create([
+        //     'name' => 'Adventure Tour',
+        //     'description' => 'Explore the wild.',
+        //     'image' => 'https://example.com/adventure-tour.jpg',
+        //     'packageName' => 'Basic Adventure',
+        //     'ticket_price' => 500,
+        //     'duration' => '5 days',
+        //     'highlights' => 'Nature, Wildlife',
+        //     'avg_rating' => 4.5,
+        //     'total_rating' => 100,
+        //     'category' => 'adventure',
+        // ]);
 
-        $tour2 = Tour::create([
-            'name' => 'Cultural Tour',
-            'description' => 'Experience local culture.',
-            'image' => 'https://example.com/cultural-tour.jpg',
-            'packageName' => 'Cultural Experience',
-            'ticket_price' => 300,
-            'duration' => '3 days',
-            'highlights' => 'History, Traditions',
-            'avg_rating' => 4.7,
-            'total_rating' => 80,
-            'category' => 'cultural',
-        ]);
+        // $tour2 = Tour::create([
+        //     'name' => 'Cultural Tour',
+        //     'description' => 'Experience local culture.',
+        //     'image' => 'https://example.com/cultural-tour.jpg',
+        //     'packageName' => 'Cultural Experience',
+        //     'ticket_price' => 300,
+        //     'duration' => '3 days',
+        //     'highlights' => 'History, Traditions',
+        //     'avg_rating' => 4.7,
+        //     'total_rating' => 80,
+        //     'category' => 'cultural',
+        // ]);
 
         // Create events with categories
         $event1 = Event::create([
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             'category' => 'sports',
         ]);
 
-        // Create bookings for the user
+        // // Create bookings for the user
         Booking::create([
             'user_id' => $user->id,
             'bookable_type' => 'App\Models\Movie',
@@ -110,13 +110,13 @@ class DatabaseSeeder extends Seeder
             'payment_status' => 'paid',
         ]);
 
-        Booking::create([
-            'user_id' => $user->id,
-            'bookable_type' => 'App\Models\Tour',
-            'bookable_id' => $tour1->id,
-            'seats_booked' => 1,
-            'total_price' => 500,
-            'payment_status' => 'paid',
-        ]);
+        // Booking::create([
+        //     'user_id' => $user->id,
+        //     'bookable_type' => 'App\Models\Tour',
+        //     'bookable_id' => $tour1->id,
+        //     'seats_booked' => 1,
+        //     'total_price' => 500,
+        //     'payment_status' => 'paid',
+        // ]);
     }
 }

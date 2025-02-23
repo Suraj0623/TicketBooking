@@ -68,6 +68,7 @@
 </style>
 
 <main class="container" style="margin-top: 80px;">
+    <x-filter/>
     <div class="container my-4">
         <div class="search-box">
             <x-search-box search-route="{{ route('tour.index') }}" placeholder="Search Tour..." />

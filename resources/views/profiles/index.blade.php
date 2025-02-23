@@ -28,7 +28,7 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">Your Profile</h1>
         <div class="row">
-            
+{{--             
             <div class="col-lg-3 mb-3">
                 <div class="bg-white shadow-sm rounded p-3">
                     <ul class="list-unstyled">
@@ -50,7 +50,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-6">
                 <div class="d-flex align-items-center" style="gap: 0.5rem">
                     <i class="ti-wallet"></i>

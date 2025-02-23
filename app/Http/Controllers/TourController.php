@@ -36,7 +36,19 @@ class TourController extends Controller
     {
 
     }
-
+// to do filtering just demo
+public function filter(Request $request){
+    $tours = Tour::query()->when($request->category,function($query)use($request){
+        return $query->where('category',$request->category);
+    })->when($request->location,function($query)use($request){
+        return $query->where('location',$request->location);
+    })->when($request->min_price,function($query)use($request){
+        return $query->where('price','>=',$request->min_price);
+    })->when($request->max_price,function($query)use($request){
+        return $query->where('price','<=',$request->max_price);
+    })->orderByDesc('bookings_count')
+    ->get();
+}
 
     /**
      * Display the specified resource.

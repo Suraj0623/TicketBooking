@@ -11,7 +11,7 @@
 <div class="container py-4">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-lg-3 mb-3">
+        {{-- <div class="col-lg-3 mb-3">
             <div class="bg-white shadow-sm rounded p-3">
                 <ul class="list-unstyled">
                     <li class="mb-3">
@@ -25,7 +25,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Main Content -->
         <div class="col-lg-9">
@@ -37,7 +37,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control" value="Soris Shrestha">
+                            <input type="text" class="form-control" value="Full Name">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Father Name</label>
@@ -163,6 +163,9 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{route('profile.index')}}" class="btn btn-secondary w-80">Go Back</a>
                     </div>
                 </form>
             </div>

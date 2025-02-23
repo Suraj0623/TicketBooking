@@ -47,9 +47,11 @@
         const pricePerSeat = {{ $pricePerSeat }};
 
         seatsInput.addEventListener('input', () => {
-            const total = seatsInput.value * pricePerSeat;
-            totalPriceDisplay.textContent = `$${total.toFixed(2)}`;
-            totalPriceInput.value = total.toFixed(2);
-        });
+    let seatCount = Math.max(1, parseInt(seatsInput.value) || 1);
+    let total = seatCount * pricePerSeat;
+    totalPriceDisplay.textContent = `$${total.toFixed(2)}`;
+    totalPriceInput.value = total.toFixed(2);
+});
+
     </script>
 @endsection

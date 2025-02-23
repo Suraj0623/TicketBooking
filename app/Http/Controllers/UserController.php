@@ -121,7 +121,7 @@ public function login(Request $request)
     public function dashboardPage()
     {
         $user = Auth::user();
-        $role = $user->roles->where('roleName', 'admin')->first();
+        $role = $user->roles->where('roleName', 'SuperAdmin')->first();
         if($role){
             return view('admin.index');
         }else{
