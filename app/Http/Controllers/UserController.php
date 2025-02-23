@@ -88,23 +88,35 @@ class UserController extends Controller
         return back()->with('error', 'Failed to register the user.');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+  
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboardPage');
-        }
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
 
-        return back()->withErrors(['login' => 'Invalid credentials.']);
+    if (Auth::attempt($credentials)) {
+        return redirect()->route('dashboardPage'); 
     }
+
+    return back()->withErrors(['login' => 'Invalid credentials.']);
+}
+
+    
+    
 
     public function dashboardPage()
     {
-        return view('admin.index');
+        $user = Auth::user();
+        $role = $user->roles->where('roleName', 'admin')->first();
+        if($role){
+            return view('admin.index');
+        }else{
+            return redirect()->route('user.index');
+        }
+      
     }
 
     public function logout(Request $request)

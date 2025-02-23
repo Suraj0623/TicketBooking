@@ -3,11 +3,16 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">Your Tickets</h1>
 
-        @if ($allTickets->isEmpty())
-            <div class="alert alert-warning text-center" role="alert">
-                No tickets available. Make a booking & pay to generate tickets.
-            </div>
-        @else
+        @php
+        $userTickets = $allTickets->where('user_id', auth()->id());
+    @endphp
+    
+    @if ($userTickets->isEmpty())
+        <div class="alert alert-warning text-center" role="alert">
+            No tickets available. Make a booking & pay to generate tickets.
+        </div>
+    @else
+       
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
@@ -22,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($allTickets as $ticket)
+                    @foreach ($userTickets as $ticket)
                         <tr>
                             <td>{{ $ticket->user->FirstName }}</td>
                             <td>{{ $ticket->user->LastName }}</td>

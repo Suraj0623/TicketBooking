@@ -184,8 +184,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/seats/manage/{id}/{type}', [SeatController::class, 'manageSeats'])->name('seats.manage');
     Route::post('/seats/update/{id}/{type}', [SeatController::class, 'updateSeats'])->name('seats.update');
 
-    Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('tickets.index');
+    // Route::get('/user/ticket/{bookingId}', [TicketController::class, 'index'])->name('tickets.index');
 
+    Route::get('/user/ticket/{bookingId}', [TicketController::class, 'show'])->name('user.ticket');
+    
 });
 
 // Seat Management Routes
