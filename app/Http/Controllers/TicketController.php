@@ -16,20 +16,26 @@ class TicketController extends Controller
      */
     public function index()
     {
-
-        $tickets = auth::user()->tickets;
+        // Fetch tickets directly associated with the authenticated user
+        $tickets = Ticket::where('user_id', Auth::id())
+            ->with(['booking.bookable']) // Eager load the booking and its bookable relationship
+            ->get();
+    
+        // Fetch paid bookings for the authenticated user
         $bookings = Booking::where('user_id', Auth::id())
             ->where('payment_status', 'paid')
             ->get();
-
-        // Fetch tickets related to these bookings
-        $ticketBookings = Ticket::whereIn('ticketable_id', $bookings->pluck('bookable_id'))
+    
+        // Fetch tickets related to these bookings (scoped to the authenticated user)
+        $ticketBookings = Ticket::where('user_id', Auth::id())
+            ->whereIn('ticketable_id', $bookings->pluck('bookable_id'))
             ->whereIn('ticketable_type', $bookings->pluck('bookable_type'))
+            ->with(['booking.bookable']) // Eager load the booking and its bookable relationship
             ->get();
-
-        // Merge tickets from user's direct relationship and those from bookings
+    
+        // Merge tickets from direct association and those from bookings
         $allTickets = $tickets->merge($ticketBookings);
-
+    
         return view('tickets.index', compact('allTickets'));
     }
 
@@ -53,18 +59,21 @@ class TicketController extends Controller
     /**
      * Display the specified ticket.
      */
-    public function show($ticketId)
+    public function show($bookingId)
     {
-        $ticket = Ticket::with(['ticketable', 'seats'])->find($ticketId);
-
+        // Find the booking by ID
+        $booking = Booking::with(['tickets'])->findOrFail($bookingId);
+    
+        // Get the first ticket associated with the booking
+        $ticket = $booking->tickets->first();
+    
         if (!$ticket) {
-            // If the ticket is not found, redirect to an error page or handle accordingly
-            return redirect()->route('tickets.index')->with('error', 'Ticket not found');
+            return redirect()->route('tickets.index')->with('error', 'No ticket found for this booking.');
         }
-
-        // Generate QR code data (e.g., ticket ID or user ID)
+    
+        // Generate QR code data
         $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]);
-
+    
         return view('tickets.show', compact('ticket', 'qrCodeData'));
     }
 
@@ -88,28 +97,27 @@ class TicketController extends Controller
      * Remove the specified ticket from storage.
      */
     public function destroy(Ticket $ticket)
-    {
-        $ticket->delete();
-        return back()->with('success', 'Ticket deleted successfully.');
+{
+    $ticket->delete();
+    return back()->with('success', 'Ticket deleted successfully.');
+}
+
+public function validateTicket(Ticket $ticket)
+{
+    // Ensure the ticket belongs to the authenticated user
+    if ($ticket->user_id !== auth::id()) {
+        return response()->json(['status' => 'unauthorized', 'message' => 'This ticket does not belong to you.'], 403);
     }
 
-    public function validateTicket(Ticket $ticket)
-    {
-        // Ensure the ticket belongs to the authenticated user
-        if ($ticket->user_id !== auth::id()) {
-            return response()->json(['status' => 'unauthorized'], 403);
-        }
-
-        // Check if the ticket has already been used
-        if ($ticket->status === 'used') {
-            return response()->json(['status' => 'invalid']);
-        }
-
-        // Mark the ticket as used
-        $ticket->status = 'used';
-        $ticket->save();
-
-        return response()->json(['status' => 'valid']);
+    // Check if the ticket has already been used
+    if ($ticket->status === 'used') {
+        return response()->json(['status' => 'invalid', 'message' => 'This ticket has already been used.']);
     }
 
+    // Mark the ticket as used
+    $ticket->status = 'used';
+    $ticket->save();
+
+    return response()->json(['status' => 'valid', 'message' => 'Ticket validated successfully.']);
+}
 }
