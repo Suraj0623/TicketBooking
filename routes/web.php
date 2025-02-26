@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
     
 });
 
+
 // Seat Management Routes
 Route::get('/seats/{booking}', [SeatController::class, 'view'])->name('seats.view');
 Route::post('/seats/assign', [SeatController::class, 'assignSeats'])->name('seats.assign');
@@ -200,4 +201,33 @@ Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateSta
 
 Route::prefix('admin')->group(function () {
     Route::resource('tours', AdminTourController::class)->except(['show']);
+});
+
+
+// User-specific routes
+Route::prefix('user')->group(function () {
+    // Resourceful routes for tickets
+    Route::resource('ticket', TicketController::class);
+
+    // Explicit route for listing all tickets
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+
+    // Other user routes...
+});
+
+// Auth Middleware Group
+Route::middleware('auth')->group(function () {
+    // Payment-related routes
+    Route::get('/payment/{booking_id}', [PaymentController::class, 'index'])->name('payment.index');
+    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
+
+    // Booking-related routes
+    Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+    Route::post('/booking/{id}/accept', [BookingController::class, 'accept'])->name('booking.accept');
+    Route::post('/booking/{id}/reject', [BookingController::class, 'reject'])->name('booking.reject');
+
+    // Seat management routes
+    Route::get('/seats/manage/{id}/{type}', [SeatController::class, 'manageSeats'])->name('seats.manage');
+    Route::post('/seats/update/{id}/{type}', [SeatController::class, 'updateSeats'])->name('seats.update');
 });

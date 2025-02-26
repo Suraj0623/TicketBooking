@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -31,37 +32,44 @@ class PaymentController extends Controller
 
 
     // Process the payment (e.g., initiate payment)
+ 
+
+
+
     public function process(Request $request)
     {
         $request->validate([
             'booking_id' => 'required|exists:bookings,id',
             'payment_method' => 'required|string',
         ]);
-
-        // Find the booking and create a pending payment
+    
+        // Find the booking
         $booking = Booking::findOrFail($request->booking_id);
-
-        // Process the payment with status 'pending'
+    
+        // Process the payment
         $payment = Payment::create([
             'booking_id' => $booking->id,
             'amount' => $booking->total_price,
             'payment_method' => $request->payment_method,
-            'status' => 'pending',  // Set status to pending initially
+            'status' => $request->payment_method === 'pay_now' ? 'completed' : 'pending', // Set status based on payment method
         ]);
-
-        // Update booking payment status to 'pending'
-        $booking->update(['payment_status' => 'pending']);
-
-        return redirect()->route('user.ticket', ['bookingId' => $booking->id])
-            ->with('success', 'Payment initiated, awaiting admin approval!');
-    }
-
-    // Show details of a specific payment
-    public function show($id)
-    {
-        $payment = Payment::with('booking')->findOrFail($id);
-
-        return response()->json($payment);
+    
+        // Update booking payment status
+        $booking->update(['payment_status' => $request->payment_method === 'pay_now' ? 'paid' : 'pending']);
+    
+        // If payment method is 'pay_now', generate a ticket
+        if ($request->payment_method === 'pay_now') {
+            Ticket::create([
+                'user_id' => $booking->user_id,
+                'ticketable_type' => $booking->bookable_type,
+                'ticketable_id' => $booking->bookable_id,
+                'price' => $booking->total_price,
+                'quantity' => $booking->seats_booked,
+            ]);
+        }
+    
+        return redirect()->route('tickets.index')
+            ->with('success', 'Payment completed successfully! Your ticket has been generated.');
     }
 
     // Create a new payment (for administrative purposes)
