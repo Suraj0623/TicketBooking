@@ -114,7 +114,7 @@
                                         <i class="fas fa-ticket-alt fa-2x"></i>
                                     </div>
                                     <p class="card-text">Total Bookings</p>
-                                    <p class="h4">0</p>
+                                    <p class="h4">{{}}</p>
                                     <a href="{{ route('booking.index') }}" class="btn btn-light btn-sm">View More <i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>

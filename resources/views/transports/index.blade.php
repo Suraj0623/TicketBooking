@@ -51,7 +51,15 @@
     @if (request('search'))
         <p class="text-center text-secondary">Search results for: <strong>{{ request('search') }}</strong></p>
     @endif
-
+    <div class="container">
+        <h2>Transport Search Results</h2>
+    
+        <!-- Search Filters Display -->
+        <div class="mb-4">
+            <p><strong>Origin:</strong> {{ request('origin') }}</p>
+            <p><strong>Destination:</strong> {{ request('destination') }}</p>
+            <p><strong>Departure Date:</strong> {{ request('departure_date') }}</p>
+        </div>
     <!-- Buses Section -->
     <h2 class="section-title">Buses</h2>
     <div class="row justify-content-center">

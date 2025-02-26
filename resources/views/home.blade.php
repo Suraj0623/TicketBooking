@@ -92,9 +92,6 @@
 </style>
 
 <div class="background-container">
-    <!-- Bus image animation -->
-    {{-- <img class="moving-bus" src="{{ asset('images/bus.jpeg')}}" alt="Moving Bus"> --}}
-
     <!-- Search Form -->
     <form action="{{route('transport.search')}}" method="Post" class="search-form">
         @csrf
@@ -125,7 +122,22 @@
                 <label for="departure_date">Date</label>
                 <input type="date" id="departure_date" name="departure_date" required>
             </div>
-
+            <div class="col-md-12">
+                <label class="d-block mb-2 fw-semibold" style="font-size: 0.9rem;">Transport Type</label>
+                <div class="d-flex gap-2" >
+                    <div class="form-check" style="font-size: 0.85rem;">
+                        <input type="radio" id="bus" name="transport_type" value="Bus" class="form-check-input" style="transform: scale(0.6);" required>
+                        <label for="bus" class="form-check-label">🚌 Bus</label>                    </div>
+                    <div class="form-check" style="font-size: 0.85rem;">
+                        <input type="radio" id="train" name="transport_type" value="Train" class="form-check-input" style="transform: scale(0.6);" required>
+                        <label for="train" class="form-check-label">🚆 Train</label>                    </div>
+                    <div class="form-check" style="font-size: 0.85rem;">
+                        <input type="radio" id="flight" name="transport_type" value="Flight" class="form-check-input" style="transform: scale(0.6);" required>
+                        <label for="flight" class="form-check-label">✈️ Flight</label>
+                    </div>
+                </div>
+            </div>
+            
             <div class="col-12 text-end">
                 <button type="submit">Search</button>
             </div>
