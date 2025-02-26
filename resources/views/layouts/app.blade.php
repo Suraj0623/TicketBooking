@@ -45,7 +45,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-5">
+    {{-- <footer class="bg-light py-4 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5">
@@ -69,7 +69,8 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> --}}
+    <x-footer/>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
