@@ -45,50 +45,53 @@ class BookingController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'bookable_type' => 'required|string',
-            'bookable_id' => 'required|integer',
-            'seats_booked' => 'required|integer|min:1',
-            'payment_option' => 'required|string|in:pay_now,pay_later',
-        ]);
+{
+    $request->validate([
+        'bookable_type' => 'required|string',
+        'bookable_id' => 'required|integer',
+        'seats_booked' => 'required|integer|min:1',
+        'payment_option' => 'required|string|in:pay_now,pay_later',
+    ]);
 
-        $bookableId = $request->bookable_id;
-        $bookableType = $request->bookable_type;
+    $bookableId = $request->bookable_id;
+    $bookableType = $request->bookable_type;
 
-        $seats = Seat::where('seatable_id', $bookableId)
-            ->where('seatable_type', $bookableType)
-            ->where('status', 'available')
-            ->take($request->seats_booked)
-            ->get();
+    // Check available seats
+    $seats = Seat::where('seatable_id', $bookableId)
+        ->where('seatable_type', $bookableType)
+        ->where('status', 'available')
+        ->take($request->seats_booked)
+        ->get();
 
-            if ($seats->count() < $request->seats_booked) {
-                return redirect()->back()->with('message', 'Not enough available seats.');
-            }
-            
-
-        $bookableModel = app($bookableType)::findOrFail($bookableId);
-        $pricePerSeat = $bookableModel->ticket_price;
-        $totalPrice = round($pricePerSeat * $request->seats_booked, 2);
-
-        $paymentStatus = $request->payment_option === 'pay_now' ? 'pay_later' : 'unpaid';
-
-        $booking = Booking::create([
-            'user_id' => Auth::id(),
-            'bookable_id' => $bookableId,
-            'bookable_type' => $bookableType,
-            'seats_booked' => $request->seats_booked,
-            'total_price' => $totalPrice,
-            'payment_status' => $paymentStatus,
-        ]);
-        
-
-        foreach ($seats as $seat) {
-            $seat->update(['status' => 'booked', 'user_id' => Auth::id()]);
-        }
-
-        return redirect()->route('payment.index', ['booking_id' => $booking->id]);
+    if ($seats->count() < $request->seats_booked) {
+        return redirect()->back()->with('message', 'Not enough available seats.');
     }
+
+    // Fetch bookable model and calculate total price
+    $bookableModel = app($bookableType)::findOrFail($bookableId);
+    $pricePerSeat = $bookableModel->ticket_price;
+    $totalPrice = round($pricePerSeat * $request->seats_booked, 2);
+
+    // Map payment_option to payment_status
+    $paymentStatus = $request->payment_option === 'pay_now' ? 'paid' : 'pending';
+
+    // Create the booking
+    $booking = Booking::create([
+        'user_id' => Auth::id(),
+        'bookable_id' => $bookableId,
+        'bookable_type' => $bookableType,
+        'seats_booked' => $request->seats_booked,
+        'total_price' => $totalPrice,
+        'payment_status' => $paymentStatus,
+    ]);
+
+    // Update seat statuses
+    foreach ($seats as $seat) {
+        $seat->update(['status' => 'booked', 'user_id' => Auth::id()]);
+    }
+
+    return redirect()->route('payment.index', ['booking_id' => $booking->id]);
+}
 
     // Updated method for updating the booking details
     public function update(string $id, Request $request)
@@ -113,7 +116,7 @@ class BookingController extends Controller
             'payment_status' => $paymentStatus, // Update the payment status
         ]);
 
-        return redirect()->route('booking.index')->with('success', 'Booking updated successfully');
+        return redirect()->route('booking.index')->with('paid', 'Booking updated successfully');
     }
 
     // Renamed method to cancel the booking (previously `update`)
@@ -140,7 +143,7 @@ class BookingController extends Controller
     public function destroy(Booking $booking)
     {
         $this->cancel($booking->id, new Request());
-        return redirect()->route('booking.index')->with('success', 'Booking canceled successfully');
+        return redirect()->route('booking.index')->with('paid', 'Booking canceled successfully');
     }
 
     public function updateStatus(Request $request, Booking $booking)
@@ -148,7 +151,7 @@ class BookingController extends Controller
         $request->validate(['status' => 'required|string']);
         $booking->update(['status' => $request->status]);
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+        return response()->json(['paid' => true, 'message' => 'Status updated successfully']);
     }
 
     // Edit method to render the form for editing a booking
@@ -177,7 +180,7 @@ class BookingController extends Controller
 
         // Redirect with success message
         return redirect()->route('booking.index')
-            ->with('success', 'Booking payment accepted successfully.');
+            ->with('paid', 'Booking payment accepted successfully.');
     }
 
 
@@ -197,6 +200,6 @@ class BookingController extends Controller
 
         // Redirect with success message
         return redirect()->route('booking.index')
-            ->with('success', 'Booking payment rejected successfully.');
+            ->with('paid', 'Booking payment rejected successfully.');
     }
 }
