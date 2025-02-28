@@ -9,6 +9,7 @@
 
        <h1 class="mt-4">Events</h1>
        <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">Add New Event</a>
+       <a href="{{ route('dashboardPage') }}" class="btn btn-primary mb-3">Go Back</a>
 
     <table class="table table-striped table-bordered">
         <thead class="table-dark">

@@ -6,6 +6,9 @@
     <div class="container">
         <h1 class="mt-4">Movies</h1>
         <a href="{{ route('movies.create') }}" class="btn btn-primary mb-3">Add New Movie</a>
+        <a href="{{ route('dashboardPage') }}" class="btn btn-primary mb-3">Go Back</a>
+        <a href="{{ route('screenings.index') }}" class="btn btn-primary mb-3">View Screenings</a>
+
 
         <!-- Movies Table -->
         <table class="table table-striped table-bordered">

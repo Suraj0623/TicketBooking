@@ -18,36 +18,31 @@ class TransportController extends Controller
         $origin = $request->query('origin');
         $destination = $request->query('destination');
         $departure_date = $request->query('departure_date');
-
+    
         // Build base query for transports
-        $query = Transport::query();
-
-        // Apply search filter to 'name'
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-
-        // Filter by route if origin and destination are provided
-        if ($origin && $destination) {
-            $query->whereHas('route', function ($query) use ($origin, $destination) {
-                $query->where('origin', $origin)
-                    ->where('destination', $destination);
+        $query = Transport::with(['route']) // Eager load the route relationship
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->when($origin && $destination, function ($query) use ($origin, $destination) {
+                return $query->whereHas('route', function ($query) use ($origin, $destination) {
+                    $query->where('origin', $origin)
+                        ->where('destination', $destination);
+                });
+            })
+            ->when($departure_date, function ($query, $departure_date) {
+                return $query->whereDate('departure_date', $departure_date);
             });
-        }
-
-        // Filter by departure date if provided
-        if ($departure_date) {
-            $query->whereDate('departure_date', $departure_date);
-        }
-
+    
         // Separate queries for each transport type
         $buses = (clone $query)->where('type', 'bus')->get();
         $planes = (clone $query)->where('type', 'plane')->get();
         $trains = (clone $query)->where('type', 'train')->get();
-
+    
         // Return the view with the results
         return view('transports.index', compact('buses', 'planes', 'trains'));
     }
+    
 
 
 

@@ -36,6 +36,7 @@ class AdminMovieController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'release_date' => 'nullable|date',
+            'poster_url'=>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'genre' => 'nullable|string',
             'director' => 'nullable|string',
         ]);

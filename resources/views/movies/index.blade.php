@@ -13,6 +13,10 @@
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body">
+                            @if ($movie->poster_url)
+    <img src="{{ asset('storage/' . $movie->poster_url) }}" alt="{{ $movie->title }}" width="100">
+@endif
+
                             <h5 class="card-title">{{ $movie->title }}</h5>
                             <p class="card-text"><strong>Description:</strong> {{ $movie->description }}</p>
                             <p class="card-text"><strong>Released Date:</strong> {{ $movie->release_date }}</p>

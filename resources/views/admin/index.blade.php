@@ -105,7 +105,7 @@
             <div class="container">
                 <section id="dashboard">
                     <!-- Dashboard Status Boxes -->
-                    <div id="status" class="row">
+                    {{-- <div id="status" class="row">
                         <div class="col-md-4">
                             <div id="Booking" class="card text-white bg-primary mb-3">
                                 <div class="card-body">
@@ -114,11 +114,11 @@
                                         <i class="fas fa-ticket-alt fa-2x"></i>
                                     </div>
                                     <p class="card-text">Total Bookings</p>
-                                    <p class="h4">{{}}</p>
+                                    <p class="h4">0</p>
                                     <a href="{{ route('booking.index') }}" class="btn btn-light btn-sm">View More <i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- Add more status items here -->
                     </div>
                 </section>
