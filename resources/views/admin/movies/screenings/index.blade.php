@@ -6,6 +6,7 @@
     <div class="container">
         <h1 class="mt-4">Screenings</h1>
         <a href="{{ route('screenings.create') }}" class="btn btn-primary mb-3">Add Screening</a>
+        <a href="{{ route('dashboardPage') }}" class="btn btn-primary mb-3">Go Back</a>
 
         <!-- Screenings Table -->
         <table class="table table-striped table-bordered">

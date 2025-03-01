@@ -10,18 +10,7 @@
         max-width: 1100px;
     }
 
-    .search-box {
-        background-color: #007bff;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-    }
-
-    .search-box input {
-        width: 100%;
-        border-radius: 5px;
-        padding: 8px;
-    }
+  
 
     .card {
         border-radius: 10px;
@@ -68,11 +57,14 @@
 </style>
 
 <main class="container" style="margin-top: 80px;">
-    <x-filter/>
     <div class="container my-4">
+        
         <div class="search-box">
-            <x-search-box search-route="{{ route('tour.index') }}" placeholder="Search Tour..." />
-        </div>
+            <x-search-box search-route="{{ route('tour.index') }}" placeholder="Search tours..." />
+            @if (request('search'))
+                <p class="text-center">Search results for: <strong>{{ request('search') }}</strong></p>
+            @endif
+            </div>
 
         @if (request('search'))
             <p class="text-center mt-3 text-dark">Search results for: <strong>{{ request('search') }}</strong></p>

@@ -89,7 +89,7 @@
         </div>
 
         <div class="mt-3">
-            {{-- {{ $bookings->links() }} Laravel pagination links --}}
+            {{ $bookings->links() }} {{-- Laravel pagination links --}}
         </div>
     </div>
     <x-footer/>

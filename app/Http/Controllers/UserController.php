@@ -53,8 +53,19 @@ class UserController extends Controller
         $query = $request->input('query');
         $category = $request->input('category');
 
+        // Define an array of models
+    $models = [
+        'tours' => \App\Models\Tour::class,
+        'movies' => \App\Models\Movie::class,
+        'events' => \App\Models\Event::class,
+        'transport' => \App\Models\Transport::class,
+    ];
+    if(!array_key_exists($category,$models)){
+        return redirect()->back()->with('error','invalid search type');
+    }
+    $results=$models[$category]::where('name','LIKE','%{$query}%')->get();
 
-        return view('search-results', compact('query', 'category')); // Pass search results here
+        return view('search-results', compact('query', 'category','results')); // Pass search results here
     }
 
     public function user()

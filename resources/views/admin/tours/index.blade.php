@@ -8,6 +8,7 @@
     <div class="container">
         <h1 class="mt-4">All Tours</h1>
         <a href="{{ route('tours.create') }}" class="btn btn-primary mb-3">Add New Tour</a>
+        <a href="{{ route('dashboardPage') }}" class="btn btn-primary mb-3">Go Back</a>
 
         <table class="table table-striped table-bordered">
             <thead class="table-dark">

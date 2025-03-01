@@ -10,6 +10,8 @@
     <button class="btn btn-primary mb-3"> 
         <a href="{{ route('transports.create') }}" class="text-white text-decoration-none">Add New Transport</a>
     </button>
+    <a href="{{ route('dashboardPage') }}" class="btn btn-primary mb-3">Go Back</a>
+
     <!-- For Bus -->
     <h1>For Bus</h1>
     <table class="table table-bordered table-striped">

@@ -123,7 +123,7 @@
                             @foreach ($services as $service)
                                 <div class="col-md-8 col-12 mb-3">
                                     <div class="card p-3 shadow-sm">
-                                        <img src="{{ asset($service['image']) }}" class="card-img-top"
+                                        <img src="{{ asset($service['image']) }}" class="card-img-top" loading="lazy"
                                             alt="{{ $service['title'] }}" style="height: 150px; object-fit: cover;">
                                         <i class="fas fa-calendar-check text-primary fs-2"></i>
                                         <h6 class="mt-2 text-center fs-4">{{ $service['title'] }}</h6>
