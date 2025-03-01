@@ -60,9 +60,9 @@
             <!-- Contact Section -->
             <div class="col-md-3 mb-4">
                 <h5>Contact Us</h5>
-                <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                <p><strong>Phone:</strong> +977 (555) 123-4567</p>
                 <p><strong>Email:</strong> support@example.com</p>
-                <p><strong>Address:</strong> 123 Main Street, Cityville, USA</p>
+                <p><strong>Address:</strong> Bhaktapur,Bagmati,Nepal</p>
             </div>
 
             <!-- Download Section -->
