@@ -88,9 +88,9 @@
         </table>
         </div>
 
-        <div class="mt-3">
+        {{-- <div class="mt-3">
             {{ $bookings->links() }} {{-- Laravel pagination links --}}
-        </div>
+        {{-- </div/> --}}
     </div>
     <x-footer/>
 @endsection

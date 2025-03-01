@@ -34,7 +34,7 @@ class AdminTourController extends Controller
     {
         // Validate the request
         $request->validate([
-            'name' => 'required',
+            'title' => 'required',
             'description' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
             'packageName' => 'required',
@@ -51,7 +51,7 @@ class AdminTourController extends Controller
 
         // Create the new tour and save the image path
         $tour = Tour::create([
-            'name' => $request->name,
+            'title' => $request->title,
             'description' => $request->description,
             'image' => $path, // Store the image path in the database
             'packageName' => $request->packageName,

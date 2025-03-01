@@ -70,7 +70,7 @@
     </section>
 
     <!-- Search Bar -->
-    <section class="container my-4">
+    {{-- <section class="container my-4">
         <div class="search-bar shadow p-3">
             <form action="{{ route('search') }}" method="GET">
                 <div class="row g-3 align-items-center">
@@ -93,7 +93,7 @@
                 </div>
             </form>
         </div>
-    </section>
+    </section> --}}
     <!-- Features Section -->
 
     {{-- <section class="container py-5 text-center">

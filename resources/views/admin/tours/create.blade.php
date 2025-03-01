@@ -4,8 +4,8 @@
 <form action="{{ route('tours.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
-        <label for="name">Tour Name</label>
-        <input type="text" class="form-control" name="name" id="name" required>
+        <label for="title">Tour Name</label>
+        <input type="text" class="form-control" name="title" id="title" required>
     </div>
     <div class="form-group">
         <label for="description">Description</label>
