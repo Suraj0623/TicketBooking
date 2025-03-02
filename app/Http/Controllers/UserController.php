@@ -98,14 +98,14 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        if ($user) {
-            $defaultRole = Role::where('roleName', 'customer')->first();
-            if ($defaultRole) {
-                $user->roles()->sync([$defaultRole->id]);
-            }
-            Mail::to($user->email)->send(new WelcomeEmail($user));
-            return redirect()->route('login')->with('success', 'User registered successfully.');
-        }
+        // if ($user) {
+        //     $defaultRole = Role::where('roleName', 'customer')->first();
+        //     if ($defaultRole) {
+        //         $user->roles()->sync([$defaultRole->id]);
+        //     }
+        //     Mail::to($user->email)->send(new WelcomeEmail($user));
+        //     return redirect()->route('login')->with('success', 'User registered successfully.');
+        // }
 
         return back()->with('error', 'Failed to register the user.');
     }

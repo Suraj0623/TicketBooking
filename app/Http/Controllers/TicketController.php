@@ -68,7 +68,7 @@ class TicketController extends Controller
         $ticket = $booking->tickets->first();
     
         if (!$ticket) {
-            return redirect()->route('tickets.index')->with('error', 'No ticket found for this booking.');
+            return redirect()->route('ticket.index')->with('error', 'No ticket found for this booking.');
         }
     
         // Generate QR code data
@@ -76,6 +76,7 @@ class TicketController extends Controller
     
         return view('tickets.show', compact('ticket', 'qrCodeData'));
     }
+   
 
 
     /**

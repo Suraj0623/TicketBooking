@@ -32,8 +32,7 @@
                         <td>{{ ucfirst($ticket->booking?->payment_status ?? 'Paid') }}</td>
                         <td>{{ $ticket->created_at->format('Y-m-d H:i') }}</td>
                         <td>
-                            <a href="{{ route('ticket.show', ['ticket' => $ticket->id]) }}"
-                                class="btn btn-info btn-sm">View</a>
+                            <a href="{{ route('ticket.show', ['ticket' => $ticket->id]) }}" class="btn btn-info btn-sm">View</a>
                         </td>
                     </tr>
                 @endforeach

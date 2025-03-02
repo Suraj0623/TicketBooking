@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-    // List all payments for a specific booking
     public function index($bookingId)
     {
         $booking = Booking::findOrFail($bookingId);
@@ -25,15 +23,32 @@ class PaymentController extends Controller
 
         return view('payments.index', compact('booking', 'totalAmount', 'bookingId'));
     }
+    public function updateStatus(Request $request, $paymentId)
+{
+    $payment = Payment::find($paymentId);
 
-    // Accept payment method
-    // Accept payment method (POST)
+    if (!$payment || $payment->status !== 'pending') {
+        return back()->with('error', 'Invalid payment or already completed.');
+    }
 
+    // Update payment status
+    $payment->status = 'completed';
+    $payment->save();
 
+    // Check if booking was already accepted, then generate ticket
+    $booking = $payment->booking;
+    if ($booking && $booking->status === 'accepted') {
+        Ticket::create([
+            'user_id' => $booking->user_id,
+            'event_id' => $booking->event_id,
+            'booking_id' => $booking->id,
+            'seat_number' => $booking->seat_number,
+            'status' => 'generated'
+        ]);
+    }
 
-    // Process the payment (e.g., initiate payment)
- 
-
+    return redirect()->route('ticket.index')->with('success', 'Payment completed and ticket generated.');
+}
 
 
     public function process(Request $request)
@@ -68,60 +83,41 @@ class PaymentController extends Controller
             ]);
         }
     
-        return redirect()->route('tickets.index')
+        return redirect()->route('ticket.index')
             ->with('success', 'Payment completed successfully! Your ticket has been generated.');
     }
 
-    // Create a new payment (for administrative purposes)
-    public function store(Request $request)
+    public function updatePaymentStatus(Request $request, $paymentId)
     {
-        $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
-            'amount' => 'required|numeric|min:0',
-            'method' => 'required|string',
-            'status' => 'required|in:pending,completed,failed',
-        ]);
-
-        // Create the payment record
-        $payment = Payment::create([
-            'booking_id' => $request->booking_id,
-            'amount' => $request->amount,
-            'method' => $request->method,
-            'status' => $request->status,
-        ]);
-
-        return response()->json([
-            'message' => 'Payment created successfully',
-            'payment' => $payment,
-        ], 201);
+        $payment = Payment::find($paymentId);
+    
+        if (!$payment || $payment->status !== 'pending') {
+            return back()->with('error', 'Invalid payment or already completed.');
+        }
+    
+        // Update payment status to completed
+        $payment->status = 'completed';
+        $payment->save();
+    
+        // Find the associated booking
+        $booking = $payment->booking;
+    
+        if ($booking) {
+            // Update the booking status to 'accepted' after payment completion
+            $booking->status = 'accepted';
+            $booking->save();
+    
+            // Generate ticket after booking is accepted
+            Ticket::create([
+                'user_id' => $booking->user_id,
+                'event_id' => $booking->event_id,
+                'booking_id' => $booking->id,
+                'seat_number' => $booking->seat_number,  // Ensure seat number logic is handled
+                'status' => 'generated',
+            ]);
+        }
+    
+        return redirect()->route('ticket.index')->with('success', 'Payment completed, booking accepted, and ticket generated.');
     }
-
-    // Update an existing payment (e.g., modify payment status or details)
-    public function update(Request $request, $id)
-    {
-        $payment = Payment::findOrFail($id);
-
-        $request->validate([
-            'amount' => 'sometimes|numeric|min:0',
-            'method' => 'sometimes|string',
-            'status' => 'sometimes|in:pending,completed,failed',
-        ]);
-
-        // Update the payment details
-        $payment->update($request->only(['amount', 'method', 'status']));
-
-        return response()->json([
-            'message' => 'Payment updated successfully',
-            'payment' => $payment,
-        ]);
-    }
-
-    // Delete a payment (e.g., cancel or remove a payment)
-    public function destroy($id)
-    {
-        $payment = Payment::findOrFail($id);
-        $payment->delete();
-
-        return response()->json(['message' => 'Payment deleted successfully']);
-    }
+    
 }
