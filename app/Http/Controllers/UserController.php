@@ -25,7 +25,6 @@ class UserController extends Controller
         return view('auth.login');
     }
 
-
     public function index()
     {
         // Define the services array
@@ -47,25 +46,24 @@ class UserController extends Controller
         return view('welcome', compact('services', 'recommendations'));
     }
 
-
     public function search(Request $request)
     {
         $query = $request->input('query');
         $category = $request->input('category');
 
         // Define an array of models
-    $models = [
-        'tours' => \App\Models\Tour::class,
-        'movies' => \App\Models\Movie::class,
-        'events' => \App\Models\Event::class,
-        'transport' => \App\Models\Transport::class,
-    ];
-    if(!array_key_exists($category,$models)){
-        return redirect()->back()->with('error','invalid search type');
-    }
-    $results=$models[$category]::where('name','LIKE','%{$query}%')->get();
+        $models = [
+            'tours' => \App\Models\Tour::class,
+            'movies' => \App\Models\Movie::class,
+            'events' => \App\Models\Event::class,
+            'transport' => \App\Models\Transport::class,
+        ];
+        if (!array_key_exists($category, $models)) {
+            return redirect()->back()->with('error', 'invalid search type');
+        }
+        $results = $models[$category]::where('name', 'LIKE', '%{$query}%')->get();
 
-        return view('search-results', compact('query', 'category','results')); // Pass search results here
+        return view('search-results', compact('query', 'category', 'results')); // Pass search results here
     }
 
     public function user()
@@ -73,10 +71,10 @@ class UserController extends Controller
         $users = User::all();
         return view('user.index', compact('users'));
     }
+
     public function viewregister()
     {
         return view('auth.register');
-
     }
 
     public function register(Request $request)
@@ -88,7 +86,6 @@ class UserController extends Controller
             'mobileNumber' => 'required|digits:10',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
 
         $user = User::create([
             'FirstName' => $request->FirstName,
@@ -110,35 +107,29 @@ class UserController extends Controller
         return back()->with('error', 'Failed to register the user.');
     }
 
-  
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('dashboardPage');
+        }
 
-    if (Auth::attempt($credentials)) {
-        return redirect()->route('dashboardPage'); 
+        return back()->withErrors(['login' => 'Invalid credentials.']);
     }
-
-    return back()->withErrors(['login' => 'Invalid credentials.']);
-}
-
-    
-    
 
     public function dashboardPage()
     {
         $user = Auth::user();
         $role = $user->roles->where('roleName', 'SuperAdmin')->first();
-        if($role){
+        if ($role) {
             return view('admin.index');
-        }else{
+        } else {
             return redirect()->route('user.index');
         }
-      
     }
 
     public function logout(Request $request)
@@ -177,19 +168,11 @@ public function login(Request $request)
         return redirect()->route('admin.manage')->with('error', 'Failed to assign role.');
     }
 
-    // public function user()
-    // {
-    //     $users = User::select(['id', 'FirstName', 'LastName', 'email'])->get();
-    //     return view('user.index', compact('users'));
-    // }
-
     public function recommendations(User $user)
     {
         $recommendations = $this->recommendationService->recommendForUser($user);
         return view('user.recommendations', compact('recommendations'));
     }
-
-
 
     public function partner()
     {
