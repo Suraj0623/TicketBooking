@@ -58,16 +58,22 @@ class TicketController extends Controller
 
     /**
      * Display the specified ticket.
-     */public function show($ticketId)
-{
-    // Find the ticket by ID
-    $ticket = Ticket::with(['booking.bookable', 'seats', 'booking.payment'])->findOrFail($ticketId);
-
-    // Generate QR code data
-    $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]);
-
-    return view('tickets.show', compact('ticket', 'qrCodeData'));
-}
+     */
+    public function show($ticketId)
+    {
+        // Fetch ticket with all necessary relationships
+        $ticket = Ticket::with(['user', 'ticketable', 'seats', 'booking.bookable', 'booking.payment'])
+                        ->findOrFail($ticketId);
+    
+        // Determine Ticket Type
+        $ticketType = class_basename($ticket->ticketable_type); // 'Flight', 'Event', 'Movie', etc.
+    
+        // Generate QR code data for validation
+        $qrCodeData = route('ticket.validate', ['ticket' => $ticket->id]);
+    
+        return view('tickets.show', compact('ticket', 'ticketType', 'qrCodeData'));
+    }
+    
    
 
 

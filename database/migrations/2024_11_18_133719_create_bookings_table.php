@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->integer('seats_booked');
             $table->decimal('total_price', 10, 2);
             $table->enum('payment_status', ['pending', 'paid', 'failed','unpaid'])->default('pending');
-                        // $table->enum('payment_status', ['pending', 'unpaid', 'paid'])->default('pending');
 
             $table->timestamps();
         });

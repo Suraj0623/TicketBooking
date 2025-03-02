@@ -33,7 +33,8 @@
                 <h2 class="mb-3">KYC Form</h2>
                 <h3 class="mb-3">User's Personal Details</h3>
 
-                <form>
+                <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Name</label>

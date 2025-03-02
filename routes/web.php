@@ -80,14 +80,15 @@ Route::prefix('user')->group(function () {
 
 
 Route::put('/payment/{payment}/updateStatus', [PaymentController::class, 'updateStatus'])->name('payment.updateStatus');
-    Route::get('profile', [UserController::class,'partner'])->name('profile.index');
     // Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
     // Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::get('/ticket/validate/{ticket}', [TicketController::class, 'validateTicket'])->name('ticket.validate');
     Route::get('/{user}/recommendations', [UserController::class, 'recommendations'])->name('user.recommendations');
     Route::get('/', [UserController::class, 'index'])->name('user.index');
 });
-
+Route::prefix('profile')->group(function () {
+    Route::get('/partner', [UserController::class, 'partner'])->name('partner');
+});
 // Booking & Payment Routes
 Route::middleware('auth')->group(function () {
     Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
