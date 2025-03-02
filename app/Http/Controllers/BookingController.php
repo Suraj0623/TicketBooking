@@ -15,7 +15,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with(['user', 'bookable', 'payment'])->get();
+        $bookings = Booking::with(['user', 'bookable', 'payment'])->paginate(10);
         return view('bookings.index', compact('bookings'));
     }
 
