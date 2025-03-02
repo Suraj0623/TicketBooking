@@ -1,167 +1,5 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ticket Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        @media print {
-            body {
-                background-color: white;
-            }
-            header, footer, .btn {
-                display: none;
-            }
-            .ticket-details {
-                border: none;
-                padding: 10px;
-                background-color: white;
-                box-shadow: none;
-            }
-            h1 {
-                font-size: 28px;
-                text-align: center;
-            }
-        }
-    </style>
-</head>
-<body class="bg-primary text-white">
-    <div class="container mt-5">
-        <h1 class="text-center">Ticket Details</h1>
-        <div class="card bg-light text-dark p-4 mt-4">
-            @if(!$ticket)
-                <p>No tickets found.</p>
-            @else
-                <div class="ticket-details">
-                    <!-- Dynamic Title or Name based on ticketable model -->
-                    <p><strong>Title/Name:</strong> {{ $ticket->ticketable->title ?? $ticket->ticketable->name ?? $ticket->ticketable->movie->title }}</p>
-                    
-                    <!-- Dynamic Seats Booked -->
-                    <p><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
-                    
-                    <!-- Dynamic Assigned Seats -->
-                    <p><strong>Assigned Seats:</strong></p>
-                    <ul>
-                        @foreach($ticket->seats as $seat)
-                            <li>Seat #{{ $seat->seat_number }} - Status: {{ ucfirst($seat->status) }}</li>
-                        @endforeach
-                    </ul>
 
-                    <!-- Dynamic Status (Paid or Pending) -->
-                    <p><strong>Status:</strong>
-                        @if(optional($ticket->booking)->payment && optional($ticket->booking->payment)->status === 'completed')
-                            <span class="text-success">Paid</span>
-                        @else
-                            <span class="text-warning">Pending</span>
-                        @endif
-                    </p>
-                    
-                    <!-- Dynamic QR Code using Laravel's QrCode package -->
-                    <div class="text-center">
-                        {!! QrCode::size(250)->generate($qrCodeData) !!}
-                    </div>
-                    
-                    <!-- Print Button -->
-                    <p class="text-center mt-3">
-                        <a href="javascript:window.print()" class="btn btn-primary">Print</a>
-                    </p>
-                </div>
-            @endif
-        </div>
-        
-        <!-- Home Button -->
-        <div class="text-center mt-3">
-            <a href="{{ route('welcome') }}" class="btn btn-secondary">Home</a>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> --}}
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boarding Pass</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <style>
-        .boarding-pass {
-            max-width: 700px;
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .pass-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
-        }
-        .pass-body {
-            padding: 20px;
-        }
-        .qr-code {
-            width: 80px;
-            height: 80px;
-        }
-    </style>
-</head>
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="container">
-        <div class="boarding-pass mx-auto">
-            <div class="pass-header">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-plane text-white fs-3 me-2"></i>
-                    <h5 class="m-0">BOARDING PASS</h5>
-                </div>
-                <h6 class="m-0">WORLD VECTOR AIRLINES</h6>
-            </div>
-            <div class="pass-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <p class="fw-bold mb-1">JOHN VOYAGE</p>
-                        <small class="text-uppercase">Name of Passenger</small>
-                        <hr>
-                        <p class="fw-bold mb-1">Madrid / MAD</p>
-                        <small class="text-uppercase">From</small>
-                        <hr>
-                        <p class="fw-bold mb-1">Stockholm / STO</p>
-                        <small class="text-uppercase">To</small>
-                        <hr>
-                        <p class="fw-bold mb-1">ABC1234</p>
-                        <small class="text-uppercase">Flight No</small>
-                        <hr>
-                        <p class="fw-bold mb-1">15 SEP 2019</p>
-                        <small class="text-uppercase">Date</small>
-                        <hr>
-                        <p class="fw-bold mb-1">16:30</p>
-                        <small class="text-uppercase">Departure Time</small>
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <p class="fw-bold mb-1">M</p>
-                        <small class="text-uppercase">Class</small>
-                        <hr>
-                        <img src="https://storage.googleapis.com/a1aa/image/cdHsmIVI2-ZHn65yInByKHNR_nyITVgmOZTh9Dietc0.jpg" alt="QR Code" class="qr-code my-3">
-                        <hr>
-                        <p class="fw-bold mb-1">27A</p>
-                        <small class="text-uppercase">Seat</small>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center py-3 bg-white text-dark fw-bold">
-                ENJOY YOUR TRIP!
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -208,11 +46,11 @@
             <div class="ticket-body">
                 <div class="row">
                     <div class="col-md-8">
-                        <p class="fw-bold mb-1">{{ $ticket->user->name }}</p>
+                        <p class="fw-bold mb-1">{{ $ticket->user->FirstName . ' ' . $ticket->user->LastName }}</p>
                         <small class="text-uppercase">Name of Passenger/Attendee</small>
                         <hr>
                         
-                        @if($ticketType == 'Flight')
+                        @if($ticketType == 'Transport')
                             <p class="fw-bold mb-1">{{ $ticket->ticketable->origin }} / {{ $ticket->ticketable->origin_code }}</p>
                             <small class="text-uppercase">From</small>
                             <hr>
@@ -225,6 +63,15 @@
                             <p class="fw-bold mb-1">{{ $ticket->ticketable->departure_time }}</p>
                             <small class="text-uppercase">Departure Time</small>
                         @elseif($ticketType == 'Event')
+                            <p class="fw-bold mb-1">{{ $ticket->ticketable->title }}</p>
+                            <small class="text-uppercase">Event Name</small>
+                            <hr>
+                            <p class="fw-bold mb-1">{{ $ticket->ticketable->venue }}</p>
+                            <small class="text-uppercase">Venue</small>
+                            <hr>
+                            <p class="fw-bold mb-1">{{ $ticket->ticketable->event_date }}</p>
+                            <small class="text-uppercase">Event Date</small>
+                        @elseif($ticketType == 'Tour')
                             <p class="fw-bold mb-1">{{ $ticket->ticketable->title }}</p>
                             <small class="text-uppercase">Event Name</small>
                             <hr>
@@ -250,19 +97,55 @@
                     <div class="col-md-4 text-center">
                         <p class="fw-bold mb-1">{{ $ticket->seats->first()->seat_number ?? 'N/A' }}</p>
                         <small class="text-uppercase">Seat</small>
+                           <!-- Dynamic Seats Booked -->
+                    <p><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
+                    
+                    <!-- Dynamic Assigned Seats -->
+                    {{-- <p><strong>Assigned Seats:</strong></p>
+                    <ul>
+                        @foreach($ticket->seats as $seat)
+                            <li>Seat #{{ $seat->seat_number }} - Status: {{ ucfirst($seat->status) }}</li>
+                        @endforeach
+                    </ul> --}}
                         <hr>
-                        <img src="{{ asset('path/to/qr-code.png') }}" alt="QR Code" class="qr-code my-3">
+                        {{-- <img src="{{ asset('path/to/qr-code.png') }}" alt="QR Code" class="qr-code my-3"> --}}
+                                     <!-- Dynamic QR Code using Laravel's QrCode package -->
+                        <div class="text-center">
+                            {!! QrCode::size(150)->generate($qrCodeData) !!}
+                        </div>
                         <hr>
                         <p class="fw-bold mb-1">${{ $ticket->price }}</p>
-                        <small class="text-uppercase">Price</small>
+                        <small class="text-uppercase">Total  Price</small>
                     </div>
                 </div>
             </div>
+        </div>
             <div class="text-center py-3 bg-white text-dark fw-bold">
                 ENJOY YOUR EXPERIENCE!
             </div>
+              <!-- Print Button -->
+              <p class="text-center mt-3">
+                <a href="javascript:window.print()" class="btn btn-primary" id="printButton">Print</a>
+            </p>
+            
+            
         </div>
     </div>
+    <a href="{{route('welcome')}}" class="btn btn-lg" id="home" >Go back</a>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Hide the print button before the print dialog is opened
+        window.onbeforeprint = function() {
+            document.getElementById('printButton').style.display = 'none';
+            document.getElementById('home').style.display = 'none';
+        };
+        
+        // Show the print button again after the print dialog is closed
+        window.onafterprint = function() {
+            document.getElementById('printButton').style.display = 'block';
+            document.getElementById('home').style.display = 'block';
+        };
+    </script>
+    
 </body>
 </html>

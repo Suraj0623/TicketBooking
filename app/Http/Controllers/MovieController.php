@@ -24,7 +24,7 @@ class MovieController extends Controller
     public function show($id)
     {
         $movie = Movie::with('screenings')->findOrFail($id);
-        return view('movies.show');
+        return view('movies.show',compact('movie'));
     }
 
     public function store(Request $request)

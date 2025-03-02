@@ -56,14 +56,14 @@
 
             <!-- Poster -->
             <div class="col-md-6">
-                <label for="poster" class="form-label">Poster</label>
-                <input type="file" name="poster" id="poster" class="form-control">
+                <label for="poster_url" class="form-label">Poster</label>
+                <input type="file" name="poster_url" id="poster_url" class="form-control">
                 @if ($movie->poster_url)
                     <div class="mt-2">
                         <img src="{{ asset('storage/' . $movie->poster_url) }}" alt="{{ $movie->title }}" style="max-width: 100px;">
                     </div>
                 @endif
-                @error('poster')
+                @error('poster_url')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
