@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class SeatController extends Controller
 {
+   public function index($seatableId,$seatableType)
+   {
+    $seats=Seat::where('seatableId',$seatableId)
+    ->where('seatableType',$seatableType)->get();
+    return view('view',compact('seat'));
+   }
+
     /**
      * Manage seat information for a specific bookable item (e.g., event, transportation).
      */

@@ -63,7 +63,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
     Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
 });
-
+Route::get('seat/{seatableId}/{seatableType}',[SeatController::class,'index']);
 // User Routes
 Route::prefix('user')->group(function () {
     Route::resource('booking', BookingController::class);
