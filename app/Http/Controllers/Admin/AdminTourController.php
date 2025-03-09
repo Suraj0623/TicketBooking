@@ -99,15 +99,14 @@ class AdminTourController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Allow nullable image
-            'packageName' => 'required|string|max:255',
-            'ticket_price' => 'required|numeric|min:0',
-            'duration' => 'required|string|max:255',
-            'highlights' => 'required|string',
-            'avg_rating' => 'nullable|numeric|min:0|max:5',
-            'total_rating' => 'nullable|numeric|min:0',
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
+            'packageName' => 'required',
+            'ticket_price' => 'required|numeric',
+            'duration' => 'required',
+            'highlights' => 'required',
+            'capacity'=>'required|integer|min:1|max:35',
             'category' => 'required|string|max:255',
         ]);
 
@@ -130,8 +129,7 @@ class AdminTourController extends Controller
             'ticket_price',
             'duration',
             'highlights',
-            'avg_rating',
-            'total_rating',
+            'capacity',
             'category',
         ]));
 
