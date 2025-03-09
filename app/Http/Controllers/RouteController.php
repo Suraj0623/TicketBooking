@@ -34,6 +34,7 @@ class RouteController extends Controller
             'origin' => 'required|string',
             'destination' => 'required|string',
             'duration' => 'required|numeric|min:0',
+            'distance' => 'required|numeric|min:0',
         ]);
 
         // Store the data

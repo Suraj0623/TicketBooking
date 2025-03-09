@@ -30,7 +30,7 @@
                     <td>{{ $bus->name }}</td>
                     <td>{{ $bus->capacity }}</td>
                     <td>{{ $bus->route->origin }} to {{ $bus->route->destination }}</td>
-                    <td>{{ $bus->price_per_seat }}</td>
+                    <td>{{ $bus->ticket_price }}</td>
                     <td>
                         <a href="{{ route('transports.edit', $bus->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('transports.destroy', $bus->id) }}" method="POST" style="display: inline;">
@@ -62,7 +62,7 @@
                     <td>{{ $train->name }}</td>
                     <td>{{ $train->capacity }}</td>
                     <td>{{ $train->route->origin }} to {{ $train->route->destination }}</td>
-                    <td>{{ $train->price_per_seat }}</td>
+                    <td>{{ $train->ticket_price }}</td>
                     <td>
                         <a href="{{ route('transports.edit', $train->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('transports.destroy', $train->id) }}" method="POST" style="display: inline;">
@@ -94,7 +94,7 @@
                     <td>{{ $plane->name }}</td>
                     <td>{{ $plane->capacity }}</td>
                     <td>{{ $plane->route->origin }} to {{ $plane->route->destination }}</td>
-                    <td>{{ $plane->price_per_seat }}</td>
+                    <td>{{ $plane->ticket_price }}</td>
                     <td>
                         <a href="{{ route('transports.edit', $plane->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('transports.destroy', $plane->id) }}" method="POST" style="display: inline;">

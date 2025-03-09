@@ -19,6 +19,11 @@ return new class extends Migration {
             $table->string('mobileNumber');
             $table->string('password');
             $table->string('image')->nullable();
+            $table->string('country')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('description')->nullable();
+            $table->string('hobby')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

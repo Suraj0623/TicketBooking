@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('origin');
             $table->string('destination');
+            $table->string('distance');
             $table->decimal('duration', 8, 2)->unsigned(); // Store duration in minutes for flexibility
             $table->timestamps();
         });

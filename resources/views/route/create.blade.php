@@ -23,9 +23,16 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+        <div class="form-group">
+            <label for="distance">Distance in (km):</label>
+            <input type="text" name="distance" id="distance" class="form-control" value="{{ old('distance') }}" required>
+            @error('distance')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
 
         <div class="form-group">
-            <label for="duration">Duration (in hours):</label>
+            <label for="duration">Travelling time (in hours):</label>
             <input type="text" name="duration" id="duration" class="form-control" value="{{ old('duration') }}" required>
             @error('duration')
                 <div class="alert alert-danger">{{ $message }}</div>

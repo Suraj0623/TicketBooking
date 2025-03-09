@@ -28,29 +28,6 @@ class AdminEventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //             $request->validate([
-    //         'title' => 'required',
-    //         'description' => 'required',
-    //         'event_date' => 'required|date',
-    //         'venue' => 'required|string|max:255',
-    //         'ticket_price' => 'required|numeric|min:0',
-    //         'total_seats' => 'required|integer|min:1',
-    //     ]);
-
-    //    $event= Event::create($request->all());
-    //    $event->seats()->create([
-    //     'total_seats'=>$request->total_seats,
-    //     'available_seats'=>$request->total_seats,
-    //     'seatable_id' => $event->id,
-    //     'seatable_type' => Event::class,
-    //    ]);
-
-    //     return redirect()->route('events.index')->with('success', 'Event created successfully.');
-
-    // }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -104,11 +81,16 @@ class AdminEventController extends Controller
             'description' => 'required',
             'event_date' => 'required|date',
             'venue' => 'required',
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'ticket_price' => 'required|numeric',
             'total_seats' => 'required|integer|min:1',
             'category' => 'required|string|max:255', // Add validation for category
         ]);
-
+  // Handle file upload (if a file is provided)
+  if ($request->hasFile('image')) {
+    $path = $request->file('image')->store('events', 'public'); // Store the file in the 'storage/app/public/posters' directory
+    $validated['image'] = $path; // Add the file path to the validated data
+}
         $event = Event::find($id);
         $event->update($request->all());
 

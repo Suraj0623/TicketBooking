@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('description');
             $table->integer('total_seats')->nullable();
+            $table->string('image')->nullable();
             $table->timestamp('event_date');
             $table->string('venue');
             $table->decimal('ticket_price', 8, 2);

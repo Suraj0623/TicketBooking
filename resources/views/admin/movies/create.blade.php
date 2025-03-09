@@ -63,14 +63,6 @@
                 @enderror
             </div>
 
-            {{-- <!-- Poster -->
-            <div class="col-md-6">
-                <label for="poster" class="form-label">Poster</label>
-                <input type="file" name="poster" id="poster" class="form-control">
-                @error('poster')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div> --}}
 
             <!-- Submit and Cancel Buttons -->
             <div class="col-12 d-flex gap-2">

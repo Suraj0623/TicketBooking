@@ -41,22 +41,29 @@ class AdminTransportController extends Controller
             'route_id' => 'required|exists:routes,id', // route exists in the `routes` table
             'type' => 'required|in:bus,plane,train', //  specific types
             'name' => 'required|string|max:255', //  string name
+            'number' => ['required', 'regex:/^[A-Z]{2} \d{1,2} [A-Z]{2,3} \d{4}$/'],
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'departure_date' => 'required|date|after_or_equal:today', //  valid date after today
             'departure_time' => 'required|date_format:H:i', //  time is in HH:mm format
             'capacity' => 'required|integer|min:1', // 
             'ticket_price' => 'required|numeric|min:0',
         ]);
-
+  // Handle file upload (if a file is provided)
+  if ($request->hasFile('image')) {
+    $path = $request->file('image')->store('transports', 'public'); // Store the file in the 'storage/app/public/posters' directory
+    $validated['image'] = $path; // Add the file path to the validated data
+}
 
         // Create a new transport record
         $transport = Transport::create($validated);
 
-        Seat::create([
-            'seatable_id' => $transport->id,
-            'seatable_type' => Transport::class,
-            'seat_number' => 100,
-            'status' => 'available',
-        ]);
+        for ($i = 1; $i <= $request->capacity; $i++) {
+            $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
+            $transport->seats()->create([
+                'seat_number' => $seatNumber,
+                'status' => 'available',
+            ]);
+        }
 
 
         return redirect()->route('transports.index')->with('success', 'Transport created successfully!');

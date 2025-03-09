@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->foreignId('route_id')->constrained('routes')->onDelete('cascade'); // Link to routes
             $table->enum('type', ['bus', 'plane', 'train']);
             $table->string('name'); // Vehicle name/identifier
+            $table->string('image')->nullable();
+            $table->string('number');
             $table->date('departure_date');
             $table->time('departure_time');
             $table->integer('capacity')->unsigned(); // Maximum number of seats

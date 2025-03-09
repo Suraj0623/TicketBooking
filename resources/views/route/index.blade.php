@@ -12,6 +12,7 @@
         <tr>
             <th>Origin</th>
             <th>Destination</th>
+            <th>Distance (in km)</th>
             <th>Total Time (in hours) </th>
             
         </tr>
@@ -21,6 +22,7 @@
             <tr>
                 <td>{{ $route->origin }}</td>
                 <td>{{ $route->destination }}</td>
+                <td>{{ $route->distance }}</td>
                 <td>{{ $route->duration }}</td>
             </tr>
         @endforeach

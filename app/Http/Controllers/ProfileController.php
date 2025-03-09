@@ -35,8 +35,8 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate incoming data
-         $validated = $request->validate([
+        // Validate incoming data
+        $validated = $request->validate([
             'name'                  => 'required|string|max:255',
             'father_name'           => 'nullable|string|max:255',
             'grandfather_name'      => 'nullable|string|max:255',
@@ -57,14 +57,14 @@ class ProfileController extends Controller
             // Permanent Address
             'permanent_province'    => 'required|string|max:255',
             'permanent_district'    => 'required|string|max:255',
-            'permanent_municipality'=> 'required|string|max:255',
+            'permanent_municipality' => 'required|string|max:255',
             'permanent_street'      => 'nullable|string|max:255',
 
             // Temporary Address
             'is_temporary_same'     => 'sometimes|boolean',
             'temporary_province'    => 'nullable|string|max:255',
             'temporary_district'    => 'nullable|string|max:255',
-            'temporary_municipality'=> 'nullable|string|max:255',
+            'temporary_municipality' => 'nullable|string|max:255',
             'temporary_street'      => 'nullable|string|max:255',
         ]);
 
@@ -88,16 +88,12 @@ class ProfileController extends Controller
         Partner::create($validated);
 
         return redirect()->route('profile.index')->with('success', 'User information stored successfully!');
-    
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Profile $profile)
-    {
-
-    }
+    public function show(Profile $profile) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -115,12 +111,16 @@ class ProfileController extends Controller
     public function update(Request $request, Profile $profile)
     {
         // Validate input data
-        $request->validate([
-            'FirstName' => 'required|string|max:255',
-            'LastName' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'mobileNumber' => 'required|digits:10',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        $validatedData = $request->validate([
+            'FirstName'    => 'required|string|max:255',
+            'LastName'     => 'required|string|max:255',
+            'email'        => 'required|email|max:255',
+            'mobileNumber' => 'required|string|max:20',
+            'country'      => 'nullable|string|max:100',
+            'description'  => 'nullable|string',
+            'hobby'        => 'nullable|string|max:255',
+            'history'      => 'nullable|string|max:255',
+            'image'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         // Update profile details
@@ -128,23 +128,20 @@ class ProfileController extends Controller
         $profile->LastName = $request->input('LastName');
         $profile->email = $request->input('email');
         $profile->mobileNumber = $request->input('mobileNumber');
+  // Check if a new profile image is uploaded
+  if ($request->hasFile('image')) {
+    // Optionally delete the old image if it exists
+    if ($profile->image && Storage::disk('public')->exists($profile->image)) {
+        Storage::disk('public')->delete($profile->image);
+    }
+    // Store the new image in the "profile_images" directory on the public disk
+    $validatedData['image'] = $request->file('image')->store('profile_images', 'public');
+}
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Delete the old image if exists
-            if ($profile->image && Storage::exists('public/' . $profile->image)) {
-                Storage::delete('public/' . $profile->image);
-            }
+// Update the profile with the validated data
+$profile->update($validatedData);
 
-            // Store the new image
-            $imagePath = $request->file('image')->store('profiles', 'public');
-            $profile->image = $imagePath;
-        }
-
-        // Save updated profile
-        $profile->save();
-
-        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.index', ['profile' => $profile->id])->with('success', 'Profile updated successfully!');
     }
 
     /**

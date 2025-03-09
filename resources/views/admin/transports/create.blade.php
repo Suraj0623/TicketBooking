@@ -43,7 +43,23 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-
+              
+             <!-- Vehicle number -->
+            <div class="form-group">
+                <label for="number">Vehicle number</label>
+                <input type="text" name="number" id="number" class="form-control" pattern="[A-Z]{2} \d{1,2} [A-Z]{2,3} \d{4}" value="{{ old('number') }}" required>
+                @error('number')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+             <!-- Vehicle image -->
+            <div class="col-md-6">
+                <label for="image" class="form-label" value="Insert image of vehicle with its number">Vehicle Image</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                @error('poster')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
            <!-- Departure Date -->
             <div class="form-group">
                 <label for="departure_date">Departure Date:</label>

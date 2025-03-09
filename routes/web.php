@@ -59,7 +59,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('transports', AdminTransportController::class);
     Route::resource('screenings', AdminScreeningController::class);
     Route::resource('bookings', BookingController::class);
-    Route::get('/', [UserController::class, 'view'])->name('user.view');
+    Route::get('/view', [UserController::class, 'view'])->name('user.view');
     Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
     Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
     Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
@@ -78,6 +78,7 @@ Route::prefix('user')->group(function () {
     Route::resource('screening', ScreeningController::class);
     Route::resource('ticket', TicketController::class);
     Route::resource('profile', ProfileController::class);
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
 
 
 Route::put('/payment/{payment}/updateStatus', [PaymentController::class, 'updateStatus'])->name('payment.updateStatus');

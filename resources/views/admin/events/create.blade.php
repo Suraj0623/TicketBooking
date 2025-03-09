@@ -20,6 +20,15 @@
                 @enderror
             </div>
 
+               <!-- Image -->
+               <div class="col-md-6">
+                <label for="image" class="form-label">Event Photos</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                @error('image')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
             <!-- Description -->
             <div class="col-md-6">
                 <label for="description" class="form-label">Description</label>
