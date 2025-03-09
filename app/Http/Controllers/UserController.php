@@ -95,15 +95,6 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        // if ($user) {
-        //     $defaultRole = Role::where('roleName', 'customer')->first();
-        //     if ($defaultRole) {
-        //         $user->roles()->sync([$defaultRole->id]);
-        //     }
-        //     Mail::to($user->email)->send(new WelcomeEmail($user));
-        //     return redirect()->route('login')->with('success', 'User registered successfully.');
-        // }
-
         return back()->with('error', 'Failed to register the user.');
     }
 
@@ -178,4 +169,10 @@ class UserController extends Controller
     {
         return view('profiles.partner');
     }
+    public function view(){
+        $userId = Auth::id(); // Get the authenticated user ID
+        $user = User::where('id', '!=', $userId)->get(); // Exclude the logged-in user
+        return view('user.index', compact('user'));
+    }
+    
 }

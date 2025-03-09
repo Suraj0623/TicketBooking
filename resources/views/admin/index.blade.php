@@ -86,7 +86,7 @@
                     @endphp
                     @if ($role)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('user.index') }}">
+                        <a class="nav-link" href="{{ route('user.view') }}">
                             <i class="fas fa-users"></i> Users
                         </a>
                     </li>
