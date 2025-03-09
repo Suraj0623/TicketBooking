@@ -19,8 +19,7 @@ return new class extends Migration {
             $table->decimal('ticket_price', 8, 2);
             $table->string('duration');
             $table->string('highlights');
-            $table->decimal('avg_rating');
-            $table->decimal('total_rating');
+            $table->integer('capacity');
             $table->timestamps();
         });
     }

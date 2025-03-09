@@ -41,8 +41,7 @@ class AdminTourController extends Controller
             'ticket_price' => 'required|numeric',
             'duration' => 'required',
             'highlights' => 'required',
-            'avg_rating' => 'required|numeric',
-            'total_rating' => 'required|numeric',
+            'capacity'=>'required|integer|min:1|max:35',
             'category' => 'required|string|max:255', // Add validation for category
         ]);
 
@@ -58,17 +57,17 @@ class AdminTourController extends Controller
             'ticket_price' => $request->ticket_price,
             'duration' => $request->duration,
             'highlights' => $request->highlights,
-            'avg_rating' => $request->avg_rating,
-            'total_rating' => $request->total_rating,
+            'capacity' => $request->capacity,
             'category' => $request->category, // Add category
         ]);
 
-        Seat::create([
-            'seatable_id' => $tour->id,
-            'seatable_type' => Tour::class,
-            'seat_number' => 100,
-            'status' => 'available',
-        ]);
+        for ($i = 1; $i <= $request->capacity; $i++) {
+            $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
+            $tour->seats()->create([
+                'seat_number' => $seatNumber,
+                'status' => 'available',
+            ]);
+        }
 
         // Redirect back to the tour index page
         return redirect()->route('tours.index');

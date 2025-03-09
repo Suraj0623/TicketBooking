@@ -32,12 +32,8 @@
         <textarea class="form-control" name="highlights" id="highlights" rows="3" required></textarea>
     </div>
     <div class="form-group">
-        <label for="avg_rating">Average Rating</label>
-        <input type="number" class="form-control" name="avg_rating" id="avg_rating" step="0.1" required>
-    </div>
-    <div class="form-group">
-        <label for="total_rating">Total Rating</label>
-        <input type="number" class="form-control" name="total_rating" id="total_rating" required>
+        <label for="capacity">Total Person Per Package</label>
+        <input type="number" class="form-control" name="capacity" id="capacity" step="0.1" required>
     </div>
     <div class="form-group">
         <label for="category">Category</label>
