@@ -95,7 +95,17 @@ class AdminScreeningController extends Controller
             'ticket_price',
             'total_seats',
         ]));
-
+ // Update seats only if capacity changes
+ if ($request->total_seats != $screening->seats()->count()) {
+    $screening->seats()->delete(); // Remove existing seats
+    for ($i = 1; $i <= $request->capacity; $i++) {
+        $seatNumber = 'S' . $i;
+        $screening->seats()->create([
+            'seat_number' => $seatNumber,
+            'status' => 'available',
+        ]);
+    }
+}
         return redirect()->route('screenings.index')->with('success', 'Screening updated successfully.');
     }
 

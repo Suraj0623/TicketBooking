@@ -35,7 +35,7 @@ class AdminTourController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp,gif,svg|max:2048', // Image validation
             'packageName' => 'required',
             'ticket_price' => 'required|numeric',
             'duration' => 'required',
@@ -100,7 +100,7 @@ class AdminTourController extends Controller
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:2048', 
             'packageName' => 'required',
             'ticket_price' => 'required|numeric',
             'duration' => 'required',
@@ -124,7 +124,17 @@ class AdminTourController extends Controller
 
         // Update the tour with the validated data
         $tour->update($validated);
-
+ // Update seats only if capacity changes
+ if ($request->capacity != $tour->seats()->count()) {
+    $tour->seats()->delete(); // Remove existing seats
+    for ($i = 1; $i <= $request->capacity; $i++) {
+        $seatNumber = 'S' . $i;
+        $tour->seats()->create([
+            'seat_number' => $seatNumber,
+            'status' => 'available',
+        ]);
+    }
+}
         // Redirect back to the tour index page with success message
         return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
     }

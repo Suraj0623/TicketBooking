@@ -68,7 +68,13 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-
+            <div class="form-group">
+                <label for="capacity">Total Person Per Package</label>
+                <input type="number" class="form-control" name="capacity" id="capacity" value="{{ old('capacity', $tour->capacity) }}" step="0.1" required>
+                @error('capacity')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <!-- Highlights -->
             <div class="form-group">
                 <label for="highlights">Highlights</label>
