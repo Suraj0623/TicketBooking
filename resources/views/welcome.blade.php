@@ -77,8 +77,10 @@
 
         .horizontal-item {
             flex: 0 0 auto;
-            width: 300px; /* Increased width */
-            min-width: 300px; /* Increased minimum width */
+            width: 300px;
+            /* Increased width */
+            min-width: 300px;
+            /* Increased minimum width */
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -92,7 +94,8 @@
 
         .horizontal-item img {
             width: 100%;
-            height: 200px; /* Increased height */
+            height: 200px;
+            /* Increased height */
             object-fit: cover;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -103,9 +106,11 @@
         }
 
         /* Recommended for You Section */
+        /* Recommended for You Section */
         .recommended-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid layout */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* Responsive grid layout */
             gap: 1.5rem;
         }
 
@@ -123,6 +128,22 @@
         .recommended-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .recommended-item .image-container {
+            width: 100%;
+            height: 150px;
+            /* Fixed height for the image container */
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .recommended-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Ensures the image fits within the container without distortion */
         }
 
         .recommended-item .details {
@@ -161,6 +182,7 @@
         </div>
     </div>
 
+    <!-- Update the "Recommended for You" section to display images -->
     <!-- Recommend Activities Section -->
     <div class="container py-4">
         <h2 class="text-center mb-4">Recommended for You</h2>
@@ -168,13 +190,23 @@
             <p class="text-center">No recommendations available at this time.</p>
         @else
             <div class="recommended-grid">
-                @foreach ($recommendations as $item)
+                @foreach ($recommendations as $recommendation)
                     <div class="recommended-item">
-                        <div class="details">
-                            <strong>{{ $item->title ?? $item->name }}</strong>
-                            <p class="small">{{ Str::limit($item->description, 50) }}</p>
+                        <div class="image-container">
+                            @if ($recommendation['image_url'])
+                                <img src="{{ $recommendation['image_url'] }}"
+                                    alt="{{ $recommendation['item']->title ?? $recommendation['item']->name }}"
+                                    class="recommended-image">
+                            @else
+                                <img src="{{ asset('images/default-placeholder.jpg') }}" alt="Placeholder"
+                                    class="recommended-image">
+                            @endif
                         </div>
-                        <a href="{{ route('booking.create', ['bookable_type' => get_class($item), 'bookable_id' => $item->id]) }}"
+                        <div class="details">
+                            <strong>{{ $recommendation['item']->title ?? $recommendation['item']->name }}</strong>
+                            <p class="small">{{ Str::limit($recommendation['item']->description, 50) }}</p>
+                        </div>
+                        <a href="{{ route('booking.create', ['bookable_type' => get_class($recommendation['item']), 'bookable_id' => $recommendation['item']->id]) }}"
                             class="btn btn-sm btn-primary w-100">Book Now</a>
                     </div>
                 @endforeach

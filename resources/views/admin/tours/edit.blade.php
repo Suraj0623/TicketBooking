@@ -4,61 +4,42 @@
 
 @section('content')
     <div class="container">
-        <h1>Edit Tour</h1>
-        <!-- Form to update the tour -->
-        <form action="{{ route('tours.update', $tour->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT') 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-            <!-- Tour Name -->
-            <div class="form-group">
-                <label for="title">Tour Name</label>
-                <input type="text" class="form-control" name="title" id="title" value="{{ old('title', $tour->title) }}" required>
-                @error('title')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+<h1>Edit Tour</h1>
+<form action="{{ route('tours.update', $tour->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT') <!-- Use PUT method for updates -->
 
-            <!-- Description -->
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" name="description" id="description" rows="3" required>{{ old('description', $tour->description) }}</textarea>
-                @error('description')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+    <div class="form-group">
+        <label for="title">Tour Name</label>
+        <input type="text" class="form-control" name="title" id="title" value="{{ old('title', $tour->title) }}" required>
+    </div>
 
-            <!-- Image -->
-            <div class="form-group">
-                <label for="image">Image</label>
-                <input type="file" class="form-control" name="image" id="image">
-                @if ($tour->image)
-                    <div class="mt-2">
-                        <img src="{{ asset('storage/' . $tour->image) }}" alt="{{ $tour->name }}" style="max-width: 100px;">
-                    </div>
-                @endif
-                @error('image')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" id="description" rows="3" required>{{ old('description', $tour->description) }}</textarea>
+    </div>
 
-            <!-- Package Name -->
-            <div class="form-group">
-                <label for="packageName">Package Name</label>
-                <input type="text" class="form-control" name="packageName" id="packageName" value="{{ old('packageName', $tour->packageName) }}" required>
-                @error('packageName')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+    <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" class="form-control" name="image" id="image">
+        @if ($tour->image)
+            <div class="mt-2">
+                <img src="{{ asset('storage/' . $tour->image) }}" alt="Current Image" style="max-width: 100px;">
             </div>
+        @endif
+    </div>
 
-            <!-- Ticket Price -->
-            <div class="form-group">
-                <label for="ticket_price">Ticket Price</label>
-                <input type="number" class="form-control" name="ticket_price" id="ticket_price" value="{{ old('ticket_price', $tour->ticket_price) }}" step="0.01" required>
-                @error('ticket_price')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+    <div class="form-group">
+        <label for="packageName">Package Name</label>
+        <input type="text" class="form-control" name="packageName" id="packageName" value="{{ old('packageName', $tour->packageName) }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ticket_price">Price Per Person</label>
+        <input type="number" class="form-control" name="ticket_price" id="ticket_price" step="0.01" value="{{ old('ticket_price', $tour->ticket_price) }}" required>
+    </div>
 
             <!-- Duration -->
             <div class="form-group">
@@ -68,13 +49,7 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="form-group">
-                <label for="capacity">Total Person Per Package</label>
-                <input type="number" class="form-control" name="capacity" id="capacity" value="{{ old('capacity', $tour->capacity) }}" step="0.1" required>
-                @error('capacity')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
+
             <!-- Highlights -->
             <div class="form-group">
                 <label for="highlights">Highlights</label>
@@ -84,17 +59,14 @@
                 @enderror
             </div>
 
-            <!-- Category -->
-            <div class="form-group">
-                <label for="category">Category</label>
-                <input type="text" class="form-control" name="category" id="category" value="{{ old('category', $tour->category) }}" required>
-                @error('category')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary mt-3">Update Tour</button>
-        </form>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" class="form-control" name="category" id="category" value="{{ old('category', $tour->category) }}" required>
     </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">Update Tour</button>
+        <a href="{{ route('tours.index') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
 @endsection
