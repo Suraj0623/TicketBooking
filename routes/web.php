@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('movies', AdminMovieController::class);
-    Route::resource('tours', AdminTourController::class)->except(['show']);
+    Route::resource('tours', AdminTourController::class);
     Route::resource('events', AdminEventController::class);
     Route::resource('transports', AdminTransportController::class);
     Route::resource('screenings', AdminScreeningController::class);

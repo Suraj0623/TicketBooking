@@ -98,7 +98,7 @@ class AdminTourController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validated=$request->validate([
             'title' => 'required',
             'description' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
@@ -114,24 +114,15 @@ class AdminTourController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('tours', 'public'); // Store the new image
             if ($tour->image) {
                 Storage::disk('public')->delete($tour->image); // Delete the old image
             }
-            $tour->image = $path; // Update the image path
+            $path = $request->file('image')->store('tours', 'public');
+            $validated['image'] = $path;
         }
 
         // Update other fields
-        $tour->update($request->only([
-            'name',
-            'description',
-            'packageName',
-            'ticket_price',
-            'duration',
-            'highlights',
-            'capacity',
-            'category',
-        ]));
+        $tour->update($validated);
 
         return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
     }

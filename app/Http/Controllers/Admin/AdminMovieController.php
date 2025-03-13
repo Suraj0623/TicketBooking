@@ -74,37 +74,39 @@ class AdminMovieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        // Validate the incoming request data (excluding 'poster')
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'release_date' => 'nullable|date',
-            'genre' => 'nullable|string',
-            'director' => 'nullable|string',
-        ]);
+   public function update(Request $request, $id)
+{
+    // Validate the incoming request data (excluding 'poster')
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'release_date' => 'nullable|date',
+        'genre' => 'nullable|string',
+        'director' => 'nullable|string',
+    ]);
 
-        // Find the movie to update
-        $movie = Movie::findOrFail($id);
+    // Find the movie to update
+    $movie = Movie::findOrFail($id);
 
-        // Handle file upload (if a file is provided)
-        if ($request->hasFile('poster')) {
-            $path = $request->file('poster')->store('posters', 'public'); // Store the file in the 'storage/app/public/posters' directory
+    // Handle file upload (if a file is provided)
+    if ($request->hasFile('poster')) {
+        // Store the new poster image
+        $path = $request->file('poster')->store('posters', 'public');
 
-            // Delete the old poster file if it exists
-            if ($movie->poster_url) {
-                Storage::disk('public')->delete($movie->poster_url);
-            }
-
-            $validated['poster_url'] = $path; // Add the file path to the validated data
+        // Delete the old poster file if it exists
+        if ($movie->poster_url) {
+            Storage::disk('public')->delete($movie->poster_url);
         }
 
-        // Update the movie record
-        $movie->update($validated);
-
-        return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
+        $validated['poster_url'] = $path; // Add the file path to the validated data
     }
+
+    // Update the movie record with the validated data (including poster_url if it's updated)
+    $movie->update($validated);
+
+    return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.

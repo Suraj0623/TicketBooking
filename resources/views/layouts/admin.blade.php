@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Admin Panel</title>
+    <title>@yield('title') Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom Styles -->
@@ -23,6 +23,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('welcome') }}">Welcome</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Services
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                                <li><a class="dropdown-item" href="{{ route('movie.index') }}">Movies</a></li>
+                                <li><a class="dropdown-item" href="{{ route('transport.index') }}">Transports</a></li>
+                                <li><a class="dropdown-item" href="{{ route('event.index') }}">Event</a></li>
+                                <li><a class="dropdown-item" href="{{ route('tour.index') }}">Tours</a></li>
+                            </ul>
+                        </li>
+                        
                         <li class="nav-item">
                             <li class="nav-item"><a class="nav-link" href="{{ route('logout') }}">Logout</a></li>
                         </li>

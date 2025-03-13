@@ -28,7 +28,7 @@
                         <td>{{ $screening->movie->title }}</td>
                         <td>{{ $screening->cinema }}</td>
                         <td>{{ $screening->show_time }}</td>
-                        <td>${{ number_format($screening->ticket_price, 2) }}</td>
+                        <td>Rs{{ number_format($screening->ticket_price, 2) }}</td>
                         <td>{{ $screening->total_seats }}</td>
                         <td>
                             <a href="{{ route('screenings.edit', $screening) }}" class="btn btn-sm btn-warning">Edit</a>

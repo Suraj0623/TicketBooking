@@ -1,4 +1,4 @@
-@extends('layouts.moviesScreen')
+@extends('layouts.admin')
 
 @section('title', 'Edit Movie')
 

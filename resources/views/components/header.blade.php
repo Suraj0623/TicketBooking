@@ -9,7 +9,17 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link fs-5" href="{{ route('tour.index') }}">Tours</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Services
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                        <li><a class="dropdown-item" href="{{ route('movie.index') }}">Movies</a></li>
+                        <li><a class="dropdown-item" href="{{ route('transport.index') }}">Transports</a></li>
+                        <li><a class="dropdown-item" href="{{ route('event.index') }}">Event</a></li>
+                        <li><a class="dropdown-item" href="{{ route('tour.index') }}">Tours</a></li>
+                    </ul>
+                </li>
                 @auth
                     <li class="nav-item"><a class="nav-link fs-5" href="{{ route('ticket.index') }}">My Bookings</a></li>
                     @php

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Storage;
 use App\Models\Seat;
 use App\Models\Route;
 use App\Models\Transport;
@@ -77,12 +77,15 @@ class AdminTransportController extends Controller
         //
     }
 
-    /**
+        /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $transport = Transport::findOrFail($id);
+        $routes = Route::all(); // Retrieve all routes for the dropdown
+
+        return view('admin.transports.edit', compact('transport', 'routes'));
     }
 
     /**
@@ -90,7 +93,46 @@ class AdminTransportController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'route_id' => 'required|exists:routes,id',
+            'type' => 'required|in:bus,plane,train',
+            'name' => 'required|string|max:255',
+            'number' => ['required', 'regex:/^[A-Z]{2} \d{1,2} [A-Z]{2,3} \d{4}$/'],
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'departure_date' => 'required|date|after_or_equal:today',
+            'departure_time' => 'required|date_format:H:i',
+            'capacity' => 'required|integer|min:1',
+            'ticket_price' => 'required|numeric|min:0',
+        ]);
+
+        $transport = Transport::findOrFail($id);
+
+        // Handle file upload (if a new file is provided)
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($transport->image) {
+                Storage::disk('public')->delete($transport->image);
+            }
+            $path = $request->file('image')->store('transports', 'public');
+            $validated['image'] = $path;
+        }
+
+        // Update the transport record
+        $transport->update($validated);
+
+        // Update seats only if capacity changes
+        if ($request->capacity != $transport->seats()->count()) {
+            $transport->seats()->delete(); // Remove existing seats
+            for ($i = 1; $i <= $request->capacity; $i++) {
+                $seatNumber = 'S' . $i;
+                $transport->seats()->create([
+                    'seat_number' => $seatNumber,
+                    'status' => 'available',
+                ]);
+            }
+        }
+
+        return redirect()->route('transports.index')->with('success', 'Transport updated successfully!');
     }
 
     /**

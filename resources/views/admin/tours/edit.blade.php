@@ -8,13 +8,13 @@
         <!-- Form to update the tour -->
         <form action="{{ route('tours.update', $tour->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT') <!-- This tells Laravel to use the PUT method for updating -->
+            @method('PUT') 
 
             <!-- Tour Name -->
             <div class="form-group">
-                <label for="name">Tour Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $tour->name) }}" required>
-                @error('name')
+                <label for="title">Tour Name</label>
+                <input type="text" class="form-control" name="title" id="title" value="{{ old('title', $tour->title) }}" required>
+                @error('title')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -74,24 +74,6 @@
                 <label for="highlights">Highlights</label>
                 <textarea class="form-control" name="highlights" id="highlights" rows="3" required>{{ old('highlights', $tour->highlights) }}</textarea>
                 @error('highlights')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Average Rating -->
-            <div class="form-group">
-                <label for="avg_rating">Average Rating</label>
-                <input type="number" class="form-control" name="avg_rating" id="avg_rating" value="{{ old('avg_rating', $tour->avg_rating) }}" step="0.1">
-                @error('avg_rating')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Total Rating -->
-            <div class="form-group">
-                <label for="total_rating">Total Rating</label>
-                <input type="number" class="form-control" name="total_rating" id="total_rating" value="{{ old('total_rating', $tour->total_rating) }}">
-                @error('total_rating')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>

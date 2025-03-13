@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('movie_id')->constrained()->onDelete('cascade');
             $table->string('cinema');
-            $table->timestamp('show_time');
+            $table->date('show_time');
             $table->decimal('ticket_price', 8, 2);
             $table->integer('total_seats');
             $table->timestamps();

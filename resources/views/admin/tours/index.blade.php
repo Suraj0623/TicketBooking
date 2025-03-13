@@ -26,7 +26,7 @@
                 @foreach ($tours as $key => $tour)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $tour->name }}</td>
+                        <td>{{ $tour->title }}</td>
                         <td>
                             <img src="{{ asset('storage/' . $tour->image) }}" class="img-thumbnail" style="width: 100px; height: 70px;" alt="{{ $tour->name }}">
                         </td>
@@ -34,7 +34,7 @@
                         <td>{{ $tour->ticket_price }}</td>
                         <td>{{ $tour->duration }}</td>
                         <td>
-                            <a href="{{ route('tours.show', $tour->id) }}" class="btn btn-info btn-sm">View</a>
+                            {{-- <a href="{{ route('tours.show', $tour->id) }}" class="btn btn-info btn-sm">View</a> --}}
                             <a href="{{ route('tours.edit', $tour->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('tours.destroy', $tour->id) }}" method="POST" style="display: inline;">
                                 @csrf
