@@ -124,7 +124,17 @@ class AdminTourController extends Controller
 
         // Update the tour with the validated data
         $tour->update($validated);
-
+ // Update seats only if capacity changes
+ if ($request->capacity != $tour->seats()->count()) {
+    $tour->seats()->delete(); // Remove existing seats
+    for ($i = 1; $i <= $request->capacity; $i++) {
+        $seatNumber = 'S' . $i;
+        $tour->seats()->create([
+            'seat_number' => $seatNumber,
+            'status' => 'available',
+        ]);
+    }
+}
         // Redirect back to the tour index page with success message
         return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
     }
