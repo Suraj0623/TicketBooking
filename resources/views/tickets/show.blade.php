@@ -56,7 +56,7 @@
           <i class="fas fa-ticket-alt fs-3 me-2"></i>
           <h5>{{ strtoupper($ticketType) }} TICKET</h5>
         </div>
-        <h6>UNIVERSAL BOOKING SYSTEM</h6>
+        <h6>ALL IN ONE TICKET BOOKING SYSTEM</h6>
       </div>
       <!-- Ticket Body -->
       <div class="ticket-body">
@@ -64,6 +64,8 @@
           <div class="col-md-8">
             <p class="fw-bold mb-1">{{ $ticket->user->FirstName . ' ' . $ticket->user->LastName }}</p>
             <small class="text-uppercase">Name of Passenger/Attendee</small>
+            <p class="fw-bold mb-1">{{ $ticket->user->mobileNumber }}</p>
+            <small class="text-uppercase">Phone Number of Passenger/Attendee</small>
             <hr>
             
             @if($ticketType == 'Transport')
@@ -96,14 +98,14 @@
               <hr>
               <p class="fw-bold mb-1">{{ $ticket->ticketable->event_date }}</p>
               <small class="text-uppercase">Event Date</small>
-            @elseif($ticketType == 'Movie')
-              <p class="fw-bold mb-1">{{ $ticket->ticketable->title }}</p>
+            @elseif($ticketType == 'Screening')
+              <p class="fw-bold mb-1">{{ $ticket->ticketable->movie->title }}</p>
               <small class="text-uppercase">Movie Title</small>
               <hr>
-              <p class="fw-bold mb-1">{{ $ticket->ticketable->genre }}</p>
+              <p class="fw-bold mb-1">{{ $ticket->ticketable->movie->genre }}</p>
               <small class="text-uppercase">Genre</small>
               <hr>
-              <p class="fw-bold mb-1">{{ $ticket->ticketable->director }}</p>
+              <p class="fw-bold mb-1">{{ $ticket->ticketable->movie->director }}</p>
               <small class="text-uppercase">Director</small>
               <hr>
               <p class="fw-bold mb-1">{{ $ticket->booking->created_at->format('d M Y H:i') }}</p>
@@ -111,8 +113,13 @@
             @endif
           </div>
           <div class="col-md-4 text-center">
-            <p class="fw-bold mb-1">{{ $ticket->seats->first()->seat_number ?? 'N/A' }}</p>
-            <small class="text-uppercase">Seat</small>
+            @php
+            $seat = $ticket->seats->where('status', 'booked')->where('user_id', auth()->id())->first();
+          @endphp
+          <p class="fw-bold mb-1">
+            {{ $seat ? $seat->seat_number : 'N/A' }}
+          </p>
+          <small class="text-uppercase">Seat</small>
             <p class="mt-2"><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
             <hr>
             <div class="text-center">
