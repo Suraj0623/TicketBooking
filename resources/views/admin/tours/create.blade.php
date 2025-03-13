@@ -1,3 +1,10 @@
+@extends('layouts.admin')
+
+@section('title', 'Create Tour')
+
+@section('content')
+    <div class="container">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <h1>Create New Tour</h1>
@@ -44,3 +51,4 @@
         <a href="{{ route('tours.index') }}" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
+@endsection
