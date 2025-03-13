@@ -28,15 +28,7 @@
         animation: moveBus 10s linear infinite;
     }
 
-    /* Keyframes for moving the bus */
-    /* @keyframes moveBus {
-        0% {
-            left: -300px;
-        }
-        100% {
-            left: 100%;
-        }
-    } */
+    
 
     /* Form styling */
     .search-form {
@@ -103,8 +95,30 @@
                     <option value="Pokhara">Pokhara</option>
                     <option value="Chitwan">Chitwan</option>
                     <option value="Delhi">Delhi</option>
-                    <!-- Add other options here -->
-                </select>
+                    <option value="Lalitpur">Lalitpur</option>
+                    <option value="Bhaktapur">Bhaktapur</option>
+                    <option value="Biratnagar">Biratnagar</option>
+                    <option value="Dharan">Dharan</option>
+                    <option value="Itahari">Itahari</option>
+                    <option value="Janakpur">Janakpur</option>
+                    <option value="Hetauda">Hetauda</option>
+                    <option value="Bharatpur">Bharatpur</option>
+                    <option value="Butwal">Butwal</option>
+                    <option value="Tansen">Tansen</option>
+                    <option value="Nepalgunj">Nepalgunj</option>
+                    <option value="Dhangadhi">Dhangadhi</option>
+                    <option value="Mahendranagar">Mahendranagar</option>
+                    <option value="Birgunj">Birgunj</option>
+                    <option value="Ghorahi">Ghorahi</option>
+                    <option value="Tulsipur">Tulsipur</option>
+                    <option value="Ilam">Ilam</option>
+                    <option value="Bhimdatta">Bhimdatta</option>
+                    <option value="Kalaiya">Kalaiya</option>
+                    <option value="Rajbiraj">Rajbiraj</option>
+                    <option value="Lahan">Lahan</option>
+                    <option value="Jumla">Jumla</option>
+                    <option value="Simara">Simara</option>
+                                </select>
             </div>
 
             <div class="col-md-4">
@@ -114,8 +128,29 @@
                     <option value="Kathmandu">Kathmandu</option>
                     <option value="Chitwan">Chitwan</option>
                     <option value="Delhi">Delhi</option>
-                    <!-- Add other options here -->
-                </select>
+                    <option value="Lalitpur">Lalitpur</option>
+                    <option value="Bhaktapur">Bhaktapur</option>
+                    <option value="Biratnagar">Biratnagar</option>
+                    <option value="Dharan">Dharan</option>
+                    <option value="Itahari">Itahari</option>
+                    <option value="Janakpur">Janakpur</option>
+                    <option value="Hetauda">Hetauda</option>
+                    <option value="Bharatpur">Bharatpur</option>
+                    <option value="Butwal">Butwal</option>
+                    <option value="Tansen">Tansen</option>
+                    <option value="Nepalgunj">Nepalgunj</option>
+                    <option value="Dhangadhi">Dhangadhi</option>
+                    <option value="Mahendranagar">Mahendranagar</option>
+                    <option value="Birgunj">Birgunj</option>
+                    <option value="Ghorahi">Ghorahi</option>
+                    <option value="Tulsipur">Tulsipur</option>
+                    <option value="Ilam">Ilam</option>
+                    <option value="Bhimdatta">Bhimdatta</option>
+                    <option value="Kalaiya">Kalaiya</option>
+                    <option value="Rajbiraj">Rajbiraj</option>
+                    <option value="Lahan">Lahan</option>
+                    <option value="Jumla">Jumla</option>
+                    <option value="Simara">Simara</option>                </select>
             </div>
 
             <div class="col-md-4">

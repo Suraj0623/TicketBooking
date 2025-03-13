@@ -33,11 +33,10 @@
     <div class="row g-4">
       @foreach ($movies as $movie)
         <div class="col-md-4">
-          <div class="card h-100 movie-card border-0 rounded">
-            @if ($movie->poster_url)
-              <img src="{{ asset('storage/' . $movie->poster_url) }}" alt="{{ $movie->title }}" class="card-img-top rounded-top">
-            @endif
-            <div class="card-body d-flex flex-column">
+          <div class="card h-100 movie-card border-0 rounded" 
+               style="background-image: url('{{ asset('storage/' . $movie->poster_url) }}'); background-size: cover; background-position: center; height: 400px;">
+    
+            <div class="card-body d-flex flex-column text-white" style="background-color: rgba(0, 0, 0, 0.5); height: 100%;">
               <h5 class="card-title">{{ $movie->title }}</h5>
               <p class="card-text truncate-text" title="{{ $movie->description }}">
                 <strong>Description:</strong> {{ $movie->description }}
@@ -51,10 +50,12 @@
                 </a>
               </div>
             </div>
+    
           </div>
         </div>
       @endforeach
     </div>
+    
   </div>
 </main>
 

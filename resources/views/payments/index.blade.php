@@ -5,7 +5,7 @@
     <div class="card-body">
       <h1 class="card-title mb-4 text-center">Payment Details</h1>
       <p class="card-text text-center mb-4">
-        <strong>Total Amount:</strong> ${{ number_format($totalAmount, 2) }}
+        <strong>Total Amount:</strong> Rs{{ number_format($totalAmount, 2) }}
       </p>
       <form action="{{ route('payment.process') }}" method="POST">
         @csrf

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Seat;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,12 +40,12 @@ class AdminTourController extends Controller
             'ticket_price' => 'required|numeric',
             'duration' => 'required',
             'highlights' => 'required',
-            'capacity'=>'required|integer|min:1|max:35',
+            'capacity' => 'required|integer|min:1|max:35',
             'category' => 'required|string|max:255', // Add validation for category
         ]);
 
         // Store the image and get the file path
-        $path = $request->file('image')->store('storage/tours', 'public');
+        $path = $request->file('image')->store('tours', 'public'); // Fixed the folder path to be consistent
 
         // Create the new tour and save the image path
         $tour = Tour::create([
@@ -61,6 +60,7 @@ class AdminTourController extends Controller
             'category' => $request->category, // Add category
         ]);
 
+        // Generate seats based on the capacity
         for ($i = 1; $i <= $request->capacity; $i++) {
             $seatNumber = 'S' . $i; // Example seat numbering: S1, S2, S3...
             $tour->seats()->create([
@@ -69,8 +69,8 @@ class AdminTourController extends Controller
             ]);
         }
 
-        // Redirect back to the tour index page
-        return redirect()->route('tours.index');
+        // Redirect back to the tour index page with success message
+        return redirect()->route('tours.index')->with('success', 'Tour created successfully.');
     }
 
     /**
@@ -78,8 +78,8 @@ class AdminTourController extends Controller
      */
     public function show(string $id)
     {
-        $tour = Tour::find($id);
-        return view('tour.show', compact('tour'));
+        $tour = Tour::findOrFail($id);
+        return view('admin.tours.show', compact('tour')); 
     }
 
     /**
@@ -87,7 +87,7 @@ class AdminTourController extends Controller
      */
     public function edit(string $id)
     {
-        $tour = Tour::findOrFail($id);
+        $tour = Tour::findOrFail($id); 
         return view('admin.tours.edit', compact('tour'));
     }
 
@@ -96,49 +96,52 @@ class AdminTourController extends Controller
      */
 
 
-     public function update(Request $request, string $id)
-     {
-         // Validate the incoming request data
-         $validated = $request->validate([
-             'title' => 'required|string|max:255',
-             'description' => 'required|string',
-             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Make image optional
-             'packageName' => 'required|string|max:255',
-             'ticket_price' => 'required|numeric|min:0',
-             'duration' => 'required|string|max:255',
-             'highlights' => 'required|string',
-             'capacity' => 'required|integer|min:1|max:35',
-             'category' => 'required|string|max:255',
-         ]);
-     
-         // Find the tour to update
-         $tour = Tour::findOrFail($id);
-     
-         // Handle file upload (if a file is provided)
-         if ($request->hasFile('image')) {
-             // Delete the old image file if it exists
-             if ($tour->image) {
-                 Storage::disk('public')->delete($tour->image);
-             }
-     
-             // Store the new image and get the file path
-             $path = $request->file('image')->store('tours', 'public');
-             $validated['image'] = $path; // Save the new file path
-         }
-     
-         // Update the tour record with the validated data
-         $tour->update($validated);
-     
-         return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
-     }
+    public function update(Request $request, string $id)
+    {
+        $validated=$request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
+            'packageName' => 'required',
+            'ticket_price' => 'required|numeric',
+            'duration' => 'required',
+            'highlights' => 'required',
+            'capacity'=>'required|integer|min:1|max:35',
+            'category' => 'required|string|max:255',
+        ]);
+
+        $tour = Tour::findOrFail($id);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            if ($tour->image) {
+                Storage::disk('public')->delete($tour->image); // Delete the old image
+            }
+            $path = $request->file('image')->store('tours', 'public');
+            $validated['image'] = $path;
+        }
+
+        // Update other fields
+        $tour->update($validated);
+
+        return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         $tour = Tour::findOrFail($id);
+
+        // Delete the tour image if it exists
+        if ($tour->image) {
+            Storage::disk('public')->delete($tour->image);
+        }
+
+        // Delete the tour and associated seats (if needed)
         $tour->delete();
 
-        return redirect()->route('tours.index');
+        // Redirect back to the tour index page with success message
+        return redirect()->route('tours.index')->with('success', 'Tour deleted successfully.');
     }
 }

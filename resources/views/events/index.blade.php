@@ -34,11 +34,10 @@
     <div class="row g-4 mt-4">
       @foreach($events as $event)
         <div class="col-md-4">
-          <div class="card event-card h-100 border-0 rounded shadow-sm">
-            @if(isset($event->image_url))
-              <img src="{{ asset('storage/' . $event->image_url) }}" alt="{{ $event->title }}" class="card-img-top rounded-top">
-            @endif
-            <div class="card-body d-flex flex-column">
+          <div class="card event-card h-100 border-0 rounded shadow-sm" 
+               style="background-image: url('{{ isset($event->image) ? asset('storage/' . $event->image) : '' }}'); background-size: cover; background-position: center; height: 400px;">
+    
+            <div class="card-body d-flex flex-column text-white" style="background-color: rgba(0, 0, 0, 0.5); height: 100%;">
               <h5 class="card-title">{{ $event->title }}</h5>
               <p class="card-text truncate-text" title="{{ $event->description }}">{{ $event->description }}</p>
               <p class="card-text"><strong>Date:</strong> {{ $event->event_date }}</p>
@@ -50,10 +49,12 @@
                 </a>
               </div>
             </div>
+    
           </div>
         </div>
       @endforeach
     </div>
+    
   </div>
 </main>
 <x-footer/>

@@ -42,8 +42,8 @@ class AdminMovieController extends Controller
         ]);
 
         // Handle file upload (if a file is provided)
-        if ($request->hasFile('poster')) {
-            $path = $request->file('poster')->store('posters', 'public'); // Store the file in the 'storage/app/public/posters' directory
+        if ($request->hasFile('poster_url')) {
+            $path = $request->file('poster_url')->store('movies', 'public'); // Store the file in the 'storage/app/public/posters' directory
             $validated['poster_url'] = $path; // Add the file path to the validated data
         }
 
@@ -81,6 +81,7 @@ class AdminMovieController extends Controller
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
         'release_date' => 'nullable|date',
+        'poster_url'=>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'genre' => 'nullable|string',
         'director' => 'nullable|string',
     ]);
@@ -88,17 +89,14 @@ class AdminMovieController extends Controller
     // Find the movie to update
     $movie = Movie::findOrFail($id);
 
-    // Handle file upload (if a file is provided)
-    if ($request->hasFile('poster')) {
-        // Store the new poster image
-        $path = $request->file('poster')->store('posters', 'public');
-
-        // Delete the old poster file if it exists
+     // Handle file upload (if a new file is provided)
+     if ($request->hasFile('poster_url')) {
+        // Delete old image if exists
         if ($movie->poster_url) {
             Storage::disk('public')->delete($movie->poster_url);
         }
-
-        $validated['poster_url'] = $path; // Add the file path to the validated data
+        $path = $request->file('poster_url')->store('movies', 'public');
+        $validated['poster_url'] = $path;
     }
 
     // Update the movie record with the validated data (including poster_url if it's updated)
