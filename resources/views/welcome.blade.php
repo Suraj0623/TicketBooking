@@ -198,7 +198,7 @@
                                     alt="{{ $recommendation['item']->title ?? $recommendation['item']->name }}"
                                     class="recommended-image">
                             @else
-                                <img src="{{ asset('images/default-placeholder.jpg') }}" alt="Placeholder"
+                                <img src="{{ asset('images/all.jpeg') }}" alt="Placeholder"
                                     class="recommended-image">
                             @endif
                         </div>

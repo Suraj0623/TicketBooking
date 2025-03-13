@@ -3,8 +3,8 @@
 @section('title', 'Edit Tour')
 
 @section('content')
-    <div class="container">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <h1>Edit Tour</h1>
 <form action="{{ route('tours.update', $tour->id) }}" method="POST" enctype="multipart/form-data">

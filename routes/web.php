@@ -63,6 +63,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::patch('booking/{booking}/update-payment-status', [BookingController::class, 'updatePaymentStatus'])->name('booking.updatePaymentStatus');
     Route::patch('/payments/accept/{payment_id}', [PaymentController::class, 'accept'])->name('payments.accept');
     Route::patch('/payments/reject/{payment_id}', [PaymentController::class, 'reject'])->name('payments.reject');
+    Route::put('/tours/{id}', [AdminTourController::class, 'update'])->name('tours.update');
 });
 Route::get('seat/{seatableId}/{seatableType}',[SeatController::class,'index']);
 // User Routes
