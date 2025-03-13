@@ -30,41 +30,49 @@ class AdminEventController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required|string',
-        'total_seats' => 'nullable|integer|min:1',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'event_date' => 'required|date',
-        'venue' => 'required|string|max:255',
-        'ticket_price' => 'required|numeric|min:0',
-    ]);
-
-    $data = $request->only(['title', 'description', 'total_seats', 'event_date', 'venue', 'ticket_price']);
-
-      // Handle file upload (if a file is provided)
-  if ($request->hasFile('image')) {
-    $path = $request->file('image')->store('events', 'public'); // Store the file in the 'storage/app/public/posters' directory
-    $data['image'] = $path; // Add the file path to the validated data
-}
-
-
-    $event=Event::create($data);
-
-
-    // Generate seat entries for the event
-    for ($i = 1; $i <= $request->total_seats; $i++) {
-        $seatNumber = 'S' . $i;
-        $event->seats()->create([
-            'seat_number' => $seatNumber,
-            'status' => 'available',
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'total_seats' => 'nullable|integer|min:1',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'event_date' => 'required|date',
+            'venue' => 'required|string|max:255',
+            'ticket_price' => 'required|numeric|min:0',
+            'category' => 'nullable|string|max:255', // Add validation for category
         ]);
+
+        $data = $request->only([
+            'title',
+            'description',
+            'total_seats',
+            'event_date',
+            'venue',
+            'ticket_price',
+            'category', // Include 'category'
+        ]);
+
+        // Handle file upload (if a file is provided)
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('events', 'public'); // Store the file in the 'storage/app/public/events' directory
+            $data['image'] = $path; // Add the file path to the validated data
+        }
+
+        $event = Event::create($data);
+
+        // Generate seat entries for the event
+        if ($request->total_seats) {
+            for ($i = 1; $i <= $request->total_seats; $i++) {
+                $seatNumber = 'S' . $i;
+                $event->seats()->create([
+                    'seat_number' => $seatNumber,
+                    'status' => 'available',
+                ]);
+            }
+        }
+
+        return redirect()->route('events.index')->with('success', 'Event created successfully.');
     }
-
-    return redirect()->route('events.index')->with('success', 'Event created successfully.');
-}
-
 
     /**
      * Display the specified resource.
@@ -98,9 +106,18 @@ class AdminEventController extends Controller
             'event_date' => 'required|date',
             'venue' => 'required|string|max:255',
             'ticket_price' => 'required|numeric|min:0',
+            'category' => 'nullable|string|max:255', // Add validation for category
         ]);
 
-        $data = $request->only(['title', 'description', 'total_seats', 'event_date', 'venue', 'ticket_price']);
+        $data = $request->only([
+            'title',
+            'description',
+            'total_seats',
+            'event_date',
+            'venue',
+            'ticket_price',
+            'category', // Include 'category'
+        ]);
 
         // Handle file upload (if a new file is provided)
         if ($request->hasFile('image')) {
@@ -113,21 +130,23 @@ class AdminEventController extends Controller
         }
 
         $event->update($data);
-// Update seats only if capacity changes
-if ($request->total_seats != $event->seats()->count()) {
-    $event->seats()->delete(); // Remove existing seats
-    for ($i = 1; $i <= $request->total_seats; $i++) {
-        $seatNumber = 'S' . $i;
-        $event->seats()->create([
-            'seat_number' => $seatNumber,
-            'status' => 'available',
-        ]);
-    }
-}
+
+        // Update seats only if capacity changes
+        if ($request->total_seats != $event->seats()->count()) {
+            $event->seats()->delete(); // Remove existing seats
+            if ($request->total_seats) {
+                for ($i = 1; $i <= $request->total_seats; $i++) {
+                    $seatNumber = 'S' . $i;
+                    $event->seats()->create([
+                        'seat_number' => $seatNumber,
+                        'status' => 'available',
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('events.index')->with('success', 'Event updated successfully');
     }
-    
-    
 
     /**
      * Remove the specified resource from storage.
@@ -135,8 +154,13 @@ if ($request->total_seats != $event->seats()->count()) {
     public function destroy($id)
     {
         $event = Event::find($id);
-        $event->delete();
-        return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
 
+        // Delete associated seats
+        $event->seats()->delete();
+
+        // Delete the event
+        $event->delete();
+
+        return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
     }
 }
