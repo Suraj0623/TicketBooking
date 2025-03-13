@@ -17,6 +17,7 @@ class RecommendationService
      * @param User $user
      * @return \Illuminate\Support\Collection
      */
+    
     public function recommendForUser(User $user)
     {
         // Step 1: Get the user's past bookings with their bookable items, eager loading to prevent N+1 issues
@@ -109,8 +110,11 @@ class RecommendationService
             $similarity = $this->cosineSimilarity($userPreferenceVector, $itemFeatureVector);
 
             if ($similarity > 0) {
-                // Ensure $item is passed as an object
-                $recommendations[] = ['item' => $item, 'score' => $similarity];
+                $recommendations[] = [
+                    'item' => $item,
+                    'image_url' => $this->getImageUrl($item),
+                    'score' => $similarity
+                ];
             }
         }
 
@@ -121,7 +125,10 @@ class RecommendationService
         \Log::info('Recommendations:', $recommendations);
 
         // Return only the items (as objects) without the scores
-        return collect(array_slice($recommendations, 0, 10))->map(fn($rec) => $rec['item']);
+        return collect(array_slice($recommendations, 0, 10))->map(fn($rec) => [
+            'item' => $rec['item'],
+            'image_url' => $rec['image_url']
+        ]);
     }
 
     /**
@@ -188,4 +195,13 @@ class RecommendationService
         $magnitudeB = sqrt(array_sum(array_map(fn($val) => $val ** 2, $vectorB)));
         return ($magnitudeA * $magnitudeB) ? $dotProduct / ($magnitudeA * $magnitudeB) : 0;
     }
+    private function getImageUrl($item)
+{
+    if ($item instanceof \App\Models\Movie) {
+        return $item->poster_url ? asset('storage/' . $item->poster_url) : null;
+    } elseif ($item instanceof \App\Models\Tour || $item instanceof \App\Models\Event) {
+        return $item->image ? asset('storage/' . $item->image) : null;
+    }
+    return null;
+}
 }

@@ -96,36 +96,41 @@ class AdminTourController extends Controller
      */
 
 
-    public function update(Request $request, string $id)
-    {
-        $validated=$request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
-            'packageName' => 'required',
-            'ticket_price' => 'required|numeric',
-            'duration' => 'required',
-            'highlights' => 'required',
-            'capacity'=>'required|integer|min:1|max:35',
-            'category' => 'required|string|max:255',
-        ]);
-
-        $tour = Tour::findOrFail($id);
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            if ($tour->image) {
-                Storage::disk('public')->delete($tour->image); // Delete the old image
-            }
-            $path = $request->file('image')->store('tours', 'public');
-            $validated['image'] = $path;
-        }
-
-        // Update other fields
-        $tour->update($validated);
-
-        return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
-    }
+     public function update(Request $request, string $id)
+     {
+         // Validate the incoming request data
+         $validated = $request->validate([
+             'title' => 'required|string|max:255',
+             'description' => 'required|string',
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Make image optional
+             'packageName' => 'required|string|max:255',
+             'ticket_price' => 'required|numeric|min:0',
+             'duration' => 'required|string|max:255',
+             'highlights' => 'required|string',
+             'capacity' => 'required|integer|min:1|max:35',
+             'category' => 'required|string|max:255',
+         ]);
+     
+         // Find the tour to update
+         $tour = Tour::findOrFail($id);
+     
+         // Handle file upload (if a file is provided)
+         if ($request->hasFile('image')) {
+             // Delete the old image file if it exists
+             if ($tour->image) {
+                 Storage::disk('public')->delete($tour->image);
+             }
+     
+             // Store the new image and get the file path
+             $path = $request->file('image')->store('tours', 'public');
+             $validated['image'] = $path; // Save the new file path
+         }
+     
+         // Update the tour record with the validated data
+         $tour->update($validated);
+     
+         return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
+     }
     /**
      * Remove the specified resource from storage.
      */
