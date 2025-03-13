@@ -3,7 +3,7 @@
 @section('title', 'Book Now')
 
 @section('content')
-<div class="container my-5">
+<div class="container my-5 pt-5">
     <div class="card shadow-lg border-0">
         <div class="card-header bg-primary text-white">
             <h2 class="mb-0">Book Seats</h2>

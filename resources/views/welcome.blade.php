@@ -53,6 +53,81 @@
         .bg-purple {
             background: linear-gradient(to right, purple, rgba(66, 145, 98, 0.666), red);
         }
+
+        /* Styling for Horizontal Layout */
+        .horizontal-section {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .horizontal-section::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .horizontal-section::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .horizontal-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .horizontal-item {
+            flex: 0 0 auto;
+            width: 300px; /* Increased width */
+            min-width: 300px; /* Increased minimum width */
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .horizontal-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .horizontal-item img {
+            width: 100%;
+            height: 200px; /* Increased height */
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .horizontal-item .content {
+            padding: 1rem;
+        }
+
+        /* Recommended for You Section */
+        .recommended-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid layout */
+            gap: 1.5rem;
+        }
+
+        .recommended-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .recommended-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .recommended-item .details {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -71,46 +146,40 @@
 
     <!-- Services Section -->
     <div class="container py-4">
-        <div class="row">
-            <!-- Services Section -->
-            <div class="col-md-8">
-                <div class="row">
-                    <h2 class="text-center mb-3">Our Services</h2>
-                    @foreach ($services as $service)
-                        <div class="col-md-8 col-12 mb-3">
-                            <div class="card p-3 shadow-sm">
-                                <img src="{{ asset($service['image']) }}" class="card-img-top" loading="lazy"
-                                    alt="{{ $service['title'] }}" style="height: 150px; object-fit: cover;">
-                                <i class="fas fa-calendar-check text-primary fs-2"></i>
-                                <h6 class="mt-2 text-center fs-4">{{ $service['title'] }}</h6>
-                                <p class="small text-center fs-4">{{ Str::limit($service['description'], 60) }}</p>
-                                <a href="{{ route($service['route']) }}" class="btn btn-lg btn-primary">Explore</a>
-                            </div>
-                        </div>
-                    @endforeach
+        <h2 class="text-center mb-4">Our Services</h2>
+        <div class="horizontal-section">
+            @foreach ($services as $service)
+                <div class="horizontal-item">
+                    <img src="{{ asset($service['image']) }}" alt="{{ $service['title'] }}">
+                    <div class="content">
+                        <h6 class="mb-2">{{ $service['title'] }}</h6>
+                        <p class="small">{{ Str::limit($service['description'], 60) }}</p>
+                        <a href="{{ route($service['route']) }}" class="btn btn-sm btn-primary w-100">Explore</a>
+                    </div>
                 </div>
-            </div>
-            <!-- Recommend Activities Section -->
-            <div class="col-md-4">
-                <h2>Recommended for You</h2>
-                @if ($recommendations->isEmpty())
-                    <p>No recommendations available at this time.</p>
-                @else
-                    <ul class="list-group">
-                        @foreach ($recommendations as $item)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ $item->title ?? $item->name }}</strong>
-                                    <p class="small">{{ Str::limit($item->description, 50) }}</p>
-                                </div>
-                                <a href="{{ route('booking.create', ['bookable_type' => get_class($item), 'bookable_id' => $item->id]) }}"
-                                    class="btn btn-sm btn-primary">Book Now</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
+            @endforeach
         </div>
+    </div>
+
+    <!-- Recommend Activities Section -->
+    <div class="container py-4">
+        <h2 class="text-center mb-4">Recommended for You</h2>
+        @if ($recommendations->isEmpty())
+            <p class="text-center">No recommendations available at this time.</p>
+        @else
+            <div class="recommended-grid">
+                @foreach ($recommendations as $item)
+                    <div class="recommended-item">
+                        <div class="details">
+                            <strong>{{ $item->title ?? $item->name }}</strong>
+                            <p class="small">{{ Str::limit($item->description, 50) }}</p>
+                        </div>
+                        <a href="{{ route('booking.create', ['bookable_type' => get_class($item), 'bookable_id' => $item->id]) }}"
+                            class="btn btn-sm btn-primary w-100">Book Now</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
     <!-- Footer -->
