@@ -95,7 +95,8 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return back()->with('error', 'Failed to register the user.');
+        // return back()->with('error', 'Failed to register the user.');
+        return redirect()->route('login');
     }
 
     public function login(Request $request)

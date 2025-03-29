@@ -116,10 +116,10 @@
             @php
             $seat = $ticket->seats->where('status', 'booked')->where('user_id', auth()->id())->first();
           @endphp
-          <p class="fw-bold mb-1">
+          {{-- <p class="fw-bold mb-1">
             {{ $seat ? $seat->seat_number : 'N/A' }}
           </p>
-          <small class="text-uppercase">Seat</small>
+          <small class="text-uppercase">Seat</small> --}}
             <p class="mt-2"><strong>Seats Booked:</strong> {{ $ticket->quantity }}</p>
             <hr>
             <div class="text-center">

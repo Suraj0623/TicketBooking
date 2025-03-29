@@ -164,6 +164,36 @@
             <p class="lead">Find flights, tours, transport, and events easily.</p>
         </div>
     </section>
+      <!-- Recommend Activities Section -->
+      <div class="container py-4">
+        <h2 class="text-center mb-4">Recommended for You</h2>
+        @if ($recommendations->isEmpty())
+            <p class="text-center text-muted">No recommendations available at this time.</p>
+        @else
+            <div class="recommended-grid">
+                @foreach ($recommendations as $recommendation)
+                    <div class="recommended-item">
+                        <div class="image-container">
+                            @if ($recommendation['image_url'])
+                                <img src="{{ $recommendation['image_url'] }}"
+                                    alt="{{ $recommendation['item']->title ?? $recommendation['item']->name }}"
+                                    class="recommended-image">
+                            @else
+                                <img src="{{ asset('images/all.jpeg') }}" alt="Placeholder"
+                                    class="recommended-image">
+                            @endif
+                        </div>
+                        <div class="details">
+                            <strong>{{ $recommendation['item']->title ?? $recommendation['item']->name }}</strong>
+                            <p class="small text-muted">{{ Str::limit($recommendation['item']->description, 50) }}</p>
+                        </div>
+                        <a href="{{ route('booking.create', ['bookable_type' => get_class($recommendation['item']), 'bookable_id' => $recommendation['item']->id]) }}"
+                            class="btn btn-primary w-100">Book Now</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
 
     <!-- Services Section -->
     <div class="container py-4">
@@ -183,36 +213,58 @@
     </div>
 
     <!-- Update the "Recommended for You" section to display images -->
-    <!-- Recommend Activities Section -->
-    <div class="container py-4">
-        <h2 class="text-center mb-4">Recommended for You</h2>
-        @if ($recommendations->isEmpty())
-            <p class="text-center">No recommendations available at this time.</p>
-        @else
-            <div class="recommended-grid">
-                @foreach ($recommendations as $recommendation)
-                    <div class="recommended-item">
-                        <div class="image-container">
-                            @if ($recommendation['image_url'])
-                                <img src="{{ $recommendation['image_url'] }}"
-                                    alt="{{ $recommendation['item']->title ?? $recommendation['item']->name }}"
-                                    class="recommended-image">
-                            @else
-                                <img src="{{ asset('images/all.jpeg') }}" alt="Placeholder"
-                                    class="recommended-image">
-                            @endif
-                        </div>
-                        <div class="details">
-                            <strong>{{ $recommendation['item']->title ?? $recommendation['item']->name }}</strong>
-                            <p class="small">{{ Str::limit($recommendation['item']->description, 50) }}</p>
-                        </div>
-                        <a href="{{ route('booking.create', ['bookable_type' => get_class($recommendation['item']), 'bookable_id' => $recommendation['item']->id]) }}"
-                            class="btn btn-sm btn-primary w-100">Book Now</a>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </div>
+  
+  
+    <style>
+        .recommended-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+  
+        .recommended-item {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+  
+        .recommended-item:hover {
+            transform: translateY(-5px);
+        }
+  
+        .image-container {
+            height: 180px;
+            overflow: hidden;
+        }
+  
+        .recommended-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+  
+        .details {
+            padding: 15px;
+        }
+  
+        .btn-primary {
+            border-radius: 0 0 12px 12px;
+            padding: 10px;
+        }
+  
+        .small {
+            font-size: 0.9rem;
+        }
+  
+        strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+    </style>
+  
 
     <!-- Footer -->
     <x-footer />

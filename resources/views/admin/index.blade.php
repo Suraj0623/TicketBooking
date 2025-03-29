@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/d8cfbe84b9.js" crossorigin="anonymous"></script>
+    
     <!-- Custom CSS -->
    
 </head>
@@ -18,9 +18,9 @@
         <div class="d-flex justify-content-between align-items-center">
             <!-- Left Side Links -->
             <div class="d-flex">
-                <a href="" class="btn btn-secondary btn-sm me-2" title="Movies">Movies</a>
-                <a href="" class="btn btn-secondary btn-sm me-2" title="Events">Events</a>
-                <a href="" class="btn btn-secondary btn-sm me-2" title="Tours">Tours</a>
+                <a href="{{route('movie.index')}}" class="btn btn-secondary btn-sm me-2" title="Movies">Movies</a>
+                <a href="{{route('event.index')}}" class="btn btn-secondary btn-sm me-2" title="Events">Events</a>
+                <a href="{{route('tour.index')}}" class="btn btn-secondary btn-sm me-2" title="Tours">Tours</a>
                 <!-- Add more items here as needed -->
             </div>
             <!-- Right Side Logout Button -->
